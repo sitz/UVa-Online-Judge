@@ -23,54 +23,62 @@
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
+#include <sstream>
+using namespace std;
 
 typedef unsigned int uint;
 typedef long long int64;
 typedef unsigned long long uint64;
 
-using namespace std;
+#define FOI(i, A, B) for (i = A; i <= B; i++)
+#define FOD(i, A, B) for (i = A; i >= B; i--)
+#define PI     acos(-1.0)
+#define INF    1<<30
+#define EPS    1e-9
+#define sqr(x) (x)*(x)
+
+vector< int > extract(string S) {
+		stringstream ss;
+		vector< int > V;
+		int I;
+		ss << S;
+		while (ss >> I) V.push_back(I);
+		return V;
+}
 
 int main(){
-    string strA, strB;
-    while(getline(cin, strA) && getline(cin, strB)){
-                       set <string> setA, setB;
-                       int lenA=strA.length(), lenB=strB.length();
-                       int i;
-                       string temp="";
-                       for(i=0; i<lenA; i++){
-                                if(isdigit(strA[i]))
-                                                    temp += strA[i];
-                                else if(temp != ""){
-                                     setA.insert(temp);
-                                     temp = "";
-                                }
-                       }
-                       if(isdigit(strA[lenA-1]))
-                                                setA.insert(temp);
-                       temp = "";
-                       for(i=0; i<lenB; i++){
-                                if(isdigit(strB[i]))
-                                                    temp += strB[i];
-                                else if(temp != ""){
-                                     setB.insert(temp);
-                                     temp = "";
-                                }
-                       }
-                       if(isdigit(strB[lenB-1]))
-                                                setB.insert(temp);
-                       set <string> comp;
-                       set_intersection( setA.begin(), setA.end(), setA.begin(), setB.end(), 
-                                         inserter(comp, comp.begin()) );
-                       if(setA == setB)
-                               cout<<"A equals B\n";
-                       else if(comp.empty())
-                            cout<<"A and B are disjoint\n";
-                       else if(comp == setA)
-                            cout<<"B is a proper subset of A\n";
-                       else if(comp == setB)
-                            cout<<"A is a proper subset of B\n";
-                       else
-                           cout<<"I'm confused!\n";
-    }
+	//freopen("testI.txt", "r", stdin);
+	//freopen("testO.txt", "w", stdout);
+	string str;
+	while (getline(cin, str)) {
+		  vector< int > A = extract(str);
+		  getline(cin, str);
+		  vector< int > B = extract(str);
+		  
+		  int N = A.size() + B.size();
+		  
+		  vector< int > amb(N), bma(N), aob(N), aib(N);
+		  vector< int >::iterator it1, it2, it3, it4;
+		  
+		  sort(A.begin(), A.end());
+		  sort(B.begin(), B.end());
+		  
+		  it1 = set_difference(A.begin(), A.end(), B.begin(), B.end(), amb.begin());
+		  it2 = set_difference(B.begin(), B.end(), A.begin(), A.end(), bma.begin());
+		  it3 = set_intersection(A.begin(), A.end(), B.begin(), B.end(), aib.begin());
+		  it4 = set_union(A.begin(), A.end(), B.begin(), B.end(), aob.begin());
+		  
+ 		if (int(it3 - aib.begin()) == A.size() && int(it3 - aib.begin()) == B.size())
+		  	 cout << "A equals B" << endl;
+		 else if (int(it1 - amb.begin()) == 0)
+		 	  cout << "A is a proper subset of B" << endl;
+		 else if (int(it2 - bma.begin()) == 0)
+		 	  cout << "B is a proper subset of A" << endl;
+  		 else if (int(it4 - aob.begin()) == N)
+  		 	  cout << "A and B are disjoint" << endl;
+	 	 else
+	 	 	 cout << "I'm confused!" << endl;
+ 	}
+	//system("pause");
     return 0;
 }
