@@ -25,37 +25,31 @@
 #include <ctime>
 using namespace std;
 
-#define INF	1<<30
 #define FOI(i, A, B) for (i = A; i <= B; i++)
 #define FOD(i, A, B) for (i = A; i >= B; i--)
 
 int main(){
 	//freopen("testI.txt", "r", stdin);
 	//freopen("testO.txt", "w", stdout);
-	while (true) {
-		int N, i, j;
-		cin >> N;
-		if (N == 0) break;
-		int preR = INF, preD = INF, mm = INF;
-		string S;
-		cin >> S;
-		FOI(i, 0, N-1) {
-			if (S[i] == 'Z') {
-				mm = 0;
-				break;
-			}
-			if (S[i] == 'R') {
-				preR = i;
-				mm = min(mm, abs(preR - preD));
-				continue;
-			}
-			if (S[i] == 'D') {
-				preD = i;
-				mm = min(mm, abs(preD - preR));
-				continue;
-			}
+	int T;
+	scanf("%d", &T);
+	while (T--) {
+		int M, N, I, i;
+		scanf("%d%d", &M, &N);
+		map<int, int> Map;
+		map<int, int>::iterator it;
+		for (i = 0; i < M; i++) {
+			scanf("%d", &I);
+			Map[I] += 1;
 		}
-		cout << mm << endl;
+		for (i = 0; i < N; i++) {
+			scanf("%d", &I);
+			Map[I] -= 1;
+		}
+		int tot = 0;
+		for (it = Map.begin(); it != Map.end(); it++)
+			tot += abs((*it).second);
+		printf("%d\n", tot);
 	}
 	return 0;
 }
