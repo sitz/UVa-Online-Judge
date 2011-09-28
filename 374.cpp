@@ -1,29 +1,20 @@
-#include<iostream>
-#include<cstdio>
-#include<cmath>
-#include<algorithm>
-using namespace std;
+#include <cstdio>
 
-typedef long long int64;
-
-#define square(x) (x)*(x)
-
-int64 BigMod(int64 B, int64 E, int64 N) {
-	if(E == 0)
-		return 1;
-		
-	int64 V = BigMod(B, E/2, N);
-	V = (V %N * V %N) %N;
-	
-	if(E % 2 == 1)
-		V = (B %N * V %N) %N;
-	return V %N;
+long long BigMod(long long a, long long b, long long c) {
+	long long x = 1, y = a;
+	while (b > 0) {
+		if (b % 2 == 1)
+			x = (x * y) % c;
+		y = (y * y) % c;
+		b = b / 2;
+	}
+	return x % c;
 }
 
 int main(){
-    int64 B, E, N;
+    long long B, E, N;
 	while (scanf("%lld%lld%lld", &B, &E, &N) != EOF)
-		printf("%lld\n", BigMod(B, E, N);
+		printf("%lld\n", BigMod(B, E, N));
 
     return 0;
 }
