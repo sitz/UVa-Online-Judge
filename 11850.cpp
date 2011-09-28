@@ -1,59 +1,30 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
 #include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
 #include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
-
 using namespace std;
 
-int main(){
-    while(true){
-                int N, i;
-                cin>>N;
-                if(N == 0)
-                     break;
-                vector <int> road;
-                for(i=0; i<N; i++){
-                         int dis;
-                         cin>>dis;
-                         road.push_back(dis);
-                }
-                sort(road.begin(), road.end());
-                bool stat = true;
-                for(i=1; i<N; i++){
-                         if(road[i] - road[i-1] > 200){
-                                    stat = false;
-                                    break;
-                         }
-                }
-                if(stat)
-                        cout<<"POSSIBLE\n";
-                else
-                    cout<<"IMPOSSIBLE\n";
-    }
-    return 0;
+int main() {
+	while (true) {
+		int N, i;
+		scanf("%d", &N);
+		if (!N) break;
+		int road[N + 2];
+		road[0] = 0;
+		road[N + 1] = 1422;
+		for (i = 1; i <= N; i++)
+			scanf("%d", &road[i]);
+		N += 2;
+		sort(road, road + N);
+		bool stat = true;
+		for (i = 1; i < N; i++) {
+			if(road[i] - road[i-1] > 200) {
+				stat = false;
+				break;
+			}
+		}
+		if (road[N - 1] - road[N - 2] > 100)
+			stat = false;
+		if(stat) printf("POSSIBLE\n");
+		else printf("IMPOSSIBLE\n");
+	}
+	return 0;
 }

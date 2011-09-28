@@ -1,28 +1,43 @@
-#include<iostream>
-#include<cstdlib>
-#include<sstream>
+#include <iostream>
+#include <string>
+#include <sstream>
 using namespace std;
 
-int main(){
-    for(;;){
-            string str;
-            cin>>str;
-            if(str=="END")
-                          break;
-            char next[100];
-            itoa(str.length(),next,10);
-            char old[100000]={'\0'};
-            for(int j=0;j<str.length();j++)
-                    old[j]=str[j];
-            int i=1;
-            while(sizeof(*old)!=sizeof(*next)){
-                                               itoa(sizeof(*next),old,10);
-                                               itoa(sizeof(*old),next,10);
-                                               i++;
-            }
-            cout<<i<<endl;
-            
-    }
-    return 0;
+int toInt(string S) {
+	istringstream ss(S);
+	int I;
+	ss >> I;
+	return I;
 }
-    
+
+string toString(int I) {
+	stringstream ss;
+	string S;
+	ss << I;
+	ss >> S;
+	return S;
+}
+
+int main(int argc, char **argv) {
+	while (true) {
+		string S;
+		cin >> S;
+		if (S == "END") break;
+		
+		if (S.length() < 30) {
+			if (toInt(S) == (int)S.length()) {
+				cout << "1\n";
+				continue;
+			}
+		}
+		S = toString(S.length());
+		int I = 2;
+		while ((int)S.length() != toInt(S)) {
+			++I;
+			S = toString(S.length());
+		}
+		cout << I << endl;
+	}
+	return 0;
+}
+

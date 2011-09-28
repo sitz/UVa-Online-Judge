@@ -1,44 +1,17 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-using namespace std;
+#include <stdio.h>
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
+int main() {
 	int T;
-	cin >> T;
+	scanf("%d", &T);
 	while( T-- ){
 		int S, D;
-		cin >> S >> D;
-		int A = (S + D);
-		int B = (S - D);
-		if( A%2 != 0 || A < 0 || B%2 != 0 || B < 0 )
-			cout << "impossible" << endl;
+		scanf("%d%d", &S, &D);
+		int A = S + D;
+		int B = S - D;
+		if (A < 0 || A&1 || B < 0 || B&1)
+			printf("impossible\n");
 		else
-			cout << A/2 << " " << B/2 << endl;
+			printf("%d %d\n", A/2, B/2);
 	}
 	return 0;
 }
