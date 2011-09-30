@@ -1,34 +1,40 @@
-#include<iostream>
-#include<stdio.h>
-
+#include <cstdio>
 using namespace std;
 
-long long fact(long long x,long long y)
-{
-     long long a,b,fact_a=1,fact_b=1;
-     a=x>2*y?(x-y):y;
-     b=x<2*y?(x-y):y;
-     for(long long j=1;j<=b;j++)
-     {
-             fact_b*=j;
-     }
-     for(long long i=a+1;i<=x;i++)
-     {
-             fact_a*=i;
-     }
-     return (fact_a/fact_b);
+long gcd(long A, long B) {
+    if (A % B == 0) return B;
+    return gcd(B, A % B);
 }
 
-int main()
-{
-    long long M,N,C;
-    for(;;)
-    {
-           cin>>N>>M;
-           if(N==0 && M==0)
-           break;
-                         C=fact(N,M);
-                         cout<<N<<" things taken "<<M<<" at a time is "<<C<<" exactly."<<endl;
+void Divbygcd(long& A, long& B) {
+    long g = gcd(A, B);
+    A /= g;
+    B /= g;
+}
+
+long C(long N, long K) {
+    long num = 1, den = 1, toMul, toDiv;
+    if (K > N/2) K = N - K;
+
+    for (int i = K; i; i--) {
+        toMul = N - K + i;
+        toDiv = i;
+        Divbygcd(toMul, toDiv);
+        Divbygcd(toMul, den);
+        Divbygcd(toDiv, num);
+
+        num *= toMul;
+        den *= toDiv;
     }
-    return 0;
+    return num / den;
+}
+
+int main() {
+    while (true) {
+        long N, M;
+        scanf("%ld%ld", &N, &M);
+        if (!N && !M) break;
+
+        printf("%ld things taken %ld at a time is %ld exactly.\n", N, M, C(N, M));
+    }
 }
