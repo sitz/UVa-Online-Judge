@@ -1,16 +1,11 @@
-#include<iostream>
+#include <cstdio>
 
-using namespace std;
-
-int main()
-{
-    int i,j,d;
-    while cin(i,j)
-    d=i-j;
-    if(d<0)
-        d*=(-1);
-    else
-        d=d;
-    cout<<i\t<<j\t<<d<<endl;
+int main() {
+    int p,q,r;
+    while (scanf("%d %d",&p,&q) != EOF){
+	r=q-p;
+	if (r < 0) r *= -1;
+	printf("%ld\n",r);
+    }
     return 0;
 }

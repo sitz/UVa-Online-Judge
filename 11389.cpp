@@ -1,43 +1,35 @@
-#include<iostream>
-using namespace std;
+#include <stdio.h>
+#include <stdlib.h>
 
-int main(){
-    for(;;){
-            long long n,d,r;
-            cin>>n>>d>>r;
-            if(n==0 && d==0 && r==0)
-                    break;
-            long long mor[200],eve[200];
-            for(long long i=0;i<n;i++)
-                    cin>>mor[i];
-            for(long long i=0;i<n;i++)
-                    cin>>eve[i];
-            for(long long i=0;i<n;i++){
-                    for(long long j=i+1;j<n;j++){
-                            if(mor[i]>mor[j]){
-                                              long long temp=mor[i];
-                                              mor[i]=mor[j];
-                                              mor[j]=temp;
-                            }
-                    }
-            }
-            for(long long i=0;i<n;i++){
-                    for(long long j=i+1;j<n;j++){
-                            if(eve[i]<eve[j]){
-                                              long long temp=eve[i];
-                                              eve[i]=eve[j];
-                                              eve[j]=temp;
-                            }
-                    }
-            }
-            long long over=0;
-            for(long long i=0;i<n;i++){
-                    if((mor[i]+eve[i])>d){
-                                        long long temp=(mor[i]+eve[i])-d;
-                                        over+=(temp*r);
-                    }
-            }
-            cout<<over<<endl;
+int compA(const void *A, const void *B) {
+	return ( *(int *)A - *(int *)B );
+}
+
+int compB(const void *A, const void *B) {
+	return ( *(int *)B - *(int *)A );
+}
+
+int main() {
+	while (1) {
+		int n, d, r, i, j, over = 0, temp;
+		int mor[200], eve[200];
+		
+		scanf("%d%d%d", &n, &d, &r);
+		if (!n && !d && !r) return 0;
+	
+		for (i = 0; i < n; i++) scanf("%d", &mor[i]);
+		for (i = 0; i < n; i++) scanf("%d", &eve[i]);
+		
+		qsort(mor, n, sizeof (int), compA);
+		qsort(eve, n, sizeof (int), compB);
+
+		for (i = 0; i < n; i++) {
+			if (mor[i] + eve[i] > d) {
+				temp = mor[i] + eve[i] - d;
+				over += temp * r;
+			}
+		}
+		printf("%d\n", over);
     }
     return 0;
 }

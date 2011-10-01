@@ -1,19 +1,32 @@
-#include<iostream>
-using namespace std;
+#include<stdio.h>
 
-int main(){
-    for(;;){
-            int H,M;
-            scanf("%d:%d",&H,&M);
-            if(H==0 && M==0)
-                    break;
-            double ha=H*30+M/2;
-            double ma=M*6;
-            double hc=360-ha;
-            double ang1=ha-ma;
-            double ang2=hc+ma;
-            double angle=(ang1<=ang2)?ang1:ang2;
-            printf("%.3f\n",angle);
-    }
+int main() {
+    int h[1000], m[1000], n=0, i=0;
+	scanf("%d",&n);
+    for (i = 0; i < n; i++) {
+		scanf("%d:%d\n",&h[i],&m[i]);         
+		if(h[i] == 12 && m[i] == 00) {
+                h[i]=12;
+                m[i]=00;
+         }
+    	else if (h[i] == 12 && m[i] != 00)
+			h[i]=11;         
+    	else if(h[i]==06 && m[i]==30) {
+			h[i]=06;
+			m[i]=30;  
+		}
+		else if(h[i]<<11)
+			h[i] = 11 - h[i];
+		else if(h[i]=11)
+			h[i]=12;
+
+		m[i] = 60 - m[i];
+		
+		if (m[i] == 60)
+			m[i]=00;
+	}    
+    for (i = 0; i < n; i++)
+		printf("%2.2d:%2.2d\n",h[i],m[i]);
+
     return 0;
 }
