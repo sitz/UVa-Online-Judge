@@ -1,26 +1,30 @@
-#include<iostream>
-#include<cstdio>
-#include<cmath>
-#include<algorithm>
+#include <set>
+#include <cstdio>
+#include <cstring>
 using namespace std;
-int main(){
-    int n,i,j;
-     while(scanf("%d",&n)!=EOF){
-                           int price[n],amt;
-                           for(i=0;i<n;i++)
-                                           scanf("%d",&price[i]);
-                           scanf("%d",&amt);
-                           sort(price,price+n);
-                           int min=0,max=0;
-                           for(i=0;i<n;i++){
-                           for(j=i;j<n;j++){
-                                              if(price[i]+price[j]==amt){
-                                                          min=price[i];
-                                                          max=price[j];
-                                              }
-                           }
-                           }
-                           printf("Peter should buy books whose prices are %d and %d.\n\n",min,max);
-     }
-    return 0;
+
+int main() {
+	int N, M, I, A, B;
+	while (scanf("%d", &N) != EOF) {
+		set< int > S;
+		set< int >::iterator it;
+		
+		while (N--) {
+			scanf("%d", &I);
+			S.insert(I);
+		}
+		scanf("%d", &M);
+		A = 0; B = 1000000;
+		for (it = S.begin(); it != S.end(); it++) {
+			if (S.find(M - *it) != S.end()) {
+				int V = M - 2 * (*it);
+				if (V >= 0 && V < B - A) {
+					A = *it;
+					B = M - (*it);
+				}
+			}
+		}
+		printf("Peter should buy books whose prices are %d and %d.\n\n", A, B);
+	}
+	return 0;
 }
