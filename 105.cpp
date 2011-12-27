@@ -1,26 +1,27 @@
-#include<iostream>
-#include<cstdio>
-#include<cmath>
-#include<algorithm>
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
 using namespace std;
-int main(){
-    int build[20002]={0},max=0,i,start,end,height;
-    while(scanf("%d%d%d",&start,&height,&end)!=EOF){
-                max=max>start?max:start;
-                max=max>end?max:end;
-                for(i=start;i<=end;i++){
-                           if(height>build[i])
-                                              build[i]=height;
-                }
-    }
-    for(i=1;i<=max;i++){
-                       if(build[i]!=build[i-1]){
-                                   int ind=i;
-                                   ind=build[i]<build[i-1]?i-1:i;
-                                   printf("%d %d ",ind,build[i]);
-                       }
-    }
-    printf("%d 0",max);
-    system("pause");
-    return 0;
+
+int main() {
+	int line[10005] = {0};
+	int L, H, R;
+	int Min = 10004, Max = 0;
+	while (scanf("%d %d %d", &L, &H, &R) != EOF) {
+		Min = min(L, Min);
+		Max = max(R, Max);
+		
+		for (int i = L; i < R; i++)
+			line[i] = max(line[i], H);
+	}
+	
+	for (int i = Min; i <= Max; i++) {
+		if (line[i] != line[i - 1]) {
+			if (i > Min) printf(" ");
+			
+			printf("%d %d", i, line[i]);
+		}
+	}
+	printf("\n");
+	return 0;
 }
