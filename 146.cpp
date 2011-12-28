@@ -1,27 +1,21 @@
-#include<iostream>
-#include<algorithm>
+#include <algorithm>
+#include <cstring>
+#include <cstdio>
 using namespace std;
 
-int main(){
-    for(;;){
-            string str;
-            cin>>str;
-            char ch[50];
-            for(int i=0;i<str.length();i++){
-                    ch[i]=str[i];
-            }
-
-            if(str=="#")
-                        break;
-
-           if(next_permutation(ch,ch+str.length())){
-                        for(int i=0;i<str.length();i++){
-                                cout<<ch[i];
-                        }
-                        cout<<endl;
-           }
-           else
-                        cout<<"No Successor"<<endl;
+int main() {
+	while (true) {
+		char ch[51];
+		scanf("%s", ch);
+		int L = strlen(ch);
+		
+		if (strcmp(ch, "#") == 0)
+			return 0;
+		
+		if (next_permutation(ch, ch + L))
+			printf("%s\n", ch);
+		else
+			printf("No Successor\n");
    }
    return 0;
 }
