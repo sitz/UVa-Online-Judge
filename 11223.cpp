@@ -1,55 +1,145 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
 #include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
 #include <cstdlib>
-#include <cctype>
-#include <string>
+#include <cstdio>
 #include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+int main(int argc, char *argv[]) {
+    int T;
+    char ar[2005], tmp[10];
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define PI	acos(-1.0)
-#define INF	1<<30
-#define EPS	1e-9
-#define sqr(x)	(x)*(x)
+    cin >> T;
+    getchar();
+    memset(tmp, '\0', sizeof(tmp));
 
-map<string, string> Map;
+    for(int i = 1; i <= T; i++) {
+        memset(ar, '\0', sizeof(ar));
+        gets(ar);
+        int len = strlen(ar), index = 0;
 
-Map[".-"] = "A"; Map["-..."] = "B"; Map["-.-."] = "C"; Map["-.."] = "D"; Map["."] = "E"; Map["..-."] = "F"; Map["- -."] = "G";
-Map[] = "H"; 	Map[] = "I"; 		Map[] = "J"; 		Map[] = "K"; Map[] = "L"; Map[] = "M"; Map[] = "N"; Map[] = "O"; Map[] = "P"; Map[] = "Q"; Map[] = "R"; 
-Map[] = "S"; Map[] = "T"; Map[] = "U"; Map[] = "V"; Map[] = "W"; Map[] = "X"; Map[] = "Y"; Map[] = "X"; 
+        cout << "Message #" << i << endl;
 
-Map[] = "0"; Map[] = "1"; Map[] = "2"; Map[] = "3"; Map[] = "4"; Map[] = "5"; Map[] = "6"; Map[] = "7"; Map[] = "8"; Map[] = "9"; 
-
-Map[] = "."; Map[] = ","; Map[] = "?"; Map[] = "\'";Map[] = "!"; Map[] = "/"; Map[] = "("; Map[] = ")"; Map[] = "&"; 
-Map[] = ":"; Map[] = ";"; Map[] = "="; Map[] = "+"; Map[] = "-"; Map[] = "_"; Map[] = "\""; Map[] = "@"; 
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	
-	return 0;
+        for(int j = 0; j < len; j++) {
+            if(ar[j] != ' ' )
+                tmp[index++] = ar[j];
+            if(ar[j] == ' ' || j == len - 1) {
+                if(strcmp(tmp,".-" ) == 0)
+                    cout << "A";
+                else if(strcmp(tmp,"-..." ) == 0)
+                    cout << "B";
+                else if(strcmp(tmp,"-.-." ) == 0)
+                    cout << "C";
+                else if(strcmp(tmp,"-.." ) == 0)
+                    cout << "D";
+                else if(strcmp(tmp,"." ) == 0)
+                    cout << "E";
+                else if(strcmp(tmp,"..-." ) == 0)
+                    cout << "F";
+                else if(strcmp(tmp,"--." ) == 0)
+                    cout << "G";
+                else if(strcmp(tmp,"...." ) == 0)
+                    cout << "H";
+                else if(strcmp(tmp,".." ) == 0)
+                    cout << "I";
+                else if(strcmp(tmp,".---" ) == 0)
+                    cout << "J";
+                else if(strcmp(tmp,"-.-" ) == 0)
+                    cout << "K";
+                else if(strcmp(tmp,".-.." ) == 0)
+                    cout << "L";
+                else if(strcmp(tmp,"--" ) == 0)
+                    cout << "M";
+                else if(strcmp(tmp,"-." ) == 0)
+                    cout << "N";
+                else if(strcmp(tmp,"---" ) == 0)
+                    cout << "O";
+                else if(strcmp(tmp,".--." ) == 0)
+                    cout << "P";
+                else if(strcmp(tmp,"--.-" ) == 0)
+                    cout << "Q";
+                else if(strcmp(tmp,".-." ) == 0)
+                    cout << "R";
+                else if(strcmp(tmp,"..." ) == 0)
+                    cout << "S";
+                else if(strcmp(tmp,"-" ) == 0)
+                    cout << "T";
+                else if(strcmp(tmp,"..-" ) == 0)
+                    cout << "U";
+                else if(strcmp(tmp,"...-" ) == 0)
+                    cout << "V";
+                else if(strcmp(tmp,".--" ) == 0)
+                    cout << "W";
+                else if(strcmp(tmp,"-..-" ) == 0)
+                    cout << "X";
+                else if(strcmp(tmp,"-.--" ) == 0)
+                    cout << "Y";
+                else if(strcmp(tmp,"--.." ) == 0)
+                    cout << "Z";
+                else if(strcmp(tmp,"-----" ) == 0)
+                    cout << "0";
+                else if(strcmp(tmp,".----" ) == 0)
+                    cout << "1";
+                else if(strcmp(tmp,"..---" ) == 0)
+                    cout << "2";
+                else if(strcmp(tmp,"...--" ) == 0)
+                    cout << "3";
+                else if(strcmp(tmp,"....-" ) == 0)
+                    cout << "4";
+                else if(strcmp(tmp,"....." ) == 0)
+                    cout << "5";
+                else if(strcmp(tmp,"-...." ) == 0)
+                    cout << "6";
+                else if(strcmp(tmp,"--..." ) == 0)
+                    cout << "7";
+                else if(strcmp(tmp,"---.." ) == 0)
+                    cout << "8";
+                else if(strcmp(tmp,"----." ) == 0)
+                    cout << "9";
+                else if(strcmp(tmp,".-.-.-" ) == 0)
+                    cout << ".";
+                else if(strcmp(tmp,"--..--" ) == 0)
+                    cout << ",";
+                else if(strcmp(tmp,"..--.." ) == 0)
+                    cout << "?";
+                else if(strcmp(tmp,".----." ) == 0)
+                    cout << "'";
+                else if(strcmp(tmp,"-.-.--" ) == 0)
+                    cout << "!";
+                else if(strcmp(tmp,"-..-." ) == 0)
+                    cout << "/";
+                else if(strcmp(tmp,"-.--." ) == 0)
+                    cout << "(";
+                else if(strcmp(tmp,"-.--.-" ) == 0)
+                    cout << ")";
+                else if(strcmp(tmp,".-..." ) == 0)
+                    cout << "&";
+                else if(strcmp(tmp,"---..." ) == 0)
+                    cout << ":";
+                else if(strcmp(tmp,"-.-.-." ) == 0)
+                    cout << ";";
+                else if(strcmp(tmp,"-...-" ) == 0)
+                    cout << "=";
+                else if(strcmp(tmp,".-.-." ) == 0)
+                    cout << "+";
+                else if(strcmp(tmp,"-....-" ) == 0)
+                    cout << "-";
+                else if(strcmp(tmp,"..--.-" ) == 0)
+                    cout << "_";
+                else if(strcmp(tmp,".-..-." ) == 0)
+                    cout << char(34);
+                else if(strcmp(tmp,".--.-." ) == 0)
+                    cout << "@";
+                if(ar[j+1] == ' ' ) {
+                    cout << " ";
+                    j++;
+                }
+                memset(tmp,'\0',sizeof(tmp));
+                index = 0;
+            }
+        }
+        cout << endl;
+        if(i != T) cout << endl;
+    }
+    return EXIT_SUCCESS;
 }
+
