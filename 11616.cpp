@@ -1,35 +1,12 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
 #include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
+#include <sstream>
 #include <string>
 #include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <cctype>
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-
-int valueOf(char c){
-    switch(c){
+int valueOf(char c) {
+    switch(c) {
         case 'M': return 1000;
         case 'D': return 500;
         case 'C': return 100;
@@ -37,39 +14,54 @@ int valueOf(char c){
         case 'X': return 10;
         case 'V': return 5;
         case 'I': return 1;
-
         default: return 0;
     }
 }
 
-int romToDec(char *p){
-    int result = 0;
-    
-    for(; *p; p++){
-        int current = valueOf(*p);
-        int next = valueOf(*(p+1));
-
-        if(current >= next) result += current;
-        else result -= current;
+int romanToDecimal(string S) {
+    int decimalNumeral = 0;
+    S += "0";
+    for(int i = 0; i + 1 < S.length(); i++) {
+        int current = valueOf(S[i]);
+        int next = valueOf(S[i + 1]);
+        if(current >= next) decimalNumeral += current;
+        else decimalNumeral -= current;
     }
-    
-    return result;
+    return decimalNumeral;
 }
 
-string decToRom(string str){
-	return NULL;
+string decimalToRoman(int value) {
+	string roman[13] = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+	int decimal[13]  = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+	
+    string romanNumeral = "";
+    /*
+	if (value <= 0 || value >= 4000)
+		return value;
+  	*/
+    for (int i = 0; i < 13; i++) {
+      while (value >= decimal[i]) {
+        value -= decimal[i];
+        romanNumeral += roman[i];
+      }
+    }
+    return romanNumeral;
 }
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	char *str;
-	while( cin >> str ){
-		if( !isdigit(*str) ){
-			cout << romToDec(str) << endl;
-		}	
-		else
-			cout << decToRom(str) << endl;
+int main() {
+	int I;
+	string S;
+	stringstream ss;
+	while (cin >> S) {
+		if (isdigit(S[0])) {
+			ss.clear();
+			ss << S;
+			ss >> I;
+			cout << decimalToRoman(I) << endl;
+		}
+		else {
+			cout << romanToDecimal(S) << endl;
+		}
 	}
 	return 0;
 }
