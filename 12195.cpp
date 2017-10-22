@@ -1,33 +1,56 @@
-#include <map>
-#include <cmath>
-#include <string>
-#include <cstdio>
-#include <iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-const double EPS = 1e-9;
-
-int main() {
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	while (true) {
-		string str;
-		cin >> str;
-		if (str == "*") break;
-		
-		map<char, double> Map;
-		Map['W'] = 1; Map['H'] = 1/2.0; Map['Q'] = 1/4.0; Map['E'] = 1/8.0; Map['S'] = 1/16.0; Map['T'] = 1/32.0; Map['X'] = 1/64.0; 
-		double C = 0;
-		int Cnt = 0;
-		for (int i = 0; i < str.length(); i++) {
-			if (str[i] == '/') {
-				if (abs(C - 1.0) <= EPS) ++Cnt;
-				C = 0.0;
-			}
-			else
-				C += Map[str[i]];
+int main()
+{
+	string input;
+	while (getline(cin, input))
+	{
+		if (input == "*")
+		{
+			break;
 		}
-		cout << Cnt << endl;
+		int a = 0, b = 64;
+		int counter = 0;
+		for (int i = 1, sz = input.size(); i < sz; i++)
+		{
+			switch (input[i])
+			{
+			case 'W':
+				a += 64;
+				break;
+			case 'H':
+				a += 32;
+				break;
+			case 'Q':
+				a += 16;
+				break;
+			case 'E':
+				a += 8;
+				break;
+			case 'S':
+				a += 4;
+				break;
+			case 'T':
+				a += 2;
+				break;
+			case 'X':
+				a += 1;
+				break;
+			case '/':
+				if (a > 0)// avoid a=0 case
+				{
+					if (a == b)
+					{
+						counter++;
+					}
+				}
+				a = 0;
+				break;
+			}
+		}
+		cout << counter << endl;
 	}
 	return 0;
 }

@@ -1,97 +1,48 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
-
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define REP(i, N) for(i=1; i<=N; i++)
-
-int main(){
-    freopen("test.txt", "r", stdin);
-    while(true){
-                int N, i, j, I, J;
-                cin>>N;
-                if(N == 0)
-                        break;
-                vector<int> rel;
-                FOI(i, 1, N)
-                         rel.push_back(i);
-
-                while(true){
-                            bool in=true;
-                            vector<int> act(rel.begin(), rel.end());
-                            vector<int> req;
-                            FOI(i, 1, N){
-                                   int num;
-                                   cin>>num;
-                                   if(num==0){
-                                              in=false;
-                                              break;
-                                   }
-                                   req.push_back(num);
-                            }
-                            if(!in){
-                                   break;
-                            }
-                            stack<int> stak;
-                            bool flag = true;
-                            while(true){
-                                   if(req.front()==act.front()){
-                                                      req.erase(req.begin());
-                                                      act.erase(act.begin());
-                                   }
-                                   else if(!stak.empty()){
-                                        if(req.front()==stak.top()){
-                                                                   stak.pop();
-                                                                   req.erase(req.begin());
-                                        }
-                                   }
-                                   else{
-                                        while(req.begin()!=act.begin()){
-                                                              stak.push(act.front());
-                                                              act.erase(act.begin());
-                                                              if(act.empty()){
-                                                                       break;
-                                                              }
-                                        }
-                                   }
-                                   if(act.empty() && stak.top() != req.front())
-                                           flag = false;
-                                   if(req.empty() || !flag)
-                                           break;
-                            }
-                            if(!flag)
-                                     cout<<"No\n";
-                            else
-                                cout<<"Yes\n";
-                }
-    }
-    return 0;
+int main()
+{
+	int tgts[1000];
+	while (1)
+	{
+		int n;
+		scanf("%d", &n);
+		if (n == 0)
+		{
+			break;
+		}
+		while (1)
+		{
+			scanf("%d", &tgts[0]);
+			if (tgts[0] == 0)
+			{
+				printf("\n");
+				break;
+			}
+			for (int i = 1; i < n; i++)
+			{
+				scanf("%d", &tgts[i]);
+			}
+			int curr_coach = 1, tgts_idx = 0;
+			stack<int> station;
+			while (curr_coach <= n)
+			{
+				station.push(curr_coach);
+				while (!station.empty() && station.top() == tgts[tgts_idx])
+				{
+					station.pop();
+					tgts_idx++;
+					if (tgts_idx >= n)
+					{
+						break;
+					}
+				}
+				curr_coach++;
+			}
+			printf(station.empty() ? "Yes\n" : "No\n");
+		}
+	}
+	return 0;
 }

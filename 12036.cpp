@@ -1,25 +1,37 @@
-#include <cstring>
-#include <cstdio>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main() {
-	int T, t, i, j, N, I;
-	bool flag;
-	int count[110];
-	scanf("%d", &T);
-	for (t = 1; t <= T; t++) {
-		flag = true;
-		memset(count, 0, sizeof count);
-		scanf("%d", &N);
-		for (i = 0; i < N; i++) {
-			for (j = 0; j < N; j++) {
-				scanf("%d", &I);
-				++count[I];
-				if (count[I] > N) flag = false;
+#define REP(i, b, n) for (int i = b; i < n; i++)
+#define rep(i, n) REP(i, 0, n)
+
+int main()
+{
+	int t, n, tmp, case_number = 0;
+	cin >> t;
+	while (t--)
+	{
+		cin >> n;
+		bool ok = true;
+		int count[101] = {0};
+		rep(i, n * n)
+		{
+			cin >> tmp;
+			count[tmp]++;
+			if (count[tmp] > n)
+			{
+				ok = false;
 			}
 		}
-		if (!flag) printf("Case %d: no\n", t);
-		else printf("Case %d: yes\n", t);
+		cout << "Case " << ++case_number << ": ";
+		if (ok)
+		{
+			cout << "yes" << endl;
+		}
+		else
+		{
+			cout << "no" << endl;
+		}
 	}
 	return 0;
 }

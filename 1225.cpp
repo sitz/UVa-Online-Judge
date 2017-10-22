@@ -1,38 +1,43 @@
-#include <cstdio>
+#include <bits/stdc++.h>
 
-int Mat[10001][10];
+using namespace std;
 
-void Cal() {
-    for (int i = 0; i < 10; i++)
-        Mat[0][i] = 0;
-
-    for (int i = 1; i <= 10000; i++) {
-        for (int j = 0; j < 10; j++)
-            Mat[i][j] = Mat[i - 1][j];
-
-        int K = i;
-        while (K) {
-            ++Mat[i][K % 10];
-            K /= 10;
-        }
-    }
+void count_digits(int number, int *result)
+{
+	while (number > 0)
+	{
+		result[number % 10] += 1;
+		number /= 10;
+	}
 }
 
-int main() {
-    //freopen("testI.txt", "r", stdin);
-    //freopen("testO.txt", "w", stdout);
-
-    Cal();
-
-    int T;
-    scanf("%d", &T);
-    while (T--) {
-        int N;
-        scanf("%d", &N);
-        for (int i = 0; i < 10; i++) {
-            if (i > 0) printf(" ");
-            printf("%d", Mat[N][i]);
-        }
-        printf("\n");
-    }
+int main()
+{
+	int t, n;
+	cin >> t;
+	int *result;
+	result = new int[10];
+	while (t--)
+	{
+		cin >> n;
+		for (int i = 0; i < 10; i++)
+		{
+			result[i] = 0;
+		}
+		for (int i = 1; i <= n; i++)
+		{
+			count_digits(i, result);
+		}
+		for (int i = 0; i < 10; i++)
+		{
+			if (i > 0)
+			{
+				cout << " ";
+			}
+			cout << result[i];
+		}
+		cout << endl;
+	}
+	delete[] result;
+	return 0;
 }

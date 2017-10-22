@@ -1,71 +1,51 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define MAX	1000000
-
-bool prime[MAX + 5];
-vector<int> P;
-
-void seive(){
-	memset(prime, true, sizeof prime);
-	prime[0] = false; prime[1] = false;
-	int i, j;
-	FOI(i, 2, MAX)
-		if( prime[i] ){
-			P.push_back(i);
-			for (j = 2*i; j <= MAX; j += i)
-				prime[j] = false;
+bool isPrime(int n)
+{
+	int temp = sqrt(double(n));
+	for (int i = 3; i < temp + 1; i += 2)
+	{
+		if (n % i == 0)
+		{
+			return false;
 		}
+	}
+	return true;
 }
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	seive();
-	int M = P.size();
-	while( true ){
-		int N, i;
-		cin >> N;
-		if( N == 0 )
-			break;
-		//map<int, bool> Map;
-		int cnt = 0;
-		FOI(i, 0, M-1){
-			if( P[i] > N/2 )
-				break;
-			int NP = N - P[i];
-			if( prime[NP] ){
-				//cout << P[i] << " " << NP << endl;
-				cnt++;
-			}
+int main()
+{
+	vector<int> primes;
+	vector<int>::iterator it;
+	int n;
+	primes.push_back(2);
+	for (int i = 3; i < 1 << 15; i += 2)
+	{
+		if (isPrime(i))
+		{
+			primes.push_back(i);
 		}
-		cout << cnt << endl;
+	}
+	while (cin >> n)
+	{
+		if (n == 0)
+		{
+			break;
+		}
+		int pos = 0;
+		int counter = 0;
+		while (primes[pos] <= n / 2)
+		{
+			it = find(primes.begin(), primes.end(), n - primes[pos]);
+			if (it != primes.end())
+			{
+				counter++;
+			}
+			++pos;
+		}
+		cout << counter << endl;
 	}
 	return 0;
 }

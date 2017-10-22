@@ -1,23 +1,33 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    int t;
-    cin>>t;
-    for(int k=1;k<=t;k++){
-            int n;
-            cin>>n;
-            int wall[50]={0};
-            for(int i=0;i<n;i++)
-                    cin>>wall[i];
-            int l=0,s=0;
-            for(int i=0;i<n-1;i++){
-                    if(wall[i+1]<wall[i])
-                                       s++;
-                    if(wall[i+1]>wall[i])
-                                       l++;
-            }
-            cout<<"Case "<<k<<": "<<l<<" "<<s<<endl;
-    }
-    return 0;
+int main()
+{
+	int t;
+	int n;
+	int h[50];
+	cin >> t;
+	for (int casenum = 0; casenum < t; casenum++)
+	{
+		cin >> n;
+		for (int i = 0; i < n; i++)
+		{
+			cin >> h[i];
+		}
+		int high = 0, low = 0;
+		for (int i = 1; i < n; i++)
+		{
+			if (h[i] > h[i - 1])
+			{
+				high++;
+			}
+			else if (h[i] < h[i - 1])
+			{
+				low++;
+			}
+		}
+		cout << "Case " << casenum + 1 << ": " << high << " " << low << endl;
+	}
+	return 0;
 }

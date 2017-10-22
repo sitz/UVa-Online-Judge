@@ -1,85 +1,102 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    int t;
-    cin>>t;
-    for(int i=1;i<=t;i++){
-            int n;
-            cin>>n;
-            int mat[20][20]={0};
-            for(int j=0;j<n;j++){
-                    long long no=0;
-                    cin>>no;
-                    for(int k=n-1;k>=0;k--){
-                            mat[j][k]=no%10;
-                            no/=10;
-                    }
-            }
-            
-            int m=0;
-            cin>>m;
-            for(int x=1;x<=m;x++){
-                    string str;
-                    cin>>str;
-                    if(str=="row"){
-                                   int a,b;
-                                   cin>>a>>b;
-                                   for(int j=0;j<n;j++){
-                                           int temp=mat[a-1][j];
-                                           mat[a-1][j]=mat[b-1][j];
-                                           mat[b-1][j]=temp;
-                                   }
-                    }
-                    if(str=="col"){
-                                   int a,b;
-                                   cin>>a>>b;
-                                   for(int k=0;k<n;k++){
-                                           int temp=mat[k][a-1];
-                                           mat[k][a-1]=mat[k][b-1];
-                                           mat[k][b-1]=temp;
-                                   }
-                    }
-                    if(str=="inc"){
-                                   for(int j=0;j<n;j++){
-                                           for(int k=0;k<n;k++){
-                                                   mat[j][k]+=1;
-                                                   if(mat[j][k]>=10)
-                                                                    mat[j][k]-=10;
-                                           }
-                                   }
-                    }
-                    if(str=="dec"){
-                                   for(int j=0;j<n;j++){
-                                           for(int k=0;k<n;k++){
-                                                   mat[j][k]-=1;
-                                                   if(mat[j][k]<0)
-                                                                  mat[j][k]+=10;
-                                           }
-                                   }
-                    }
-                    if(str=="transpose"){
-                                         for(int j=0;j<n;j++){
-                                                 for(int k=0;k<n;k++){
-                                                         if(j==k)
-                                                                 break;
-                                                         int temp=mat[j][k];
-                                                         mat[j][k]=mat[k][j];
-                                                         mat[k][j]=temp;
-                                                 }
-                                         }
-                    }
-            }
-            cout<<"Case #"<<i<<endl;
-            for(int j=0;j<n;j++){
-                    for(int k=0;k<n;k++){
-                            cout<<mat[j][k];
-                    }
-                    cout<<endl;
-            }
-            cout<<endl;
-            
-            
-    }
-    return 0;
+int tmp[10][10];
+int matrix[10][10];
+
+void transpose(int n)
+{
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 10; j++)
+		{
+			tmp[i][j] = matrix[i][j];
+		}
+	}
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+		{
+			matrix[i][j] = tmp[j][i];
+		}
+	}
+}
+
+int main()
+{
+	int t, n, m, a, b;
+	char c;
+	string instruction;
+	cin >> t;
+	for (int casenum = 0; casenum < t; casenum++)
+	{
+		cin >> n;
+		for (a = 0; a < n; a++)
+		{
+			for (b = 0; b < n; b++)
+			{
+				cin >> c;
+				matrix[a][b] = c - '0';
+			}
+		}
+		cin >> m;
+		while (m--)
+		{
+			cin >> instruction;
+			if (instruction == "row")
+			{
+				cin >> a >> b;
+				a--, b--;
+				for (int i = 0; i < n; i++)
+				{
+					swap(matrix[a][i], matrix[b][i]);
+				}
+			}
+			else if (instruction == "col")
+			{
+				cin >> a >> b;
+				a--, b--;
+				for (int i = 0; i < n; i++)
+				{
+					swap(matrix[i][a], matrix[i][b]);
+				}
+			}
+			else if (instruction == "inc")
+			{
+				for (a = 0; a < n; a++)
+				{
+					for (b = 0; b < n; b++)
+					{
+						matrix[a][b] = (matrix[a][b] + 1) % 10;
+					}
+				}
+			}
+			else if (instruction == "dec")
+			{
+				for (a = 0; a < n; a++)
+				{
+					for (b = 0; b < n; b++)
+					{
+						matrix[a][b] = (matrix[a][b] + 9) % 10;
+					}
+				}
+			}
+			else if (instruction == "transpose")
+			{
+				transpose(n);
+			}
+		}
+		cout << "Case #" << casenum + 1 << endl;
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				cout << matrix[i][j];
+			}
+			cout << endl;
+		}
+		cout << endl;
+	}
+	return 0;
 }

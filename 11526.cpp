@@ -1,23 +1,50 @@
-#include<iostream>
-using namespace std;
-long long H(long long a);
+#include <bits/stdc++.h>
 
-int main(){
-    int t;
-    cin>>t;
-    for(int i=1;i<=t;i++){
-            long long n;
-            cin>>n;
-            long long val=H(n);
-            cout<<val<<endl;
-    }
-    return 0;
+using namespace std;
+
+/*
+ *  Algorithm:
+ *      There are n/2 1s, n/3 2s, n/4 3s ......
+ *      Calculate all the num until only one num remain.
+ *      Then sum all this nums.
+ * */
+
+typedef long long LL;
+
+LL solve(int n)
+{
+	if (n < 0)
+	{
+		return 0;
+	}
+	int i, j, last = n;
+	LL ans = 0;
+	for (i = 2;; i++)
+	{
+		j = n / i;
+		ans += (last - j) * (i - 1);
+		if (last - j < 2)
+		{
+			break;
+		}
+		last = j;
+	}
+	for (; j >= 1; j--)
+	{
+		ans += n / j;
+	}
+	return ans;
 }
 
-long long H(long long a){
-     long long res = 0;
-     for(long long i=1;i<=a;i++){
-            res+=(a/i);
-      }
-      return res;
+int main()
+{
+	int t;
+	LL n;
+	cin >> t;
+	while (t--)
+	{
+		cin >> n;
+		cout << solve(n) << endl;
+	}
+	return 0;
 }

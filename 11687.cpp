@@ -1,43 +1,35 @@
-#include <iostream>
-#include <string>
-#include <sstream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int toInt(string S) {
-	istringstream ss(S);
-	int I;
-	ss >> I;
-	return I;
+int length(int n)
+{
+	return (int)log10(n) + 1;
 }
 
-string toString(int I) {
-	stringstream ss;
-	string S;
-	ss << I;
-	ss >> S;
-	return S;
-}
-
-int main(int argc, char **argv) {
-	while (true) {
-		string S;
-		cin >> S;
-		if (S == "END") break;
-		
-		if (S.length() < 30) {
-			if (toInt(S) == (int)S.length()) {
-				cout << "1\n";
-				continue;
-			}
+int main()
+{
+	int n;
+	string input;
+	while (getline(cin, input))
+	{
+		if (input == "END")
+		{
+			break;
 		}
-		S = toString(S.length());
-		int I = 2;
-		while ((int)S.length() != toInt(S)) {
-			++I;
-			S = toString(S.length());
+		if (input == "1")
+		{
+			cout << 1 << endl;
+			continue;
 		}
-		cout << I << endl;
+		int result = 1;
+		n = input.size();
+		while (n != 1)
+		{
+			n = length(n);
+			result++;
+		}
+		cout << result + 1 << endl;
 	}
 	return 0;
 }
-

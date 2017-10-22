@@ -1,40 +1,23 @@
-#include <string.h>
-#include <stdio.h>
+#include <bits/stdc++.h>
 
-const int MOD = 1000000;
-int C[101][101];
-/*
-int Cal(int N, int K) {
-	if (N < 0 || K < 0) return 0;
-	if (C[N][K] != -1)	return C[N][K];
-	
-	int V = 0, i;
-	for (i = 0; i <= N; i++)
-		V = (V + Cal(N - i, K - 1)) %MOD;
-	return C[N][K] = V;
-}
-*/
-void Calc() {
-	int i, j, k;
-	for (i = 0; i <= 100; i++) C[i][0] = 0;
-	for (j = 0; j <= 100; j++) C[0][j] = 1;
-	
-	for (i = 1; i <= 100; i++) {
-		for (j = 1; j <= 100; j++) {
-			C[i][j] = 0;
-			for (k = 0; k <= i; k++)
-				C[i][j] = (C[i][j] %MOD + C[k][j - 1] %MOD) %MOD;
-		}
+using namespace std;
+
+int main()
+{
+	long long C[201][201] = {0};
+	int N, K;
+	C[0][0] = 1;
+	for (N = 1; N <= 200; N++)
+	{
+		C[N][0] = 1;
+		for (K = 1; K <= N; K++)
+			C[N][K] = (C[N - 1][K - 1] + C[N - 1][K]) % 1000000;
 	}
-}
-
-int main() {
-	Calc();
-	while (true) {
-		int N, K;
-		scanf("%d%d", &N, &K);
-		if (!N && !K) break;
-		printf("%d\n", C[N][K]);
+	while (scanf("%d %d", &N, &K) == 2)
+	{
+		if (N == 0 && K == 0)
+			break;
+		printf("%lld\n", C[N + K - 1][K - 1]);
 	}
 	return 0;
 }

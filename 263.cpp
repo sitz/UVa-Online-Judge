@@ -1,91 +1,129 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+typedef long long ss;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define PI		acos(-1.0)
-#define INF		1<<30
-#define EPS		1e-9
-#define sqr(x)	(x)*(x)
+struct node
+{
+	ss info;
+	node *parent, *left, *right;
+};
+node *root;
 
-int main(){
-	freopen("testI.txt", "r", stdin);
-	freopen("testO.txt", "w", stdout);
-	bool stat = false;
-	while (true){
-		int N, i, j;
-		cin >> N;
-		if (N == 0)
-			break;
-		if (stat)
-			cout << endl;
-		stat = true;
-		cout << "Original number was " << N << endl;
-		vector < int > V;
-		while (true){
-			vector < int > vec;
-			while (N){
-				vec.push_back(N % 10);
-				N /= 10;
+void insert(int info)
+{
+	node *p = (node *)malloc(sizeof(node));
+	p->left = p->right = NULL;
+	p->info = info;
+	if (root == NULL)
+	{
+		root = p;
+		p->parent = NULL;
+		return;
+	}
+	node *x = root;
+	while (1)
+	{
+		if (x->info < info)
+		{
+			if (x->right == NULL)
+			{
+				x->right = p;
+				p->parent = x;
+				break;
 			}
-			sort(vec.begin(), vec.end());
-			int A = 0, B = 0;
-			FOD(i, vec.size() - 1, 0)
-				A = A * 10 + vec[i];
-			FOI(i, 0, vec.size() - 1)
-				B = B * 10 + vec[i];
-			N = A - B;
-			cout << A << " - " << B << " = " << N << endl;
-			V.push_back(N);
-			int S = V.size();
-			if (N == 0 || S > 1){
-				if (N == 0){
-					cout << "0 - 0 = 0\n";
-					cout << "Chain length " << S + 1 << endl;
-					break;
-				}
-				else{
-					bool flag = false;
-					FOI(i, 0, S - 2)
-						if (V[i] == V[S - 1]){
-							cout << "Chain length " << S << endl;
-							flag = true;
-							break;
-						}
-					if (flag)
-						break;
-				}
+			else
+			{
+				x = x->right;
+			}
+		}
+		else
+		{
+			if (x->left == NULL)
+			{
+				x->left = p;
+				p->parent = x;
+				break;
+			}
+			else
+			{
+				x = x->left;
 			}
 		}
 	}
-	return 0;
+}
+node *search(node *r, int info)
+{
+	node *x = r;
+	while (x != NULL)
+	{
+		if (x->info == info)
+		{
+			return x;
+		}
+		if (x->info < info)
+		{
+			x = x->right;
+		}
+		else
+		{
+			x = x->left;
+		}
+	}
+	return x;
+}
+int com(const void *a, const void *b)
+{
+	return *(char *)a - *(char *)b;
+}
+void Rev(char *str)
+{
+	char temp[100];
+	int i, n = 0;
+	for (i = strlen(str) - 1; i >= 0; i--)
+	{
+		temp[n++] = str[i];
+	}
+	temp[n] =  '\0';
+	strcpy(str, temp);
+}
+void Cal(ss n)
+{
+	char dummy[100];
+	root = NULL;
+	ss b, m, pre, temp, length = 0;
+	while (1)
+	{
+		sprintf(dummy, "%lld", n);
+		qsort(dummy, strlen(dummy), sizeof(char), com);
+		sscanf(dummy, "%lld", &b);
+		Rev(dummy);
+		sscanf(dummy, "%lld", &m);
+		temp = m - b;
+		printf("%lld - %lld = %lld\n", m, b, temp);
+		if (search(root, temp))
+		{
+			break;
+		}
+		insert(temp);
+		n = temp;
+		length++;
+	}
+	printf("Chain length %lld\n\n", length + 1);
 }
 
+int main()
+{
+	ss n;
+	while (scanf("%lld", &n) && n)
+	{
+		if (!n)
+		{
+			break;
+		}
+		printf("Original number was %lld\n", n);
+		Cal(n);
+	}
+	return 0;
+}

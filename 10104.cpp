@@ -1,54 +1,29 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
-
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define REP(i, N) for(i=1; i<=N; i++)
-
-int64 G[3]; 
-void Ext_gcd(int64 a,int64 b) { 
-    if(b == 0){ 
-        G[0] = a; G[1] = 1; G[2] = 0;
-        return; 
-    } 
-    Ext_gcd(b,a%b); 
-    int64 x = G[1]; 
-    G[0] = G[0]; G[1] = G[2]; G[2] = (x - ((a/b)*G[2])); 
-}
-
-int main(){
-    int64 A, B;
-    while(cin>>A>>B){
-                     Ext_gcd(A, B);
-                     cout<<G[1]<<" "<<G[2]<<" "<<G[0]<<endl;
-    }
-    return 0;
+int main()
+{
+	int s = 1, t = 0, q, r;
+	int u = 0, v = 1, a, b, x, y;
+	while (scanf("%d%d", &a, &b) != EOF)
+	{
+		s = 1;
+		v = 1, t = u = 0;
+		while (b > 0)
+		{
+			q = a / b;
+			r = a - q * b;
+			x = s - q * u;
+			y = t - q * v;
+			a = b;
+			s = u;
+			t = v;
+			b = r;
+			u = x;
+			v = y;
+		}
+		printf("%d %d %d\n", s, t, a);
+	}
+	return 0;
 }

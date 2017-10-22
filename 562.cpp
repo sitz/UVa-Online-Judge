@@ -1,45 +1,43 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    int arr[100],front=0,back=0,n,m,i=0,j=0,k=0,temp=0,val=0;
-    cin>>n;
-    for(i=0;i<n;i++){
-                     cin>>m;
-                     
-                     for(j=0;j<m;j++)
-                                     cin>>arr[j];
-                     if(m>=2){
-                              for(j=0;j<m;j++){
-                                     for(k=j+1;k<m;k++){
-                                                       if(arr[j]>arr[k]){
-                                                                        temp=arr[j];
-                                                                        arr[j]=arr[k];
-                                                                        arr[k]=temp;
-                                                       }
-                                     }
-                              }
-                     front=arr[m-1];
-                     back=arr[m-2];
-                     m=m-3;
-                     while(m!=(-1)){
-                            if(front>=back){
-                                           back+=arr[m];
-                                           front=front;
-                                           m--;
-                            }
-                            else{
-                                 front+=arr[m];
-                                 back=back;
-                                 m--;
-                            }
-                     }
-                     val=abs(front-back);
-                     cout<<val<<endl;
-                     }
-                     else{
-                          cout<<arr[0]<<endl;
-                     }
-    }
-    return 0;
+/**
+ * Dynamic Programming, Subset sum
+ */
+
+enum
+{
+	MAX_COINS = 100,
+	MAX_CENTS = 500,
+	MAX_SUM = MAX_COINS * MAX_CENTS
+};
+
+bool possible[MAX_SUM + 1];
+
+int main()
+{
+	int num_case;
+	scanf("%d", &num_case);
+	while (num_case--)
+	{
+		int num_coins;
+		scanf("%d", &num_coins);
+		int coin[MAX_COINS];
+		for (int i = 0; i < num_coins; ++i)
+			scanf("%d", &coin[i]);
+		int sum = std::accumulate(coin, coin + num_coins, 0);
+		memset(possible, 0, sizeof(possible));
+		possible[0] = 1;
+		for (int i = 0; i < num_coins; ++i)
+			for (int j = sum - coin[i]; j >= 0; --j)
+				if (possible[j])
+					possible[j + coin[i]] = true;
+		int min = INT_MAX;
+		for (int i = 0; i <= sum; ++i)// sum=0 cent is valid
+			if (possible[i] && abs(2 * i - sum) < min)
+				min = abs(2 * i - sum);
+		printf("%d\n", min);
+	}
+	return 0;
 }

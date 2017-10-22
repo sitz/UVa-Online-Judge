@@ -1,19 +1,27 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    int t;
-    cin>>t;
-    for(int i=0;i<t;i++){
-            int e,f,c;
-            cin>>e>>f>>c;
-            int init=e+f,total=0,rem=init%c;
-            while(init>=c){
-                           int fresh=init/c;
-                           init=fresh+rem;
-                           rem=init%c;
-                           total+=fresh;
-            }
-            cout<<total<<endl;
-    }
+int main()
+{
+	int n;
+	int tmp;
+	int result;
+	int e, f, c;
+	cin >> n;
+	while (n--)
+	{
+		cin >> e >> f >> c;
+		e += f;
+		result = 0;
+		while (e >= c)
+		{
+			tmp = e / c;
+			result += tmp;
+			e %= c;
+			e += tmp;
+		}
+		cout << result << endl;
+	}
+	return 0;
 }

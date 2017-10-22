@@ -1,65 +1,81 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for (i = A; i <= B; i++)
-#define FOD(i, A, B) for (i = A; i >= B; i--)
+/**
+ * UVa 492 Pig-Latin (AC)
+ * Author: chchwy
+ * Last Modified: 2010.02.06
+ */
 
-bool isVowel(char C) {
-	C = tolower(C);
-	return (C == 'a' || C == 'e' || C == 'i' || C == 'o' || C == 'u');
+bool isVowel(char c)
+{
+	switch (c)
+	{
+	case 'A':
+	case 'a':
+	case 'E':
+	case 'e':
+	case 'I':
+	case 'i':
+	case 'O':
+	case 'o':
+	case 'U':
+	case 'u':
+		return true;
+	default:
+		return false;
+	}
 }
-
-string mod(string S) {
-	if (isVowel(S[0]))
-		return S + "ay";
-	return S.substr(1) + S[0] + "ay";
-}
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	string str;
-	while (getline(cin, str)) {
-		int L = str.length() - 1;
-		int i, j;
-		string temp = "";
-		FOI(i, 0, L) {
-			if (!isalpha(str[i])) {
-				if (!temp.empty())
-					cout << mod(temp);
-				cout << str[i];
-				temp = "";
+int main()
+{
+	char buf[4096];
+	int bufIndex = 0;
+	bool isWord = false;//the state
+	char c;
+	while ((c = getchar()) != EOF)
+	{
+		/* finite state machine */
+		switch (isWord)
+		{
+		case false:
+			if (isalpha(c))
+			{
+				bufIndex = 0;//clear buf
+				buf[bufIndex++] = c;
+				isWord = true;
 			}
 			else
-				temp += str[i];
+			{
+				putchar(c);
+			}
+			break;
+		case true:
+			if (isalpha(c))
+			{
+				buf[bufIndex++] = c;
+			}
+			else
+			{
+				/* print word */
+				if (isVowel(buf[0]))
+				{
+					buf[bufIndex] = NULL;//NULL end
+					printf(buf);
+					printf("ay");
+				}
+				else
+				{
+					buf[bufIndex] = NULL;
+					printf(buf + 1);
+					putchar(buf[0]);
+					printf("ay");
+				}
+				putchar(c);
+				isWord = false;
+			}
+			break;
 		}
-		if (!temp.empty())
-			cout << mod(temp);
-		cout << endl;
 	}
 	return 0;
 }

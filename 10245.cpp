@@ -1,31 +1,56 @@
-#include<iostream>
-#include<cmath>
+#include <bits/stdc++.h>
+
 using namespace std;
-int main(){
-    for(;;){
-            long long n,i,j;
-            cin>>n;
-            if(n==0)
-                    break;
-            double cood[n][2];
-            for(i=0;i<n;i++)
-                            cin>>cood[i][0]>>cood[i][1];
-            if(n==1){
-                    cout<<"INFINITY\n";
-                    continue;
-            }
-            double min=sqrt(pow((cood[0][0]-cood[1][0]),2)+pow((cood[0][1]-cood[1][1]),2));
-            for(i=0;i<n;i++){
-            for(j=i+1;j<n;j++){
-                               double dis=sqrt(pow((cood[i][0]-cood[j][0]),2)+pow((cood[i][1]-cood[j][1]),2));
-                               if(dis<min)
-                                          min=dis;
-            }
-            }
-            if(min>=10000)
-                          cout<<"INFINITY\n";
-            else
-                          printf("%.4lf\n",min);
-    }
-    return 0;
+
+#define EPS 1e-6
+
+struct Point
+{
+	double x, y;
+	double dist(const Point &a)
+	{
+		return hypot(a.x - x, a.y - y);
+	}
+} point[10000];
+
+int main()
+{
+	int n;
+	while (scanf("%d", &n) == 1 && n)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			scanf("%lf%lf", &point[i].x, &point[i].y);
+		}
+
+		sort(point, point + n, [](const Point &a, const Point &b) -> bool
+				 {
+					 return a.x < b.x;
+				 });
+
+		double ans = 10000.0f;
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = i + 1; j < n; j++)
+			{
+				// dist > this pt + shortest dist; two pts cannot be < curr shortest dist
+				if (point[i].x + ans < point[j].x)
+				{
+					break;
+				}
+				double d = point[i].dist(point[j]);
+				ans = min(ans, d);
+			}
+		}
+
+		if (fabs(ans - 10000.0f) < EPS)
+		{
+			printf("INFINITY\n");
+		}
+		else
+		{
+			printf("%.4lf\n", ans);
+		}
+	}
+	return 0;
 }

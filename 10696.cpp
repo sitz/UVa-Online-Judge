@@ -1,21 +1,20 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
-long long f91(long long a);
-int main(){
-    long long N=0;
-    for(;;){
-            cin>>N;
-            if(N==0)
-                    break;
-                       cout<<"f91("<<N<<") = "<<f91(N)<<endl;
-    }
-    return 0;
-}
 
-
-long long f91(long long a){
-     if(a>=101)
-                return (a-10);
-     else 
-          return f91(f91(a+11));
+int main()
+{
+	int n;
+	while (scanf("%d", &n) && n)
+	{
+		if (n <= 101)
+		{
+			printf("f91(%d) = 91\n", n);
+		}
+		else
+		{
+			printf("f91(%d) = %d\n", n, n - 10);
+		}
+	}
+	return 0;
 }

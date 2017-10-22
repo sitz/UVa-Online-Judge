@@ -1,69 +1,48 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+enum
+{
+	MAX = 1000
+};
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
+int pos[MAX];
+string data[MAX];
 
-string toString(int I){
-	stringstream ss;
-	string str;
-	ss << I;
-	ss >> str;
-	return str;
+int read_pos_array()
+{
+	int x, index = 0;
+	while (cin >> x)
+	{
+		pos[x - 1] = index;//index shift (between 0 start and 1 start)
+		index++;
+		if (cin.get() == '\n')
+			break;
+	}
+	return index;
 }
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int T;
-	cin >> T;
-	string str, s;
-	while( T-- ){
-		getline(cin, str);
-		getline(cin, str);
-		vector< string > ind, val;
-		map<string, string> Map;
-		stringstream ss;
-		getline(cin, str);
-		ss << str;
-		while( ss >> s ) ind.push_back(s);
-		int N = ind.size(), i;
-		FOI(i, 0, N-1){
-			cin >> str;
-			Map[ind[i]] = str;
-		}
-		FOI(i, 0, N-1)
-			cout << Map[toString(i+1)] << endl;
-		if( T > 0 )
-			cout << endl;
+void read_data_array(int len)
+{
+	for (int i = 0; i < len; ++i)
+		cin >> data[i];
+	cin.ignore(128, '\n');
+}
+
+int main()
+{
+	int num_case;
+	cin >> num_case;
+	while (num_case--)
+	{
+		cin.ignore(128, '\n');
+		int len = read_pos_array();
+		read_data_array(len);
+		for (int i = 0; i < len; ++i)
+			cout << data[pos[i]] << '\n';
+		if (num_case != 0)
+			putchar('\n');
 	}
 	return 0;
 }

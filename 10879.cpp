@@ -1,27 +1,40 @@
-#include<iostream>
-#include<cmath>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    int t;
-    cin>>t;
-    for(int i=1;i<=t;i++){
-            int K=0;
-            cin>>K;
-            int N1=0,N2=0;
-            for(int j=2;j<=sqrt(K);j++){
-                    if(j*(K/j)==K){
-                                   N1=j;
-                                   break;
-                    }
-            }
-            for(int j=N1+1;j<=sqrt(K);j++){
-                    if(j*(K/j)==K && j!=N1 && j!=(K/N1)){
-                                   N2=j;
-                                   break;
-                    }
-            }
-            cout<<"Case #"<<i<<": "<<K<<" = "<<N1<<" * "<<K/N1<<" = "<<N2<<" * "<<K/N2<<endl;
-    }
-    return 0;
+/*
+10879
+*/
+void Cal(int n)
+{
+	int i;
+	printf(" %d = ", n);
+	for (i = 2; i * i <= n; i++)
+	{
+		if (n % i == 0)
+		{
+			printf("%d * %d = ", i, n / i);
+			break;
+		}
+	}
+	for (++i; i * i <= n; i++)
+	{
+		if (n % i == 0)
+		{
+			printf("%d * %d\n", i, n / i);
+			break;
+		}
+	}
+}
+int main()
+{
+	int n, ks, c = 1;
+	scanf("%d", &n);
+	while (n--)
+	{
+		scanf("%d", &ks);
+		printf("Case #%d: ", c++);
+		Cal(ks);
+	}
+	return 0;
 }

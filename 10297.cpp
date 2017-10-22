@@ -1,18 +1,19 @@
-#include<iostream>
-#include<cstdio>
-#include<cmath>
-#include<algorithm>
-#define PI 3.141592653589793
+#include <bits/stdc++.h>
+
 using namespace std;
-int main(){
-    for(;;){
-            double D,V;
-            scanf("%lf%lf",&D,&V);
-            if(D==0 && V==0)
-                    break;
-            double val=D*D*D - 6*V/PI;
-            double d=pow(val,1.0/3.0);
-            printf("%.3lf\n",d);
-    }
-    return 0;
+
+const double pi = 3.1415926;
+
+int main()
+{
+	double D, V;
+	while (cin >> D >> V)
+	{
+		if (D == 0.0f && V == 0.0f)
+		{
+			break;
+		}
+		printf("%.3lf\n", pow((D * D * D - 6 * V / pi), (1 / 3.0)));
+	}
+	return 0;
 }

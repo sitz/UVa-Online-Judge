@@ -1,90 +1,96 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+static int tbl[20][200], sum[20][200], x, y, best[2];
+static queue<int> path;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define PI		acos(-1.0)
-#define INF		1LL<<60
-#define EPS		1e-9
-#define sqr(x)	(x)*(x)
+int main()
+{
+	while (scanf("%d%d", &x, &y) == 2)
+	{
+		// read tbl
+		for (int i = 0; i < x; i++)
+		{
+			for (int j = 0; j < y; j++)
+			{
+				scanf("%d", &tbl[i][j]);
+			}
+		}
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int64 M, N;
-	while (scanf("%lld%lld", &M, &N) != EOF){
-		int64 mat[M][N], pre[M][N];
-		int64 i, j;
-		FOI(i, 0, M-1){
-			FOI(j, 0, N-1){
-				scanf("%lld", &mat[i][j]);
-				pre[i][j] = INF;
+		// prepare sum[]
+		for (int i = 0; i < x; i++)
+		{
+			sum[i][y - 1] = tbl[i][y - 1];
+		}
+
+		// dp
+		for (int j = y - 2; j >= 0; j--)
+		{
+			for (int i = 0; i < x; i++)
+			{
+				long a = sum[(i + x - 1) % x][j + 1], b = sum[i][j + 1], c = sum[(i + x + 1) % x][j + 1];
+				sum[i][j] = min(a, min(b, c)) + tbl[i][j];
 			}
 		}
-		FOD(j, N-2, 0){
-			FOI(i, 0, M-1){
-				int64 A = (M + i - 1) % M;
-				int64 B = (M + i) % M;
-				int64 C = (M + i + 1) % M;
-			
-				int64 mi   = min(mat[A][j+1], min(mat[B][j+1], mat[C][j+1]));
-				mat[i][j] += mi;
-			
-				if (mi == mat[A][j+1])
-					pre[i][j]  = min(pre[i][j], A);
-				if (mi == mat[B][j+1])
-					pre[i][j]  = min(pre[i][j], B);
-				if (mi == mat[C][j+1])
-					pre[i][j]  = min(pre[i][j], C);
+
+		// find min
+		int min = sum[0][0];
+		best[0] = 0;
+		best[1] = 0;
+		for (int i = 1; i < x; i++)
+		{
+			if (sum[i][0] < min)
+			{
+				min = sum[i][0];
+				best[0] = i;
 			}
 		}
-		int64 minm = INF, inR = 0, inC = N - 1;
-		FOI(i, 0, M-1){
-			if (minm > mat[i][0]){
-				inR  = i;
-				minm = mat[i][0];
+
+		// trk lexicographical path
+		path.push(best[0]);
+		for (int j = 1; j < y; j++)
+		{
+			long a = sum[best[0]][j - 1] - tbl[best[0]][j - 1];
+			int m = x + 1;
+			if (sum[(x + best[0] - 1) % x][j] == a)
+			{
+				if ((x + best[0] - 1) % x < m)
+				{
+					m = (x + best[0] - 1) % x;
+				}
 			}
+			if (sum[(x + best[0] + 1) % x][j] == a)
+			{
+				if ((x + best[0] + 1) % x < m)
+				{
+					m = (x + best[0] + 1) % x;
+				}
+			}
+			if (sum[best[0]][j] == a)
+			{
+				if (best[0] < m)
+				{
+					m = best[0];
+				}
+			}
+			best[0] = m;
+			path.push(m);
 		}
-		vector< int64 > V;
-		FOI(inC, 0, N-1){
-			V.push_back(inR);
-			inR = pre[inR][inC];
-		}
-		FOI(i, 0, V.size()-1){
-			printf("%lld", V[i] + 1);
-			if (i < V.size() - 1)
+
+		// print out path + min res
+		int c = 0;
+		while (!path.empty())
+		{
+			if (c > 0)
+			{
 				printf(" ");
+			}
+			c++;
+			printf("%d", path.front() + 1);
+			path.pop();
 		}
-		printf("\n%lld\n", minm);
+		printf("\n%d\n", min);
 	}
 	return 0;
 }
-

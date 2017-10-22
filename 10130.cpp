@@ -1,36 +1,68 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    int test;
-    cin>>test;
-    while(test--){
-                  int N, i, w;
-                  cin>>N;
-                  int price[N+1], weight[N+1];
-                  for(i=1; i<=N; i++)
-                           cin>>price[i]>>weight[i];
-                  int nMem, totVal=0;
-                  cin>>nMem;
-                  while(nMem--){
-                                int MW;
-                                cin>>MW;
-                                int mat[N+1][MW+1];
-                                for(i=0; i<=N; i++)
-                                         mat[i][0] = 0;
-                                for(w=0; w<=MW; w++)
-                                         mat[0][w] = 0;
-                                for(i=1; i<=N; i++){
-                                         for(w=1; w<=MW; w++){
-                                                  if(weight[i] > w)
-                                                               mat[i][w] = mat[i-1][w];
-                                                  else
-                                                      mat[i][w] = max(mat[i-1][w], mat[i-1][w-weight[i]] + price[i]);
-                                         }
-                                }
-                                totVal += mat[N][MW];
-                  }
-                  cout<<totVal<<endl;
-    }
-    return 0;
+int numOfCase, numOfObj, numOfPeople;
+int c[1001][31];
+
+struct Object
+{
+	int price, weight;
+} obj[1001];
+
+void InputObj()
+{
+	int i;
+	for (i = 1; i <= numOfObj; i++)
+	{
+		cin >> obj[i].price >> obj[i].weight;
+	}
+}
+
+void KnapSack()
+{
+	memset(c, 0, sizeof(c));
+	int i, w;
+	for (i = 0; i <= 1000; i++)
+	{
+		c[i][0] = 0;
+	}
+	for (w = 0; w <= 30; w++)
+	{
+		c[0][w] = 0;
+	}
+	for (i = 1; i <= numOfObj; i++)
+		for (w = 1; w <= 30; w++)
+		{
+			if (obj[i].weight > w)
+			{
+				c[i][w] = c[i - 1][w];
+			}
+			else
+			{
+				int temp = c[i - 1][w - obj[i].weight] + obj[i].price;
+				c[i][w] = c[i - 1][w] > temp ? c[i - 1][w] : temp;
+			}
+		}
+}
+
+int main()
+{
+	cin >> numOfCase;
+	while (numOfCase--)
+	{
+		cin >> numOfObj;
+		InputObj();
+		cin >> numOfPeople;
+		int sum = 0;
+		KnapSack();
+		while (numOfPeople--)
+		{
+			int mw;
+			cin >> mw;
+			sum += c[numOfObj][mw];
+		}
+		cout << sum << endl;
+	}
+	return 0;
 }

@@ -1,64 +1,142 @@
-#include <cstdio>
-#include <sstream>
-#include <cstring>
-#include <iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int Mat[101][101];
-int N = 0;
+int n;
+int sq[100][100];
+bool visited[100][100];
 
-int dI[] = {-1, 0, 1, 0};
-int dJ[] = {0, 1, 0, -1};
-void dfs(int I, int J, int C) {
-	if (I < 0 || I >= N) return;
-	if (J < 0 || J >= N) return;
-	if (Mat[I][J] == -1) return;
-	if (Mat[I][J] != C)  return;
-	
-	Mat[I][J] = -1;
-	for (int i = 0; i < 4; i++)
-		dfs(I + dI[i], J + dJ[i], C);
+bool check(int c)
+{
+	for (int i = 0; i < n; i++)
+	{
+		for (int y = 0; y < n; y++)
+		{
+			if (sq[i][y] == c)
+			{
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
-int main() {
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	
-	while (true) {
-		scanf("%d\n", &N);
-		if (!N) break;
-		
-		memset(Mat, 0, sizeof (Mat));
-		
-		for (int i = 1; i < N; i++) {
-			string str;
-			getline(cin, str);
-			stringstream ss(str);
-			int A, B;
-			while (ss >> A >> B)
-				Mat[A - 1][B - 1] = i;
-		}
-		
-		int arr[N];
-		memset(arr, 0, sizeof arr);
-		
-		bool flag = true;
-		for (int i = 0; i < N; i++) {
-			for (int j = 0; j < N; j++) {
-				if (Mat[i][j] < 0) continue;
-				
-				if (arr[Mat[i][j]] > 0) {
-					flag = false;
-					break;
-				}
-				
-				++arr[Mat[i][j]];
-				dfs(i, j, Mat[i][j]);
+void fill(int a, int b, int c)
+{
+	pair<int, int> p;
+	queue<pair<int, int>> q;
+	p = make_pair(a, b);
+	q.push(p);
+	while (!q.empty())
+	{
+		p = q.front();
+		q.pop();
+		sq[p.first][p.second] = 0;
+		if (p.first - 1 >= 0)
+		{
+			if (sq[p.first - 1][p.second] == c && visited[p.first - 1][p.second] == false)
+			{
+				q.push(make_pair(p.first - 1, p.second));
+				visited[p.first - 1][p.second] = true;
 			}
-			if (!flag) break;
 		}
-		
-		if (flag)	printf("good\n");
-		else		printf("wrong\n");
+		if (p.second - 1 >= 0)
+		{
+			if (sq[p.first][p.second - 1] == c && visited[p.first][p.second - 1] == false)
+			{
+				q.push(make_pair(p.first, p.second - 1));
+				visited[p.first][p.second - 1] = true;
+			}
+		}
+		if (p.first + 1 < n)
+		{
+			if (sq[p.first + 1][p.second] == c && visited[p.first + 1][p.second] == false)
+			{
+				q.push(make_pair(p.first + 1, p.second));
+				visited[p.first + 1][p.second] = true;
+			}
+		}
+		if (p.second + 1 < n)
+		{
+			if (sq[p.first][p.second + 1] == c && visited[p.first][p.second + 1] == false)
+			{
+				q.push(make_pair(p.first, p.second + 1));
+				visited[p.first][p.second + 1] = true;
+			}
+		}
 	}
+}
+
+int main()
+{
+	int x, y;
+	string input;
+	while (cin >> n)
+	{
+		if (n == 0)
+		{
+			break;
+		}
+		for (int i = 0; i < n; i++)
+		{
+			for (int y = 0; y < n; y++)
+			{
+				sq[i][y] = 0;
+				visited[i][y] = false;
+			}
+		}
+		int cur = 1;
+		getline(cin, input);// \n
+		for (int i = 0; i < n - 1; i++)
+		{
+			getline(cin, input);
+			stringstream ss;
+			ss << input;
+			while (ss >> x >> y)
+			{
+				sq[x - 1][y - 1] = cur;
+			}
+			cur++;
+		}
+		for (int i = 0; i < n; i++)
+		{
+			for (int y = 0; y < n; y++)
+			{
+				if (sq[i][y] == 0)
+				{
+					sq[i][y] = cur;
+				}
+			}
+		}
+		bool ok = true;
+		for (int i = 1; i <= cur; i++)
+		{
+			for (int a = 0; a < n; a++)
+			{
+				for (int b = 0; b < n; b++)
+				{
+					if (sq[a][b] == i)
+					{
+						fill(a, b, i);
+						b = n;
+						a = n;
+					}
+				}
+			}
+			if (!check(i))
+			{
+				ok = false;
+				break;
+			}
+		}
+		if (ok)
+		{
+			cout << "good" << endl;
+		}
+		else
+		{
+			cout << "wrong" << endl;
+		}
+	}
+	return 0;
 }

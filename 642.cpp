@@ -1,66 +1,47 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-
-	map<string, string> Dic;
-	map<string, string>::iterator it;
-	
-	string A, B;
-	while (true){
-		cin >> A;
-		if (A == "XXXXXX")
+int main()
+{
+	string input;
+	vector<string> result;
+	multimap<string, string> m;
+	multimap<string, string>::iterator it;
+	pair<multimap<string, string>::iterator, multimap<string, string>::iterator> ret;
+	while (getline(cin, input))
+	{
+		if (input == "XXXXXX")
+		{
 			break;
-		B = A;
-		sort(B.begin(), B.end());
-		Dic[A] = B;
-	}
-	while (true){
-		cin >> A;
-		if (A == "XXXXXX")
-			break;
-		B = A;
-		sort(B.begin(), B.end());
-		bool stat = true;
-		for (it = Dic.begin(); it != Dic.end(); it++){
-			if ((*it).second == B){
-				cout << (*it).first << endl;
-				stat = false;
-			}
 		}
-		if (stat)
+		string tmp = string(input.begin(), input.end());
+		sort(tmp.begin(), tmp.end(), less<char>());
+		m.insert(make_pair(tmp, input));
+	}
+	while (getline(cin, input))
+	{
+		if (input == "XXXXXX")
+		{
+			break;
+		}
+		sort(input.begin(), input.end(), less<char>());
+		ret = m.equal_range(input);
+		for (it = ret.first; it != ret.second; it++)
+		{
+			result.push_back(it->second);
+		}
+		sort(result.begin(), result.end());
+		for (int i = 0, sz = result.size(); i < sz; i++)
+		{
+			cout << result[i] << endl;
+		}
+		if (result.size() == 0)
+		{
 			cout << "NOT A VALID WORD" << endl;
+		}
+		result.clear();
 		cout << "******" << endl;
 	}
 	return 0;
 }
-

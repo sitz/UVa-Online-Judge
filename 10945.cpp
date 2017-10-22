@@ -1,37 +1,39 @@
-#include<iostream>
-#include<string>
+#include <bits/stdc++.h>
+
 using namespace std;
-int main(){
-    
-    for(;;){
-            string str;
-            getline(cin,str);
-            if(str=="DONE")
-                           break;
-            for(int i=0;i<str.length();i++){
-                    if(str[i]=='.' || str[i]==',' || str[i]=='!' || str[i]=='?' || str[i]==' '){
-                                   str.erase(i,1);
-                    }
-                    if(!isalpha(str[i]))
-                                     str.erase(i,1);
-                    else
-                                     str[i]=toupper(str[i]);
-            }
-            int len=str.length();
-            string s;
-            for(int i=len-1;i>=0;i--)
-                    s+=str[i];
-            int cnt=0;
-            
-            for(int i=0;i<len;i++){
-                    if(str[i]==s[i]){
-                                         cnt++;
-                    }
-            }
-            if(cnt==len)
-                           cout<<"You won't be eaten!"<<endl;
-            else
-                           cout<<"Uh oh.."<<endl;
-    }
-    return 0;
+
+bool is_palindrome(const string &s)
+{
+	string r(s.rbegin(), s.rend());
+	return s == r;
+}
+
+int main()
+{
+	string input;
+	string pal;
+	while (getline(cin, input))
+	{
+		if (input == "DONE")
+		{
+			break;
+		}
+		pal = "";
+		for (int i = 0, sz = input.size(); i < sz; i++)
+		{
+			if (input[i] >= 'A' && input[i] <= 'Z' || input[i] >= 'a' && input[i] <= 'z')
+			{
+				pal.push_back(toupper(input[i]));
+			}
+		}
+		if (is_palindrome(pal))
+		{
+			cout << "You won't be eaten!" << endl;
+		}
+		else
+		{
+			cout << "Uh oh.." << endl;
+		}
+	}
+	return 0;
 }

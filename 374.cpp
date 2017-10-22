@@ -1,20 +1,31 @@
-#include <cstdio>
+#include <bits/stdc++.h>
 
-long long BigMod(long long a, long long b, long long c) {
-	long long x = 1, y = a;
-	while (b > 0) {
-		if (b % 2 == 1)
-			x = (x * y) % c;
-		y = (y * y) % c;
-		b = b / 2;
+using namespace std;
+
+long long modulo(long long b, long long p, long long m)
+{
+	if (p == 0)
+	{
+		return 1 % m;
 	}
-	return x % c;
+	long long tmp = modulo(b, p / 2, m);
+	if (p % 2 == 0)
+	{
+		return (tmp * tmp) % m;
+	}
+	if (p % 2 == 1)
+	{
+		return (tmp * tmp * (b % m)) % m;
+	}
 }
 
-int main(){
-    long long B, E, N;
-	while (scanf("%lld%lld%lld", &B, &E, &N) != EOF)
-		printf("%lld\n", BigMod(B, E, N));
-
-    return 0;
+int main()
+{
+	long long b, p, m;
+	while (cin >> b >> p >> m)
+	{
+		b %= m;
+		cout << modulo(b, p, m) << endl;
+	}
+	return 0;
 }

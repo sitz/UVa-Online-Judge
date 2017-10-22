@@ -1,20 +1,34 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    for(;;){
-            long long a=0,na=0,cnt=0;
-            cin>>a;
-            if(a==0)
-                    break;
-            long long oa=a;
-            while(na!=a){
-                         na=((oa*oa)/100)%10000;
-                         na=oa;
-                         cnt++;
-            }
-            cout<<cnt<<endl;
-    }
-    return 0;
+int map_[10001];
+
+int main()
+{
+	int a;
+	int cnt = 0;
+	while (scanf("%d", &a) != EOF)
+	{
+		memset(map_, 0, sizeof(map_));
+		if (!a)
+		{
+			break;
+		}
+		cnt = 0;
+		while (1)
+		{
+			map_[a]++;
+			if (map_[a] > 1)
+			{
+				break;
+			}
+			a *= a;
+			a /= 100;
+			a %= 10000;
+			cnt++;
+		}
+		printf("%d\n", cnt);
+	}
+	return 0;
 }
-            

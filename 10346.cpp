@@ -1,16 +1,21 @@
-#include<cstdio>
+#include <bits/stdc++.h>
 
-int main() {
-	int n, k;
-	while (scanf("%d %d", &n, &k) != EOF) {
-		int total = n;
-		while(n >= k) {
-			int curr = n / k;
-			total += curr;
-			n %= k;
-			n += curr;
+using namespace std;
+
+int main()
+{
+	int n, k, total, butt;
+	while (cin >> n >> k)
+	{
+		total = butt = 0;
+		while (n)
+		{
+			total += n;
+			butt += n;
+			n = butt / k;
+			butt %= k;
 		}
-		printf("%d\n", total);
+		cout << total << endl;
 	}
-    return 0;
+	return 0;
 }

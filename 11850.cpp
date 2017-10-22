@@ -1,30 +1,49 @@
-#include <algorithm>
-#include <cstdio>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main() {
-	while (true) {
-		int N, i;
-		scanf("%d", &N);
-		if (!N) break;
-		int road[N + 2];
-		road[0] = 0;
-		road[N + 1] = 1422;
-		for (i = 1; i <= N; i++)
-			scanf("%d", &road[i]);
-		N += 2;
-		sort(road, road + N);
-		bool stat = true;
-		for (i = 1; i < N; i++) {
-			if(road[i] - road[i-1] > 200) {
-				stat = false;
-				break;
-			}
+int main()
+{
+	int n;
+	int cur;
+	int location;
+	bool result;
+	vector<int> stations;
+	vector<int> dist;
+	while (cin >> n)
+	{
+		if (n == 0)
+		{
+			break;
 		}
-		if (road[N - 1] - road[N - 2] > 100)
-			stat = false;
-		if(stat) printf("POSSIBLE\n");
-		else printf("IMPOSSIBLE\n");
+		stations.clear();
+		dist.clear();
+		while (n--)
+		{
+			cin >> location;
+			stations.push_back(location);
+		}
+		sort(stations.begin(), stations.end());
+		cur = 0;
+		dist.push_back(stations[0] - cur);
+		for (int i = 1, sz = stations.size(); i < sz; i++)
+		{
+			dist.push_back(stations[i] - stations[i - 1]);
+		}
+		dist.push_back((1422 - stations[stations.size() - 1]) * 2);
+		for (int i = stations.size() - 1; i > 0; i--)
+		{
+			dist.push_back(stations[i] - stations[i - 1]);
+		}
+		sort(dist.begin(), dist.end());
+		if (dist[dist.size() - 1] > 200)
+		{
+			cout << "IMPOSSIBLE" << endl;
+		}
+		else
+		{
+			cout << "POSSIBLE" << endl;
+		}
 	}
 	return 0;
 }

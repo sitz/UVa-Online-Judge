@@ -1,40 +1,33 @@
-#include <cstdio>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-long gcd(long A, long B) {
-    if (A % B == 0) return B;
-    return gcd(B, A % B);
+//C(n,r)= n! / (n-r)!r!
+
+long double C(int n, int r)
+{
+	if (n - r < r)
+	{
+		r = n - r;// C(5,3)==C(5,2)
+	}
+	long double product = 1;
+	for (int i = 1; i <= r; i++)
+	{
+		product = product * (n - r + i) / i;
+	}
+	return product;
 }
 
-void Divbygcd(long& A, long& B) {
-    long g = gcd(A, B);
-    A /= g;
-    B /= g;
-}
-
-long C(long N, long K) {
-    long num = 1, den = 1, toMul, toDiv;
-    if (K > N/2) K = N - K;
-
-    for (int i = K; i; i--) {
-        toMul = N - K + i;
-        toDiv = i;
-        Divbygcd(toMul, toDiv);
-        Divbygcd(toMul, den);
-        Divbygcd(toDiv, num);
-
-        num *= toMul;
-        den *= toDiv;
-    }
-    return num / den;
-}
-
-int main() {
-    while (true) {
-        long N, M;
-        scanf("%ld%ld", &N, &M);
-        if (!N && !M) break;
-
-        printf("%ld things taken %ld at a time is %ld exactly.\n", N, M, C(N, M));
-    }
+int main()
+{
+	int n, r;
+	while (scanf("%d %d", &n, &r) == 2)
+	{
+		if (n == 0 && r == 0)
+		{
+			break;
+		}
+		printf("%d things taken %d at a time is %.0Lf exactly.\n", n, r, C(n, r));
+	}
+	return 0;
 }

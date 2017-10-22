@@ -1,38 +1,38 @@
-#include <iostream>
-#include <string>
-#include <sstream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int Parity(int N){
-	int cnt = 0;
-	while( N ){
-		cnt += N%2;
-		N /= 2;
-	}
-	return cnt;
-}
-
-string toBinary(int N){
-	string str = "";
-	while( N ){
-		if( N%2 )
-			str = "1" + str;
+void int2bin(int n)
+{
+	for (int i = numeric_limits<int>::digits - 1; i >= 0; i--)
+	{
+		if (1 << i > n)
+		{
+			continue;
+		}
+		if (n & (1 << i))
+		{
+			cout << 1;
+		}
 		else
-			str = "0" + str;
-		N /= 2;
+		{
+			cout << 0;
+		}
 	}
-	return str;
 }
 
-int main(){
-	while( true ){
-		int N;
-		cin >> N;
-		if( N == 0 )
+int main()
+{
+	int I;
+	while (cin >> I)
+	{
+		if (I == 0)
+		{
 			break;
-		string bin = toBinary(N);
-		int P = Parity(N);
-		cout << "The parity of " << bin << " is " << P << " (mod 2)." << endl;
+		}
+		cout << "The parity of ";
+		int2bin(I);
+		cout << " is " << __builtin_popcount(I) << " (mod 2)." << endl;
 	}
 	return 0;
 }

@@ -1,69 +1,60 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define MAX	1000000
-
-bool prime[MAX + 5];
-
-void seive(){
-	memset(prime, true, sizeof prime);
-	prime[0] = false; prime[1] = false;
+int p[1000010];
+void compute_prime_table() /* with Sieve of Eratosthenes */
+{
 	int i, j;
-	FOI(i, 2, MAX)
-		if( prime[i] )
-			for (j = 2*i; j <= MAX; j += i)
-				prime[j] = false;
-}
-
-int reverse(int N){
-	int R = 0;
-	while( N > 0 ){
-		R = R*10 + N%10;
-		N /= 10;
+	p[0] = p[1] = 0;
+	for (i = 2; i <= 1000000; i++)
+	{
+		p[i] = 1; /* initialization */
 	}
-	return R;
+	for (i = 2; i <= 1000;) /* for all primes up to 1000 */
+	{
+		for (j = i + i; j <= 1000000; j += i)
+		{
+			p[j] = 0; /* delete all multiples of i */
+		}
+		for (i++; !p[i]; i++)
+			; /* find next prime */
+	}
 }
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	seive();
-	int N;
-	while( cin >> N ){
-		if( !prime[N] )
+int reversed(int n)
+{
+	int res = 0;
+	while (n)
+	{
+		res *= 10;
+		res += (n % 10);
+		n /= 10;
+	}
+	return res;
+}
+
+int main()
+{
+	compute_prime_table();
+	int N, rev;
+	while (cin >> N)
+	{
+		if (!p[N])
+		{
 			cout << N << " is not prime." << endl;
-		else{
-			int R = reverse(N);
-			if( prime[R] && N != R )
+		}
+		else
+		{
+			rev = reversed(N);
+			if (p[rev] && rev != N)
+			{
 				cout << N << " is emirp." << endl;
+			}
 			else
+			{
 				cout << N << " is prime." << endl;
+			}
 		}
 	}
 	return 0;

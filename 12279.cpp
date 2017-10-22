@@ -1,20 +1,18 @@
-#include <cstdio>
+#include <bits/stdc++.h>
 
-int main(){
-    //freopen("testI.txt", "r", stdin);
-    //freopen("testO.txt", "w", stdout);
-    for (int t = 1; ; t++) {
-        int N;
-        scanf("%d", &N);
-        if (!N) break;
+using namespace std;
 
-        int A = 0, B = 0, I;
-        while (N--) {
-            scanf("%d", &I);
-            if (I == 0) ++B;
-            else        ++A;
-        }
-        printf("Case %d: %d\n", t, A - B);
-    }
-    return 0;
+int main()
+{
+	for (int c = 0, n; scanf("%d", &n) == 1 && n;)
+	{
+		int cnt = 0;
+		for (int i = 0, z; i < n; ++i)
+		{
+			scanf("%d", &z);
+			cnt += !z;
+		}
+		printf("Case %d: %d\n", ++c, n - (cnt << 1));
+	}
+	return 0;
 }

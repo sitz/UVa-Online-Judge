@@ -1,108 +1,168 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
+struct Vertex
+{
+	vdata id;
+	vector<Vertex *> adj;
+	Vertex(vdata id) : id(id) {}
+};
+typedef map<vdata, Vertex *> vmap;
+typedef pair<vdata, Vertex *> vpair;
 
-map< string, list< string > > Map;
-list< string >::iterator lit;
-map< string, bool > used;
-vector< string > dict;
+typedef string vdata;
 
-int bfs(string src, string des){
-	queue< pair<string, int> > q;
-	q.push( make_pair(src, 0) );
-	while( !q.empty() ){
-		pair<string, int> p = q.front();
+struct Graph
+{
+	Graph() {}
+	~Graph();
+	Vertex *addVertex(vdata v);
+	void addEdge(vdata begin, vdata end, bool directed);
+	Vertex *firstVertex();
+	int bfs(vdata &b, vdata &e);
+
+	Vertex *getVertex(vdata v);
+	vmap vertexMap;
+	vector<Vertex *> allVertexes;
+};
+
+Graph::~Graph()
+{
+	for (int i = 0; i < allVertexes.size(); i++)
+	{
+		delete allVertexes[i];
+	}
+}
+
+Vertex *Graph::addVertex(vdata v)
+{
+	Vertex *newv = new Vertex(v);
+	allVertexes.push_back(newv);
+	vertexMap.insert(vpair(v, newv));
+	return newv;
+}
+
+void Graph::addEdge(vdata begin, vdata end, bool directed = false)
+{
+	Vertex *v = getVertex(begin);
+	Vertex *w = getVertex(end);
+	v->adj.push_back(w);
+	if (!directed)
+	{
+		w->adj.push_back(v);
+	}
+}
+
+Vertex *Graph::getVertex(vdata v)
+{
+	vmap::iterator it = vertexMap.find(v);
+	if (it == vertexMap.end())
+	{
+		return addVertex(v);
+	}
+	return (*it).second;
+}
+
+Vertex *Graph::firstVertex()
+{
+	return allVertexes[0];
+}
+
+int Graph::bfs(vdata &b, vdata &e)
+{
+	queue<pair<Vertex *, int>> q;
+	Vertex *beginning = getVertex(b);
+	pair<Vertex *, int> temp;
+	map<string, bool> taken;
+	q.push(pair<Vertex *, int>(beginning, 0));
+	while (!q.empty())
+	{
+		temp = q.front();
 		q.pop();
-		
-		if( p.first == des )
-			return p.second;
-		if( used[p.first] )
-			continue;
-		
-		for (lit = Map[p.first].begin(); lit != Map[p.first].	end(); lit++)
-			q.push( make_pair(*lit, p.second + 1) );
-		
-		used[p.first] = true;
+		if (temp.first->id == e)
+		{
+			return temp.second;
+		}
+		for (int i = 0; i < temp.first->adj.size(); i++)
+		{
+			if (taken[temp.first->adj[i]->id] == false)
+			{
+				taken[temp.first->adj[i]->id] = true;
+				q.push(pair<Vertex *, int>(temp.first->adj[i], temp.second + 1));
+			}
+		}
 	}
 	return -1;
 }
 
-bool diff(string A, string B){
-	int i, cnt = 0;
-	int AL = A.length();
-	int BL = B.length();
-	if( AL != BL )
-		return false;
-	FOI(i, 0, AL-1)
-		if( A[i] != B[i] )
-			cnt++;
-	if( cnt ==  1 )
-		return true;
-	return false;
-}
+int main()
+{
+	int n, i, j, k, c = 0;
+	string input, beginning, ending;
+	vector<string> dic;
+	stringstream ss;
+	Graph *g;
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int T, i, j;
-	cin >> T;
-	string str;
-	getline(cin, str); getline(cin, str);
-	while( T-- ){
-		Map.clear(); dict.clear(); used.clear();
-		while( true ){
-			getline(cin, str);
-			if( str == "*" )
-				break;
-			dict.push_back(str);
+	cin >> n;
+	getline(cin, input);
+	getline(cin, input);
+	while (n--)
+	{
+		if (c > 0)
+		{
+			cout << endl;
 		}
-		sort(dict.begin(), dict.end());
-		FOI(i, 0, dict.size()-1){
-			FOI(j, 0, dict.size()-1){
-				if( diff(dict[i], dict[j]) ){
-					Map[ dict[i] ].push_back( dict[j] );
-					Map[ dict[j] ].push_back( dict[i] );
+		c++;
+		dic.clear();
+		g = new Graph();
+		while (getline(cin, input))
+		{
+			if (input == "*")
+			{
+				break;
+			}
+			dic.push_back(input);
+		}
+		for (i = 0; i < dic.size() - 1; i++)
+		{
+			for (j = i + 1; j < dic.size(); j++)
+			{
+				if (dic[i].size() != dic[j].size())
+				{
+					continue;
+				}
+				int bad = 0;
+				for (k = 0; k < dic[i].size(); k++)
+				{
+					if (dic[i][k] != dic[j][k])
+					{
+						bad += 1;
+						if (bad > 1)
+						{
+							break;
+						}
+					}
+				}
+				if (bad < 2)
+				{
+					g->addEdge(dic[i], dic[j]);
 				}
 			}
-			used[ dict[i] ] = false;
 		}
-		while( getline(cin, str) ){
-			if( str.empty() )
+		while (getline(cin, input))
+		{
+			if (input.size() == 0)
+			{
 				break;
-			used.clear();
-			stringstream ss(str);
-			string src, des;
-			ss >> src >> des;
-			cout << src << " " << des << " " << bfs(src, des) << endl;
+			}
+			ss << input;
+			ss >> beginning >> ending;
+			cout << beginning << " " << ending << " " << g->bfs(beginning, ending) << endl;
+			ss.str(string());
+			ss.clear();
 		}
-		if( T )
-			cout << endl;
+		delete g;
 	}
 	return 0;
 }

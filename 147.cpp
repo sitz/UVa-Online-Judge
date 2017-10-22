@@ -1,44 +1,40 @@
-#include <iostream>
-#include <cstdio>
-#include <algorithm>
-#include <cstring>
-#include <string>
-#include <cctype>
-#include <stack>
-#include <queue>
-#include <vector>
-#include <map>
-#include <sstream>
-#include <set>
-#include <cmath>
-#define N 1000000
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main (){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-    int coins [] = {1, 2, 4, 10, 20, 40, 100, 200, 400, 1000, 2000};
-    double dp [6000 + 10];
+const int MAXSIZE = 30000;
+const int coin[] = {5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000};
 
-    memset (dp, 0, sizeof (dp));
+long long dp[MAXSIZE + 10];
 
-    dp [0] = 1;
+void init()
+{
+	int i, j;
+	dp[0] = 1;
+	for (i = 0; i < 11; i++)
+	{
+		for (j = 1; j <= MAXSIZE; j++)
+		{
+			if (j >= coin[i])
+			{
+				dp[j] += dp[j - coin[i]];
+			}
+		}
+	}
+}
 
-    for ( int i = 0; i < 11; i++ ) {
-        for ( int j = 1; j <= 6000; j++ ) {
-            if ( j - coins [i] >= 0 )
-                dp [j] += dp [j - coins [i]];
-        }
-    }
-
-    double c;
-
-    while ( scanf ("%lf", &c) ) {
-        if ( c <= 0 ) break;
-        int index = c * 20;
-
-        printf ("%6.2lf%17.lf\n", c, dp [index]);
-    }
-
-    return 0;
+int main()
+{
+	init();
+	double f;
+	while (EOF != scanf("%lf", &f))
+	{
+		int val = (int)(f * 100 + 1e-10);
+		if (!val)
+		{
+			break;
+		}
+		printf("%6.2lf%17lld\n", f, dp[val]);
+	}
+	return 0;
 }

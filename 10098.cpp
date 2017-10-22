@@ -1,28 +1,30 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    int t;
-    cin>>t;
-    for(int i=1;i<=t;i++){
-            char ch[10]={'\0'};
-            cin>>ch;
-            int len=strlen(ch);
-            for(int j=0;j<len;j++){
-                    for(int k=j+1;k<len;k++){
-                            if(ch[j]>ch[k]){
-                                            char temp=ch[j];
-                                            ch[j]=ch[k];
-                                            ch[k]=temp;
-                            }
-                    }
-            }
-            do{
-                    for(int j=0;j<len;j++)
-                            cout<<ch[j];
-                    cout<<endl;
-            }while(next_permutation(ch,ch+len));
-            cout<<endl;
-    }
-    return 0;
+template <class BidirectionalIterator>
+void snail_sort(BidirectionalIterator first, BidirectionalIterator last)
+{
+	while (next_permutation(first, last))
+	{
+		copy(first, last, ostream_iterator<char>(cout, ""));
+		cout << endl;
+	}
+}
+
+int main()
+{
+	int n, i, len;
+	cin >> n;
+	char str[15];
+	for (i = 0; i < n; ++i)
+	{
+		cin >> str;
+		len = strlen(str);
+		sort(str, str + len);
+		cout << str << endl;
+		snail_sort(str, str + len);
+		cout << endl;
+	}
+	return 0;
 }

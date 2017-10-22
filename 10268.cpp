@@ -1,26 +1,48 @@
-#include<iostream>
-#include<cstdlib>
-#include<string>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    int x=0;
-    while(cin>>x){
-                  string str,s;
-                  int coef[100]={0},j=0;
-                  getline(cin,str);
-                  for(int i=0;i<str.length();i++){
-                          if(str[i]==' '){
-                                       //coef[j]=strtol(s,' ',10);
-                                       //coef[j]=atoi(s.c_str());
-                                       j++;
-                                       s="";
-                                       continue;
-                          }
-                          s+=str[i];
-                  }
-                  for(int k=0;k<=j;k++)
-                          cout<<coef[j]<<"\t";
-    }
-    return 0;
+const long MX = 1000001;
+
+char str1[MX], str2[MX], *ptr;
+double arr[MX], arrD[MX], result, temp;
+
+double horner(int n, double arr[], double x)
+{
+	// compute val of polynomial of ord n
+	double p;
+	p = arr[n];
+	for (int i = n - 1; i >= 0; --i)
+	{
+		p = p * x + arr[i];
+	}
+	return p;
+}
+
+int main()
+{
+	int x, i, order;
+	while (cin.getline(str1, sizeof(str1)))
+	{
+		cin.getline(str2, sizeof(str2));
+		sscanf(str1, "%d", &x);
+		i = -1;
+		ptr = strtok(str2, " \t\n");
+		while (ptr)
+		{
+			++i;
+			sscanf(ptr, "%lf", &arr[i]);
+			ptr = strtok(NULL, " \t\n");
+		}
+		temp = i;
+		order = --i;
+		for (int j = 0; j <= order; ++j)
+		{
+			arrD[j] = temp-- * arr[j];
+		}
+		reverse(arrD, arrD + order + 1);
+		result = horner(order, arrD, x);
+		printf("%.0lf\n", result);
+	}
+	return 0;
 }

@@ -1,102 +1,215 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#define maxn 10002
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-
-struct Type{
-	int tt;
-	string ss;
-	int ii;
-	Type(int _t, int _i, string _s){
-		tt = _t; ii = _i; ss = _s;
-	}
+struct ss
+{
+	int no;
+	int time;
 };
+vector<ss> Left, Right;
+int lind, rind, ftime, fside, T, N, M, Cross[maxn];
 
-bool comp(Type A, Type B){
-	if( A.tt != B.tt )
-		return A.tt < B.tt;
-	return A.ii < B.ii;
+void Move()
+{
+	int i, k;
+
+	if (lind == Left.size())
+	{
+		if (ftime < Right[rind].time)
+			ftime += (Right[rind].time - ftime);
+		if (fside == 0)
+			ftime += T;
+		else
+			fside = 1;
+		if (ftime < Right[rind].time)
+			ftime += (Right[rind].time - ftime);
+		k = 0;
+		for (i = rind; i < Right.size(); i++)
+		{
+			if (k == N || Right[i].time > ftime)
+				break;
+			Cross[Right[i].no] = ftime + T;
+			k++;
+		}
+		rind = i;
+		ftime += T;
+		return;
+	}
+
+	if (rind == Right.size())
+	{
+		if (ftime < Left[lind].time)
+			ftime += (Left[lind].time - ftime);
+		if (fside == 1)
+			ftime += T;
+		else
+		{
+			fside++;
+			fside %= 2;
+		}
+		if (ftime < Left[lind].time)
+			ftime += (Left[lind].time - ftime);
+		k = 0;
+		for (i = lind; i < Left.size(); i++)
+		{
+			if (k == N || Left[i].time > ftime)
+				break;
+			Cross[Left[i].no] = ftime + T;
+			k++;
+		}
+		lind = i;
+		ftime += T;
+		return;
+	}
+
+	if (Left[lind].time < Right[rind].time)
+	{
+		if (ftime < Left[lind].time)
+			ftime += (Left[lind].time - ftime);
+		if (fside == 0)
+			fside = 1;
+		else
+		{
+			k = 0;
+			for (i = rind; i < Right.size(); i++)
+			{
+				if (Right[i].time > ftime || k == N)
+					break;
+				Cross[Right[i].no] = ftime + T;
+				k++;
+			}
+			rind = i;
+			ftime += T;
+		}
+		if (ftime < Left[lind].time)
+			ftime += (Left[lind].time - ftime);
+		k = 0;
+		for (i = lind; i < Left.size(); i++)
+		{
+			if (k == N || Left[i].time > ftime)
+				break;
+			Cross[Left[i].no] = ftime + T;
+			k++;
+		}
+		lind = i;
+		ftime += T;
+		return;
+	}
+
+	if (Left[lind].time > Right[rind].time)
+	{
+		if (ftime < Right[rind].time)
+			ftime += (Right[rind].time - ftime);
+		if (fside == 0)
+		{
+			k = 0;
+			for (i = lind; i < Left.size(); i++)
+			{
+				if (Left[i].time > ftime || k == N)
+					break;
+				Cross[Left[i].no] = ftime + T;
+				k++;
+			}
+			lind = i;
+			ftime += T;
+		}
+		else
+			fside = 0;
+		if (ftime < Right[rind].time)
+			ftime += (Right[rind].time - ftime);
+		k = 0;
+		for (i = rind; i < Right.size(); i++)
+		{
+			if (k == N || Right[i].time > ftime)
+				break;
+			Cross[Right[i].no] = ftime + T;
+			k++;
+		}
+		rind = i;
+		ftime += T;
+		return;
+	}
+
+	if (Left[lind].time == Right[rind].time)
+	{
+		if (fside == 0)
+		{
+			fside = 1;
+			if (ftime < Left[lind].time)
+			{
+				ftime += Left[lind].time - ftime;
+				k = 0;
+				for (i = lind; i < Left.size(); i++)
+				{
+					if (k == N || Left[i].time > ftime)
+						break;
+					Cross[Left[i].no] = ftime + T;
+					k++;
+				}
+				lind = i;
+				ftime += T;
+				return;
+			}
+		}
+		else
+		{
+			fside = 0;
+			if (ftime < Right[rind].time)
+				ftime += (Right[rind].time - ftime);
+			k = 0;
+			for (i = rind; i < Right.size(); i++)
+			{
+				if (k == N || Right[i].time > ftime)
+					break;
+				Cross[Right[i].no] = ftime + T;
+				k++;
+			}
+			rind = i;
+			ftime += T;
+			return;
+		}
+	}
 }
 
-int main(){
-	freopen("testI.txt", "r", stdin);
-	freopen("testO.txt", "w", stdout);
-	int T;
-	cin >> T;
-	while( T-- ){
-		int N, t, M;
-		cin >> N >> t >> M;
-		int i;
-		queue< Type > q;
-		vector<Type> V;
-		map<int, int> Map;
-		int tot = 0;
-		string side = "left";
-		FOI(i, 0, M-1){
-			int I;
-			string S;
-			cin >> I >> S;
-			V.push_back( Type(I, i, S) );
-		}
-		sort(V.begin(), V.end(), comp);
-		FOI(i, 0, M-1)
-			q.push(V[i]);
-		while( !q.empty() ){
-			Type p = q.front();
-			
-			tot += max(0, p.tt - tot);
-			if( p.ss != side ){
-				tot += t;
-				side = p.ss;
-			}
-			int cnt = 0;
-			while( !q.empty() && p.tt <= tot && cnt <= N && p.ss == side ){
-				q.pop();
-				++cnt;
-				Map[p.ii] = tot + t;
-				if( q.empty() )
-					break;
-				p = q.front();
-			}
-			tot += t;
-			if( side == "left" )
-				side = "right";
+void Cal()
+{
+	int i, k;
+	lind = rind = 0;
+	ftime = 0;
+	fside = 0;
+	while (lind + rind < M)
+		Move();
+	for (i = 0; i < M; i++)
+		cout << Cross[i] << endl;
+}
+
+int main()
+{
+	int c, i, t, k = 0;
+	ss d;
+	string side;
+	cin >> c;
+	while (c--)
+	{
+		cin >> N >> T >> M;
+		for (i = 0; i < M; i++)
+		{
+			cin >> t >> side;
+			d.no = i;
+			d.time = t;
+			if (side == "left")
+				Left.push_back(d);
 			else
-				side = "left";
+				Right.push_back(d);
 		}
-		FOI(i, 0, M-1)
-			cout << Map[i] << endl;
-		if( T > 0 )
+		if (k++)
 			cout << endl;
+		Cal();
+		Left.clear();
+		Right.clear();
 	}
 	return 0;
 }

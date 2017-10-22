@@ -1,92 +1,92 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
+#define FOREACH(c, itr) for (__typeof((c).begin()) itr = (c).begin(); itr != (c).end(); itr++)
 
-map<string, string> Pro;
-map<string, string>::iterator pit;
-map<string, int> Cnt;
-map<string, int>::iterator cit;
-map<string, bool> Del;
-map<string, bool>::iterator dit;
-vector<string> Vec;
+struct draft
+{
+	string name_fst;
+	int qty;
+	draft(string name_fst1 = "", int qty1 = 0) : name_fst(name_fst1), qty(qty1) {}
+};
 
-bool comp(string A, string B){
-	if (Cnt[A] != Cnt[B])
-		return Cnt[A] > Cnt[B];
-	return A < B;
+string line, capital;
+map<string, set<string>> mapa;
+set<string> s;
+vector<draft> res;
+
+bool cmp(draft a, draft b)
+{
+	if (a.qty > b.qty)
+	{
+		return true;
+	}
+	if (a.qty < b.qty)
+	{
+		return false;
+	}
+	if (a.name_fst < b.name_fst)
+	{
+		return true;
+	}
+	return false;
 }
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	bool test = true;
-	while (true){
-	string A = "", B = "";
-	Pro.clear(); Cnt.clear(); Del.clear(); Vec.clear();
-	while (true){
-		string str;
-		getline(cin, str);
-		if (str == "0"){
-			test = false;
+int main()
+{
+	while (getline(cin, line))
+	{
+		if (line == "0")
+		{
 			break;
 		}
-		if (str == "1"){
-			break;
+		if (line[0] == '1')
+		{
+			FOREACH(s, it_set)
+			{
+				int cont = 0;
+				FOREACH(mapa, it)
+				{
+					if (it->second.count(*it_set))
+					{
+						cont++;
+					}
+				}
+				if (cont > 1)
+				{
+					FOREACH(mapa, it)
+					{
+						if (it->second.count(*it_set))
+						{
+							it->second.erase(it->second.find(*it_set));
+						}
+					}
+				}
+			}
+			FOREACH(mapa, it)
+			{
+				res.push_back(draft(it->first, it->second.size()));
+			}
+			sort(res.begin(), res.end(), cmp);
+			FOREACH(res, it)
+			{
+				printf("%s %d\n", it->name_fst.c_str(), it->qty);
+			}
+			res.clear();
+			mapa.clear();
+			s.clear();
+			continue;
 		}
-		if (isupper(str[0])){
-			A = str;
-			Cnt[A] = 0;
+		if (line[0] < 'A' || line[0] > 'Z')
+		{
+			mapa[capital].insert(line);
+			s.insert(line);
 		}
-		else{
-			B = str;
-			pit = Pro.find(B);
-			dit = Del.find(B);
-			if (pit == Pro.end() && dit == Del.end())
-				Pro[B] = A;
-			if (pit != Pro.end() && (*pit).second != A){
-				Del[(*pit).first] = true;
-				Pro.erase(pit);
-			}	
+		else
+		{
+			mapa[line], capital = line;
 		}
 	}
-	if (!test)
-		break;
-	for (pit = Pro.begin(); pit != Pro.end(); pit++)
-		++Cnt[(*pit).second];
-	for (cit = Cnt.begin(); cit != Cnt.end(); cit++)
-		Vec.push_back((*cit).first);
-	
-	sort(Vec.begin(), Vec.end(), comp);
-	int i, j;
-	FOI(i, 0, Vec.size()-1)
-		cout << Vec[i] << " " << Cnt[Vec[i]] << endl;
-	}		
 	return 0;
 }
-

@@ -1,123 +1,177 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <ctime>
-#include <sstream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for (i = A; i <= B; i++)
-#define FOD(i, A, B) for (i = A; i >= B; i--)
+int row = 0, col = 0;
+int cols[1000];
+char input[1000][1000];
+int forest[1000][1000];
 
-vector< vector< string > > Vec;
-int Mat[101][101];
-int M = 0, N = 0;
-
-int count(int Val) {
-	int C = 0;
-	while (Val > 0) {
-		C++;
-		Val /= 10;
-	}
-	return C;
+int num_length(int n)
+{
+	return int(log10(n)) + 1;
 }
 
-int dI[] = {-1, -1, -1, 0, 1, 1, 1, 0};
-int dJ[] = {-1, 0, 1, 1, 1, 0, -1, -1};
-void bfs(int I, int J, int Max, string C) {
-	if (I < 0 || I >= M) return;
-	if (J < 0 || J >= N) return;
-	if (Mat[I][J] != -1) return;
-	if (Vec[I][J] != C)  return;
-	
-	Mat[I][J] = Max;
-	int i, j;
-	FOI(i, 0, 7)
-		bfs(I + dI[i], J + dJ[i], Max, C);
-}
-
-void print() {
-	int i, j;
-	int Max = 1;
-	
-	memset(Mat, -1, sizeof Mat);
-	
-	FOI(i, 0, M-1) {
-		FOI(j, 0, N-1) {
-			if (Mat[i][j] == -1) {
-				bfs(i, j, Max, Vec[i][j]);
-				++Max;
+void fill_forest()
+{
+	pair<int, int> tmp;
+	queue<pair<int, int>> q;
+	int counter = 1;
+	bool visited[1000][1000] = {false};
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < col; j++)
+		{
+			if (visited[i][j])
+			{
+				continue;
 			}
+			tmp.first = i;
+			tmp.second = j;
+			q.push(tmp);
+			visited[i][j] = true;
+			forest[i][j] = counter;
+			if (num_length(counter) > cols[j])
+			{
+				cols[j] = num_length(counter);
+			}
+			while (!q.empty())
+			{
+				tmp = q.front();
+				q.pop();
+				if (tmp.first > 0 && !visited[tmp.first - 1][tmp.second] && input[tmp.first - 1][tmp.second] == input[tmp.first][tmp.second])
+				{
+					visited[tmp.first - 1][tmp.second] = true;
+					forest[tmp.first - 1][tmp.second] = counter;
+					q.push(make_pair(tmp.first - 1, tmp.second));
+					if (num_length(counter) > cols[tmp.second])
+					{
+						cols[tmp.second] = num_length(counter);
+					}
+				}
+				if (tmp.first + 1 < row && !visited[tmp.first + 1][tmp.second] && input[tmp.first + 1][tmp.second] == input[tmp.first][tmp.second])
+				{
+					visited[tmp.first + 1][tmp.second] = true;
+					forest[tmp.first + 1][tmp.second] = counter;
+					q.push(make_pair(tmp.first + 1, tmp.second));
+					if (num_length(counter) > cols[tmp.second])
+					{
+						cols[tmp.second] = num_length(counter);
+					}
+				}
+				if (tmp.second > 0 && !visited[tmp.first][tmp.second - 1] && input[tmp.first][tmp.second - 1] == input[tmp.first][tmp.second])
+				{
+					visited[tmp.first][tmp.second - 1] = true;
+					forest[tmp.first][tmp.second - 1] = counter;
+					q.push(make_pair(tmp.first, tmp.second - 1));
+					if (num_length(counter) > cols[tmp.second - 1])
+					{
+						cols[tmp.second - 1] = num_length(counter);
+					}
+				}
+				if (tmp.second + 1 < col && !visited[tmp.first][tmp.second + 1] && input[tmp.first][tmp.second + 1] == input[tmp.first][tmp.second])
+				{
+					visited[tmp.first][tmp.second + 1] = true;
+					forest[tmp.first][tmp.second + 1] = counter;
+					q.push(make_pair(tmp.first, tmp.second + 1));
+					if (num_length(counter) > cols[tmp.second + 1])
+					{
+						cols[tmp.second + 1] = num_length(counter);
+					}
+				}
+				if (tmp.first > 0 && tmp.second > 0 && !visited[tmp.first - 1][tmp.second - 1] && input[tmp.first - 1][tmp.second - 1] == input[tmp.first][tmp.second])
+				{
+					visited[tmp.first - 1][tmp.second - 1] = true;
+					forest[tmp.first - 1][tmp.second - 1] = counter;
+					q.push(make_pair(tmp.first - 1, tmp.second - 1));
+					if (num_length(counter) > cols[tmp.second - 1])
+					{
+						cols[tmp.second - 1] = num_length(counter);
+					}
+				}
+				if (tmp.first + 1 < row && tmp.second + 1 < col && !visited[tmp.first + 1][tmp.second + 1] && input[tmp.first + 1][tmp.second + 1] == input[tmp.first][tmp.second])
+				{
+					visited[tmp.first + 1][tmp.second + 1] = true;
+					forest[tmp.first + 1][tmp.second + 1] = counter;
+					q.push(make_pair(tmp.first + 1, tmp.second + 1));
+					if (num_length(counter) > cols[tmp.second + 1])
+					{
+						cols[tmp.second + 1] = num_length(counter);
+					}
+				}
+				if (tmp.first > 0 && tmp.second + 1 < col && !visited[tmp.first - 1][tmp.second + 1] && input[tmp.first - 1][tmp.second + 1] == input[tmp.first][tmp.second])
+				{
+					visited[tmp.first - 1][tmp.second + 1] = true;
+					forest[tmp.first - 1][tmp.second + 1] = counter;
+					q.push(make_pair(tmp.first - 1, tmp.second + 1));
+					if (num_length(counter) > cols[tmp.second + 1])
+					{
+						cols[tmp.second + 1] = num_length(counter);
+					}
+				}
+				if (tmp.first + 1 < row && tmp.second > 0 && !visited[tmp.first + 1][tmp.second - 1] && input[tmp.first + 1][tmp.second - 1] == input[tmp.first][tmp.second])
+				{
+					visited[tmp.first + 1][tmp.second - 1] = true;
+					forest[tmp.first + 1][tmp.second - 1] = counter;
+					q.push(make_pair(tmp.first + 1, tmp.second - 1));
+					if (num_length(counter) > cols[tmp.second - 1])
+					{
+						cols[tmp.second - 1] = num_length(counter);
+					}
+				}
+			}
+			counter++;
 		}
 	}
-	
-	int Dig[N];
-	memset(Dig, 0, sizeof Dig);
-	
-	FOI(j, 0, N-1) {
-		int D = 0;
-		FOI(i, 0, M-1)
-			D = max(D, count(Mat[i][j]));
-		Dig[j] = D;
-	}
-	
-	FOI(i, 0, M-1) {
-		FOI(j, 0, N-1) {
-			if (j > 0)
-				printf(" ");
-			cout << setw(Dig[j]) << Mat[i][j];
+}
+
+void output_forest()
+{
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < col; j++)
+		{
+			for (int k = 0; k < cols[j] - num_length(forest[i][j]) + (j == 0 ? 0 : 1); k++)
+			{
+				cout << " ";
+			}
+			cout << forest[i][j];
 		}
 		cout << endl;
 	}
 	cout << "%" << endl;
 }
-
-int main() {
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	string str;
-	
-	while (getline(cin, str)) {
-		if (str == "%") {
-			if (Vec.size() > 0) {
-				M = Vec.size();
-				N = Vec[0].size();
-				print();
+int main()
+{
+	char tmp;
+	int r, c;
+	while (true)
+	{
+		r = c = 0;
+		fill(cols, cols + 1000, 0);
+		while (cin.peek() != '%' && cin.peek() != -1)
+		{
+			cin >> tmp;
+			input[r][c++] = tmp;
+			if (cin.peek() == '\n')
+			{
+				cin.ignore(100, '\n');
+				r++;
+				row = r;
+				col = c;
+				c = 0;
 			}
-			Vec.clear();
-			continue;
 		}
-		string S;
-		vector< string > V;
-		stringstream ss(str);
-		while (ss >> S) {
-			V.push_back(S);
+		if (cin.peek() == '%')
+		{
+			cin >> tmp;
 		}
-		Vec.push_back(V);
-	}
-	if (Vec.size() > 0) {
-		M = Vec.size();
-		N = Vec[0].size();
-		print();
+		fill_forest();
+		output_forest();
+		if (cin.peek() == -1)
+		{
+			break;
+		}
 	}
 	return 0;
 }

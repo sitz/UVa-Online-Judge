@@ -1,21 +1,23 @@
-#include<iostream>
-#include<cstdio>
-#include<cmath>
-#include<algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
-int main(){
-    double a,b,c;
-    while(scanf("%lf%lf%lf",&a,&b,&c)!=EOF){
-                double s=0.5*(a+b+c);
-                double area=s*(s-a)*(s-b)*(s-c);
-                if(area<=0){
-                           printf("-1.000\n");
-                           continue;
-                }
-                else{
-                     area=4*sqrt(area)/3;
-                     printf("%.3lf\n",area);
-                }
-    }
-    return 0;
+
+int main()
+{
+	double m1, m2, m3, s;
+	while (scanf("%lf%lf%lf", &m1, &m2, &m3) == 3)
+	{
+		double temp;
+		s = (m1 + m2 + m3) / 2.0;
+		temp = s * (s - m1) * (s - m2) * (s - m3);
+		if (temp > 0)
+		{
+			printf("%.3lf\n", 4.0 * sqrt(temp) / 3.0);
+		}
+		else
+		{
+			printf("-1.000\n");
+		}
+	}
+	return 0;
 }

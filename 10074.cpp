@@ -1,82 +1,79 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef long long int64;
-
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define INF		1LL<<50
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	while (true){
-		int64 M, N;
-		cin >> M >> N;
-		if (M == 0 && N == 0)
+int main()
+{
+	int m, n, v, field[101][101];
+	while (scanf("%d%d", &m,&n) != EOF)
+	{
+		if (m == 0 && n == 0)
+		{
 			break;
-		int64 mat[M][N];
-		int64 i, j, k;
-		FOI(i, 0, M-1){
-			FOI(j, 0, N-1){
-				cin >> mat[i][j];
-				if (mat[i][j] == 1)
-					mat[i][j] = -1 * INF;
-				else
-					mat[i][j] = 1;
-			}
 		}
-					
-		FOI(i, 1, M-1)
-			FOI(j, 0, N-1)
-				mat[i][j] += mat[i-1][j];
-				
-		int64 maxSum = -1 * INF;
-		FOI(i, 0, M-1){
-			FOI(j, i, M-1){
-				int64 arr[N];
-				FOI(k, 0, N-1)
-					arr[k] = mat[j][k];
-				if (i > 0)
-					FOI(k, 0, N-1)
-						arr[k] -= mat[i-1][k];
-					
-				int64 curSum = 0;
-				FOI(k, 0, N-1){
-					curSum += arr[k];
-					maxSum = max(curSum, maxSum);
-					if (curSum < 0)
-						curSum = 0;
+		int best = 0;
+		for (int i = 0; i < m; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				cin >> v;
+				if (j == 0)
+				{
+					if (v == 0)
+					{
+						field[i][j] = 1;
+						if (field[i][j] > best)
+						{
+							best = field[i][j];
+						}
+					}
+					else
+					{
+						field[i][j] = 0;
+					}
+				}
+				else
+				{
+					if (v == 0)
+					{
+						field[i][j] = field[i][j - 1] + 1;
+						if (field[i][j] > best)
+						{
+							best = field[i][j];
+						}
+					}
+					else
+					{
+						field[i][j] = 0;
+					}
 				}
 			}
 		}
-		maxSum = max(0LL, maxSum);
-		cout << maxSum << endl;
+		for (int i = 0; i < m; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				if (field[i][j] > 0)
+				{
+					int rows = 1;
+					int cols = field[i][j];
+					for (int k = i + 1; k < m; k++)
+					{
+						if (field[k][j] == 0)
+						{
+							break;
+						}
+						cols = min(cols, field[k][j]);
+						rows++;
+						if (rows * cols > best)
+						{
+							best = rows * cols;
+						}
+					}
+				}
+			}
+		}
+		cout << best << endl;
 	}
 	return 0;
 }
-

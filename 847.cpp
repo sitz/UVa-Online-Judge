@@ -1,26 +1,46 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    long long nine[50]={0};
-    nine[1]=9;
-    for(long long i=2;i<50;i++){
-                 nine[i]=nine[i-1]*9;
-    }
-    long long n=0;
-    while(cin>>n){
-                  int ctr=0;
-                  for(int i=0;;i++){
-                          if(n<=nine[i]){
-                                         ctr=i;
-                                         break;
-                          }
-                  }
-                  if(ctr%2!=0)
-                              cout<<"Stan wins."<<endl;
-                  else
-                              cout<<"Ollie wins."<<endl;
-    }
-      return 0;
+/**
+847
+**/
+int main()
+{
+	long long s, p;
+	int i;
+	while (scanf("%lld", &s) == 1)
+	{
+		i = 1;
+		p = 1;
+		while (1)
+		{
+			if (i % 2 == 1)
+			{
+				p *= 9;
+				if (p >= s)
+				{
+					break;
+				}
+			}
+			else
+			{
+				p *= 2;
+				if (p >= s)
+				{
+					break;
+				}
+			}
+			i++;
+		}
+		if (i % 2)
+		{
+			printf("Stan wins.\n");
+		}
+		else
+		{
+			printf("Ollie wins.\n");
+		}
+	}
+	return 0;
 }
-                  

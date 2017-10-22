@@ -1,45 +1,30 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int N;
-	while( cin >> N ){
-		int cnt = N;
-		if( N % 2 == 0 )
-			cnt++;
-		while( N >= 3 ){
-			int temp = N/3;
-			cnt += temp;
-			N %= 3;
-			N += temp;
-		}
-		cout << cnt << endl;
+int simulate(int n, int extra)
+{
+	int result;
+	int all = n + extra;
+	result = n;
+	while (all >= 3)
+	{
+		result += all / 3;
+		all = all / 3 + all % 3;
+	}
+	if (all < extra)
+	{
+		return 0;
+	}
+	return result;
+}
+
+int main()
+{
+	int n;
+	while (cin >> n)
+	{
+		cout << max(simulate(n, 0), max(simulate(n, 1), simulate(n, 2))) << endl;
 	}
 	return 0;
 }

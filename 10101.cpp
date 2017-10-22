@@ -1,39 +1,77 @@
-#include<iostream>
-#include<cstdio>
-#include<cmath>
-#include<algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
-int main(){
-    long long val,test=1;
-    while(scanf("%ld",&val)!=EOF){
-                                string master[]={" kuti", " lakh", " hajar", " shata", " kuti", " lakh", " hajar", " shata", ""};
-                                long long n=val;
-                                long long num[9]={0};
-                                num[8]=n%100; n/=100;
-//                                              if(n==0) goto XXX;
-                                num[7]=n%10;  n/=10;
-//                                              if(n==0) goto XXX;
-                                num[6]=n%100; n/=100;
-//                                              if(n==0) goto XXX;
-                                num[5]=n%100; n/=100;
-//                                              if(n==0) goto XXX;
-                                num[4]=n%100; n/=100;
-//                                              if(n==0) goto XXX;
-                                num[3]=n%10;  n/=10;
-//                                              if(n==0) goto XXX;
-                                num[2]=n%100; n/=100;
-//                                              if(n==0) goto XXX;
-                                num[1]=n%100; n/=100;
-//                                              if(n==0) goto XXX;
-                                num[0]=n%100; n/=100;
-                                int i=0;
-                                while(num[i]==0) i++;
-                                printf("%4d.",test++);
-                                for(i=0;i<9;i++){
-                                                if(num[i]!=0)
-                                                             cout<<" "<<num[i]<<master[i];
-                                }
-                                printf("\n");
-    }
-    return 0;
+
+int main()
+{
+	long long int n, a, b, c, d, e, f, g, h, i, j, k, l, m, o, p, q, r, s;
+	int count = 0;
+	while (scanf("%lld", &n) == 1)
+	{
+		count++;
+		printf("%4d.", count);
+		b = n / 100000000000000;
+		if (b > 0)
+		{
+			printf(" %lld kuti", b);
+		}
+		c = n % 100000000000000;
+		d = c / 1000000000000;
+		if (d > 0)
+		{
+			printf(" %lld lakh", d);
+		}
+		e = c % 1000000000000;
+		f = e / 10000000000;
+		if (f > 0)
+		{
+			printf(" %lld hajar", f);
+		}
+		g = e % 10000000000;
+		h = g / 1000000000;
+		if (h > 0)
+		{
+			printf(" %lld shata", h);
+		}
+		i = g % 1000000000;
+		j = i / 10000000;
+		if (j == 0 && n > 10000000)
+		{
+			printf(" kuti");
+		}
+		if (j > 0)
+		{
+			printf(" %lld kuti", j);
+		}
+		k = i % 10000000;
+		l = k / 100000;
+		if (l > 0)
+		{
+			printf(" %lld lakh", l);
+		}
+		m = k % 100000;
+		o = m / 1000;
+		if (o > 0)
+		{
+			printf(" %lld hajar", o);
+		}
+		p = m % 1000;
+		q = p / 100;
+		if (q > 0)
+		{
+			printf(" %lld shata", q);
+		}
+		r = p % 100;
+		s = r / 1;
+		if (s > 0)
+		{
+			printf(" %lld", s);
+		}
+		if (n == 0)
+		{
+			printf(" %lld", n);
+		}
+		printf("\n");
+	}
+	return 0;
 }

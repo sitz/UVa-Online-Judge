@@ -1,17 +1,31 @@
-#include <cstdio>
+#include <bits/stdc++.h>
 
-int main() {
-	int T, t, HH, MM;
-	scanf("%d", &T);
-	for (t = 1; t <= T; t++) {
-		int A, B, C, D;
-		scanf("%d:%d", &HH, &MM); A = HH * 60 + MM;
-		scanf("%d:%d", &HH, &MM); B = HH * 60 + MM;
-		scanf("%d:%d", &HH, &MM); C = HH * 60 + MM;
-		scanf("%d:%d", &HH, &MM); D = HH * 60 + MM;
-		
-		if (A > D || B < C) printf("Case %d: Hits Meeting\n", t);
-		else printf("Case %d: Mrs Meeting\n", t);
+using namespace std;
+
+int main()
+{
+	int n;
+	int h1, m1, h2, m2;
+	pair<int, int> meeting, wife;
+	char delim;
+	cin >> n;
+	for (int case_num = 0; case_num < n; case_num++)
+	{
+		cin >> h1 >> delim >> m1 >> h2 >> delim >> m2;
+		wife.first = h1 * 60 + m1;
+		wife.second = h2 * 60 + m2;
+		cin >> h1 >> delim >> m1 >> h2 >> delim >> m2;
+		meeting.first = h1 * 60 + m1;
+		meeting.second = h2 * 60 + m2;
+		cout << "Case " << case_num + 1 << ": ";
+		if (meeting.first > wife.second || meeting.second < wife.first)
+		{
+			cout << "Hits Meeting" << endl;
+		}
+		else
+		{
+			cout << "Mrs Meeting" << endl;
+		}
 	}
 	return 0;
 }

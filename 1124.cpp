@@ -1,13 +1,13 @@
-#include <cstdio>
-#include <string>
-#include <iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main() {
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	string str;
-	while (getline(cin, str))
-		cout << str << endl;
+int main()
+{
+	string input;
+	while (getline(cin, input))
+	{
+		printf("%s\n", input.c_str());
+	}
 	return 0;
 }

@@ -1,23 +1,42 @@
-#include <cmath>
-#include <cstdio>
-#include <algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-const double EPS = 1e-10;
-
-int main() {
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	for (int t = 1; ; t++) {
-		int B, S;
-		scanf("%d%d", &B, &S);
-		if (!B && !S) break;
-		
-		printf("Case %d: ", t);
-		
-		if (B <= 1) printf(":-\\\n");
-		else if (B <= S) printf(":-|\n");
-		else printf(":-(\n");
+int main()
+{
+	int counter = 0;
+	long long b, s;
+	while (cin >> b >> s)
+	{
+		if (b == 0 && s == 0)
+		{
+			break;
+		}
+		counter++;
+		cout << "Case " << counter << ": ";
+		if (b == 1)
+		{
+			cout << ":-\\" << endl;
+			continue;
+		}
+		if (b == s)
+		{
+			cout << ":-|" << endl;
+			continue;
+		}
+		if (s > b)
+		{
+			cout << ":-|" << endl;
+			continue;
+		}
+		if (s * (b - 1) > b * (s - 1))
+		{
+			cout << ":-(" << endl;
+		}
+		else
+		{
+			cout << ":-)" << endl;
+		}
 	}
 	return 0;
 }

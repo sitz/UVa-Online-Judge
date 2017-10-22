@@ -1,57 +1,47 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-
-int main(){
-	vector<int> cube;
-	map<int, int> Map;
-	int i, j;
-	for (i = 0; i <= 200; i++){
-		int val = i * i * i;
-		Map[val] = i;
-		cube.push_back(val);
-	}
-	while( true ){
-		int N;
-		cin >> N;
-		if( N == 0 )
+int main()
+{
+	int n;
+	int tmp;
+	bool found;
+	vector<int> cubes;
+	cubes.push_back(1);
+	for (int i = 2;; i++)
+	{
+		tmp = pow(i, 3);
+		if (tmp - cubes[cubes.size() - 1] > 10000)
+		{
 			break;
-		bool flag = false;
-		FOI(i, 0, 100){
-			if( Map.find(N + cube[i]) != Map.end() ){
-				cout << Map[N + cube[i]] << " " << i << endl;
-				flag = true;
-				break;
+		}
+		cubes.push_back(tmp);
+	}
+	while (cin >> n)
+	{
+		if (n == 0)
+		{
+			break;
+		}
+		found = false;
+		for (int i = 0, sz = cubes.size(); i < sz - 1; i++)
+		{
+			for (int j = i + 1; j < sz; j++)
+			{
+				if (cubes[j] - cubes[i] == n)
+				{
+					cout << cubes[j] / ((j + 1) * (j + 1)) << " " << cubes[i] / ((i + 1) * (i + 1)) << endl;
+					found = true;
+					j = sz;
+					i = sz;
+				}
 			}
 		}
-		if ( !flag )
-			cout << "No solution\n";
+		if (!found)
+		{
+			cout << "No solution" << endl;
+		}
 	}
 	return 0;
 }

@@ -1,70 +1,69 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#define MAX(A, B) (A > B ? A : B)
+#define MIN(A, B) (A > B ? B : A)
+#define MAXN 102
+#define INF 21474836
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define PI		acos(-1.0)
-#define INF		1<<30
-#define EPS		1e-9
-#define sqr(x)	(x)*(x)
+int A[MAXN][MAXN], N, M;
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	for (int t = 1; ; t++){
-		int N, R;
-		scanf("%d%d", &N, &R);
-		if (N == 0 && R == 0)
-			break;
-		int mat[N][N];
-		int i, j, k;
-		FOI(i, 0, N-1)
-			FOI(j, 0, N-1)
-				mat[i][j] = 0;
-		FOI(i, 1, R){
-			int C1, C2, P;
-			scanf("%d%d%d", &C1, &C2, &P);
-			--C1; --C2;
-			mat[C1][C2] = P;
-			mat[C2][C1] = P;
+void Ini()
+{
+	int i, j;
+	for (i = 1; i <= N; i++)
+		for (j = 1; j <= N; j++)
+		{
+			A[i][j] = 0;
 		}
-		FOI(k, 0, N-1)
-			FOI(i, 0, N-1)
-				FOI(j, 0, N-1)
-					mat[i][j] = mat[j][i] = max(mat[i][j], min(mat[i][k], mat[k][j]));
-		int S, D, T;
-		scanf("%d%d%d", &S, &D, &T);
-		--S; --D;
-		printf("Scenario #%d\nMinimum Number of Trips = %d\n\n", t, (int)ceil((double)T / (mat[S][D] - 1.0)));
+}
+void Floyd()
+{
+	int i, j, k;
+	for (k = 1; k <= N; k++)
+	{
+		for (i = 1; i < N; i++)
+		{
+			for (j = 1 + i; j <= N; j++)
+			{
+				A[i][j] = A[j][i] = MAX(A[i][j], MIN(A[i][k], A[k][j]));
+			}
+		}
+	}
+}
+void Cal(int a, int b, int c)
+{
+	int p;
+	p = c / (A[a][b] - 1);
+	if (c > p * (A[a][b] - 1))
+	{
+		p++;
+	}
+	printf("Minimum Number of Trips = %d\n", p);
+}
+
+int main()
+{
+	int i, a, b, c;
+	int kase = 1;
+	while (scanf("%d%d", &N, &M) == 2)
+	{
+		if (!N && !M)
+		{
+			break;
+		}
+		Ini();
+		for (i = 0; i < M; i++)
+		{
+			scanf("%d%d%d", &a, &b, &c);
+			A[a][b] = A[b][a] = c;
+		}
+		Floyd();
+		scanf("%d%d%d", &a, &b, &c);
+		printf("Scenario #%d\n", kase++);
+		Cal(a, b, c);
+		putchar('\n');
 	}
 	return 0;
 }
-

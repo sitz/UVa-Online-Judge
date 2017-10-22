@@ -1,21 +1,34 @@
-#include <cstdio>
-#define min(A, B) ((A) < (B) ? (A) : (B))
+#include <bits/stdc++.h>
 
-int main() {
-	int T, t;
-	scanf("%d", &T);
-	for (t = 1; t <= T; t++) {
-		int N, duration, Mile = 0, Juice = 0;
-		scanf("%d", &N);
-		while (N--) {
-			scanf("%d", &duration);
-			Mile  += (duration/30 + 1) * 10;
-			Juice += (duration/60 + 1) * 15;
+using namespace std;
+
+int main()
+{
+	int t, n, d;
+	cin >> t;
+	for (int case_num = 0; case_num < t; case_num++)
+	{
+		cin >> n;
+		int mile = 0, juice = 0;
+		while (n--)
+		{
+			cin >> d;
+			mile += ((d / 30) + 1) * 10;
+			juice += ((d / 60) + 1) * 15;
 		}
-		printf("Case %d:", t);
-		if (Mile <= Juice) printf(" Mile");
-		if (Juice <= Mile) printf(" Juice");
-		printf(" %d\n", min(Mile, Juice));
+		cout << "Case " << case_num + 1 << ": ";
+		if (mile < juice)
+		{
+			cout << "Mile " << mile << endl;
+		}
+		else if (juice < mile)
+		{
+			cout << "Juice " << juice << endl;
+		}
+		else
+		{
+			cout << "Mile Juice " << mile << endl;
+		}
 	}
 	return 0;
 }

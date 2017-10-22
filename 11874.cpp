@@ -1,84 +1,49 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
+#define EPS 1e-11
+#define LL long long
 
-#define INF 1 << 30
-#define EPS 1e-9
+#define _rep(i, a, b, x) for (__typeof(b) i = (a); i <= (b); i += x)
+#define rep(i, n) _rep(i, 0, n - 1, 1)
+#define rrep(i, a, b) for (__typeof(b) i = (a); i >= (b); --i)
+#define xrep(i, a, b) _rep(i, a, b, 1)
 
-struct Rec{
-	double inc;
-	double exp;
-};
+#define abs(x) (((x) < 0) ? (-(x)) : (x))
+#define all(x) (x).begin(), (x).end()
+#define ms(x, a) memset((x), (a), sizeof(x))
+#define mp make_pair
+#define pb push_back
+#define sz(k) (int)(k).size()
 
-int main(){
-	freopen("testI.txt", "r", stdin);
-	freopen("testO.txt", "w", stdout);
-	int test, t, i, j, k;
-    cin >> test;
-    FOI(t, 1, test){
-		int N, R;
-		double P;
-		cin >> N >> R >> P;
-		Rec mat[N][N];
-		FOI(i, 0, N-1){
-			FOI(j, 0, N-1){
-				mat[i][j].inc = -1;
-				mat[i][j].exp = INF;
-			}
+typedef vector<int> vi;
+
+int n, r, p, d[110][110];
+const int inf = 1000000000;
+
+int main()
+{
+	int t, A, B, I, E;
+	scanf("%d", &t);
+	xrep(tcase, 1, t)
+	{
+		scanf("%d %d %d", &n, &r, &p);
+		rep(i, n)
+		{
+			rep(j, n) d[i][j] = inf;
+			d[i][i] = 0;
 		}
-		while(R--){
-			int inX, inY;
-			double I, E;
-			cin >> inX >> inY >> I >> E;
-			mat[inX][inY].inc = max(mat[inX][inY].inc, I);
-			mat[inX][inY].exp = min(mat[inX][inY].exp, E);
+		rep(i, r)
+		{
+			scanf("%d %d %d %d", &A, &B, &I, &E);
+			d[A][B] = p * E - I;
 		}
-		FOI(k, 0, N-1)
-			FOI(i, 0, N-1)
-				FOI(j, 0, N-1){
-					double P1 = (mat[i][j].inc / mat[i][j].exp);
-					double P2 = (mat[i][k].inc + mat[k][j].inc) / (mat[i][k].exp + mat[k][j].exp);
-					if (P1 <= P2){
-						mat[i][j].inc = mat[i][k].inc + mat[k][j].inc;
-						mat[i][j].exp = mat[i][k].exp + mat[k][j].exp;
-					}
-				}
-		bool stat = false;
-		FOI(i, 0, N-1)
-			if(mat[i][i].inc / mat[i][i].exp >= P){
-				stat = true;
-				break;
-			}
-		if (stat)
-			cout << "Case " << t << ": YES\n";
-		else
-			cout << "Case " << t << ": NO\n";
+		rep(k, n) rep(i, n) rep(j, n) d[i][j] = min(d[i][j], d[i][k] + d[k][j]);
+		bool ok = false;
+		rep(i, n) if (d[i][i] < 0)
+				ok = true;
+		printf("Case %d: %s\n", tcase, ok ? "YES" : "NO");
 	}
 	return 0;
 }

@@ -1,32 +1,43 @@
-#include<iostream>
-#include<cstdio>
-#include<cmath>
-#include<algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
-int main(){
-    int test;
-    scanf("%d",&test);
-    while(test--){
-                  int n,p,i,j;
-                  scanf("%d",&n);
-                  int day[3651]={0};
-                  scanf("%d",&p);
-                  for(i=1;i<=p;i++){
-                                   int hpar;
-                                   scanf("%d",&hpar);
-                                   for(j=hpar;j<=n;j+=hpar)
-                                                       day[j]=1;
-                  }
-                  for(i=6;i<=n;i+=7){
-                                     day[i]=0;
-                                     day[i+1]=0;
-                  }
-                  int cnt=0;
-                  for(i=1;i<=n;i++){
-                                    if(day[i]==1)
-                                                 cnt++;
-                  }
-                  printf("%d\n",cnt);
-    }
-    return 0;
+
+int main()
+{
+	int t, n, p, h;
+	cin >> t;
+	while (t--)
+	{
+		cin >> n;
+		char days[n + 1];
+		for (int i = 1; i <= n; i++)
+		{
+			days[i] = '0';
+		}
+		cin >> p;
+		while (p--)
+		{
+			cin >> h;
+			int i = 1;
+			while (true)
+			{
+				if (i * h > n)
+				{
+					break;
+				}
+				days[i * h] = '1';
+				i++;
+			}
+		}
+		int result = 0;
+		for (int i = 1; i <= n; i++)
+		{
+			if (days[i] == '1' && ((i - 1) % 7 != 5) && ((i - 1) % 7 != 6))
+			{
+				result++;
+			}
+		}
+		cout << result << endl;
+	}
+	return 0;
 }

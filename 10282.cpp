@@ -1,62 +1,89 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <complex>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <limits>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef long long int64;
-typedef unsigned long long uint64;
+char cmd[100];
 
-#define FOI(I, A, B)	for (I=A; I<=B; I++)
-#define FOD(I, A, B)	for (I=A; I>=B; I--)
+class Dictionary
+{
+public:
+	char english[20];
+	char foreign[20];
+} dic[100010];
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	
-	map<string, string> dict;
-	map<string, string>::iterator it;
-	
-	string str;
-	while( getline(cin, str) ){
-		if( str == "" )
+int total = 0;
+
+int cmp(const void *a, const void *b)
+{
+	Dictionary *aa = (Dictionary *)a;
+	Dictionary *bb = (Dictionary *)b;
+	return strcmp(aa->foreign, bb->foreign);
+}
+
+void input()
+{
+	while (cin.getline(cmd, 100))
+	{
+		if (!strcmp(cmd, "\0"))
+		{
 			break;
-		stringstream ss;
-		string key, val;
-		ss << str;
-		ss >> val >> key;
-		dict[key] = val;
+		}
+		char *p;
+		p = strtok(cmd, " ");
+		if (p)
+		{
+			strcpy(dic[total].english, p);
+		}
+		p = strtok(NULL, " ");
+		if (p)
+		{
+			strcpy(dic[total].foreign, p);
+		}
+		total++;
 	}
-	
-	while( cin >> str ){
-		it = dict.find(str);
-		if( it != dict.end() )
-			cout << dict[str] << endl;
+	qsort(dic, total, sizeof(Dictionary), cmp);
+}
+
+// binary search
+int bin_search(char *key)
+{
+	int low, mid, high;
+	low = 0;
+	high = total - 1;
+	while (low <= high)
+	{
+		mid = (low + high) / 2;
+		if (strcmp(key, dic[mid].foreign) == 0)
+		{
+			return mid;
+		}
+		else if (strcmp(key, dic[mid].foreign) < 0)
+		{
+			high = mid - 1;
+		}
 		else
+		{
+			low = mid + 1;
+		}
+	}
+	return -1;
+}
+
+int main()
+{
+	input();
+	while (cin.getline(cmd, 100))
+	{
+		int index;
+		index = bin_search(cmd);
+		if (index < 0)
+		{
 			cout << "eh" << endl;
+		}
+		else
+		{
+			cout << dic[index].english << endl;
+		}
 	}
 	return 0;
 }

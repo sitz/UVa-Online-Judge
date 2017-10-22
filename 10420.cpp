@@ -1,24 +1,43 @@
-#include<iostream>
-#include<algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
-int main(){
-    int n=0,i=0;
-    cin>>n;
-    string allCon[n+1];
-    for(i=0;i<n;i++){
-                  string name;
-                  cin>>allCon[i];
-                  getline(cin,name);
-    }
-    sort(allCon,allCon+n);
-    int count=1;
-    for(i=0;i<n;i++){
-              if(allCon[i]!=allCon[i+1]){
-                                        cout<<allCon[i]<<" "<<count<<endl;
-                                        count=1;
-                                        continue;
-              }
-              count++;
-    }
-    return 0;
+
+char name[2009][80];
+int n;
+
+int sort_function(const void *a, const void *s)
+{
+	return (strcmp((char *)a, (char *)s));
+}
+
+int count()
+{
+	int i, c;
+	char inter[80];
+	qsort((void *)name, n, sizeof(name[0]), sort_function);
+	for (i = 0; i < n;)
+	{
+		c = 1;
+		strcpy(inter, name[i]);
+		for (i++; !strcmp(inter, name[i]) && i < n; i++)
+		{
+			c++;
+		}
+		printf("%s %d\n", inter, c);
+	}
+	return 0;
+}
+
+int main()
+{
+	char mid[100];
+	int i;
+	scanf("%d", &n);
+	for (i = 0; i < n; i++)
+	{
+		scanf("%s", name[i]);
+		gets(mid);
+	}
+	count();
+	return 0;
 }

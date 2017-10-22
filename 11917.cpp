@@ -1,36 +1,37 @@
-#include <map>
-#include <cmath>
-#include <string>
-#include <cstring>
-#include <iostream>
-#include <algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-	int T;
-	cin >> T;
-	for( int t=1; t<=T; t++ ){
-		int N, D, V;
-		string str;
-		cin >> N;
-		map <string, int> sub;
-		map <string, int>::iterator it;
-		while( N-- ){
-			cin >> str >> V;
-			sub[str] = V;
+int main()
+{
+	int t, n, d;
+	string input;
+	map<string, int>::iterator it;
+	cin >> t;
+	for (int c = 0; c < t; c++)
+	{
+		cin >> n;
+		map<string, int> subjects;
+		while (n--)
+		{
+			cin >> input >> d;
+			subjects[input] = d;
 		}
-		cin >> D >> str;
-		if( sub.find(str) != sub.end() ){
-			int time = sub[str];
-			if( time <= D )
-				cout << "Case " << t << ": Yesss" << endl;
-			else if( time <= D + 5 )
-				cout << "Case " << t << ": Late" << endl;
-			else
-				cout << "Case " << t << ": Do your own homework!" << endl;
+		cin >> d >> input;
+		it = subjects.find(input);
+		cout << "Case " << c + 1 << ": ";
+		if (it != subjects.end() && subjects[input] <= d)
+		{
+			cout << "Yesss" << endl;
+		}
+		else if (it != subjects.end() && subjects[input] <= d + 5)
+		{
+			cout << "Late" << endl;
 		}
 		else
-			cout << "Case " << t << ": Do your own homework!" << endl;
+		{
+			cout << "Do your own homework!" << endl;
+		}
 	}
 	return 0;
 }

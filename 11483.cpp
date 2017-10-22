@@ -1,35 +1,31 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    int i=0;
-    for(i=1;;i++){
-            int n;
-            cin>>n;
-            if(n==0)
-                    break;
-            for(int j=0;j<n;j++){
-                    string str;
-                    getline(cin,str);
-                    cout<<"Case "<<i<<": "<<endl;
-                    cout<<"#include<string.h>"<<endl;
-                    cout<<"#include<stdio.h>"<<endl;
-                    cout<<"int main()"<<endl;
-                    cout<<"{"<<endl;
-                    for(int j=0;j<=n;j++){
-                            int len=str.length();
-                            int c1=0,c2=0;
-                            cout<<"printf(\"";
-                            for(int k=0;k<len;k++){
-                                    cout<<str[k];
-                            }
-                    }
-                    cout<<"\");"<<endl;
-            }
-            cout<<"printf(\"\\n\");"<<endl;
-            cout<<"return 0;"<<endl;
-            cout<<"}"<<endl;
-    }
-    return 0;
+int main()
+{
+	int n, t = 0;
+	char str[1002];
+	while (scanf("%d", &n) == 1 && n)
+	{
+		getchar();
+		printf("Case %d:\n", ++t);
+		printf("#include<string.h>\n#include<stdio.h>\nint main()\n{\n");
+		while (n--)
+		{
+			gets(str);
+			printf("printf(\"");
+			for (int i = 0; str[i]; i++)
+			{
+				if (str[i] == '\\' || str[i] == '\"')
+				{
+					printf("\\");
+				}
+				printf("%c", str[i]);
+			}
+			printf("\\n\");\n");
+		}
+		printf("printf(\"\\n\");\nreturn 0;\n}\n");
+	}
+	return 0;
 }
-            

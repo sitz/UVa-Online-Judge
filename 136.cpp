@@ -1,35 +1,28 @@
-#include<iostream>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int primes(int j);
-
 int main()
 {
-    int ugly[1500],primes[1500],k=0,j=0;
-    for(k=0;k<1500;k++)
-        ugly[k]=0;
-    while(ugly[1500]==0)
-    {
-                     ugly[0]=1;
-                     k=1;
-                     j=2;
-                     primes(j)
-                     if(j%2==0 || j%3==0 || j%5==0)
-                     {
-                               ugly[k]=j;
-                               k++;
-                               j++;
-                     }
-                     else
-                               j++;
-    }
-                     
-    cout<<"The 1500'th ugly number is "<<ugly[1500];
-cin>>k;    return 0;
-}       
-
-primes(int j)
-{
-           for(int p=2;p<j;p++)
-                   if(j%p==0)
+	priority_queue<int, vector<int>, greater<int>> ugly;
+	ugly.push(2);
+	ugly.push(3);
+	ugly.push(5);
+	int cnt = 1, curr = 1;
+	while (cnt < 1500)
+	{
+		int tmp = 0;
+		while (tmp <= curr)
+		{
+			tmp = ugly.top();
+			ugly.pop();
+		}
+		ugly.push(2 * tmp);
+		ugly.push(3 * tmp);
+		ugly.push(5 * tmp);
+		curr = tmp;
+		cnt++;
+	}
+	printf("The 1500'th ugly number is %d.\n", curr);
+	return 0;
+}

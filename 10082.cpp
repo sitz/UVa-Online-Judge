@@ -1,18 +1,22 @@
-#include<iostream>
-#include<cmath>
+#include <bits/stdc++.h>
 
 using namespace std;
 
 int main()
 {
-    char ch[1000];
-    int i;
-    while(cin>>ch)
-    {
-                     if(ch=="S")
-                                   cout<<'A';
-                     else
-                                   cout<<ch;
-    }
-    return 0;
+	string keys = "`1234567890-=QWERTYUIOP[]\\ASDFGHJKL;'ZXCVBNM,./";
+	char c;
+	while (cin.get(c))
+	{
+		if (c == '\n' || c == ' ')
+		{
+			printf("%c", c);
+		}
+		else
+		{
+			size_t found = keys.find(c);
+			printf("%c", keys[found - 1]);
+		}
+	}
+	return 0;
 }

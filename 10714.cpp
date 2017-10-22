@@ -1,20 +1,29 @@
-#include <stdio.h>
+#include <bits/stdc++.h>
 
-#define min(a, b) ((a) < (b) ? (a) : (b))
-#define max(a, b) ((a) > (b) ? (a) : (b))
+using namespace std;
 
-int main() {
-	int T, N, M, I, J;
-	scanf("%d", &T);
-	while (T--) {
-		int minM = 0, maxM = 0;
-		scanf("%d%d", &M, &N);
-		while (N--) {
-			scanf("%d", &I);  J = M - I;
-			minM = max(minM, min(I, J));
-			maxM = max(maxM, max(I, J));
+/*
+10714
+Ants
+*/
+#define MAX(a, b) (a > b ? a : b)
+#define MIN(a, b) (a > b ? b : a)
+int main()
+{
+	int i, max, min, n, m, kases, k;
+	scanf("%d", &kases);
+	while (kases--)
+	{
+		scanf("%d%d", &n, &m);
+		max = 0;
+		min = 0;
+		for (i = 0; i < m; i++)
+		{
+			scanf("%d", &k);
+			min = MAX(min, MIN(k, n - k));
+			max = MAX(max, MAX(k, n - k));
 		}
-		printf("%d %d\n", minM, maxM);
+		printf("%d %d\n", min, max);
 	}
 	return 0;
 }

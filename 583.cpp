@@ -1,54 +1,118 @@
-#include <cstdio>
+#include <bits/stdc++.h>
 
-const long long MAX = 50000;
-long long P[10000];
-long long S = 0;
-static bool prime[MAX + 1];
+using namespace std;
 
-void sieve() {
-	prime[0] = true;
-	prime[1] = true;
-	
-	for (long long i = 2; i <= MAX; i++) {
-		if (!prime[i]) {
-			P[S++] = i;
-			for (long long j = i * i; j <= MAX; j += i) {
-				prime[j] = true;
-			}
+const long maxnum = 2000000001;
+
+int p[1000010];
+int prime[100000];
+
+void compute_prime_table()
+{
+	int i, j;
+	p[0] = p[1] = 0;
+	for (i = 2; i <= 1000000; i++)
+	{
+		p[i] = 1;
+	}
+	for (i = 2; i <= 1000;)
+	{
+		for (j = i + i; j <= 1000000; j += i)
+		{
+			p[j] = 0;
+		}
+		for (i++; !p[i]; i++)
+			;
+	}
+}
+
+void get_prime()
+{
+	int i, j;
+	compute_prime_table();
+	for (i = 0, j = 0; i < 50000; i++)
+	{
+		if (p[i] != 0)
+		{
+			prime[j] = i;
+			j++;
 		}
 	}
 }
 
-int main() {
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-
-	sieve();
-	long long N, I;
-	while (scanf("%lld", &N) != EOF) {
-		if (N == 0) break;
-		
-		long long M = 0;
-		long long V[50];
-		I = N;
-		if (N < 0) {
-			V[M++] = -1;
-			N = -N;
+bool judge_prime(int x)
+{
+	int i;
+	for (i = 2; i <= sqrt(x); i++)
+		if (x % i == 0)
+		{
+			return false;
 		}
-		for (long long i = 0; i < S; i++) {
-			if (N == 1) break;
-			while (N % P[i] == 0) {
-				V[M++] = P[i];
-				N /= P[i];
+	return true;
+}
+
+void process(int n)
+{
+	int i = 0, num = 0, j;
+	int array[1000];
+	while (n)
+	{
+		if (n < prime[i])
+		{
+			break;
+		}
+		if (n % prime[i] == 0)
+		{
+			array[num++] = prime[i];
+			n /= prime[i];
+		}
+		else
+		{
+			i++;
+		}
+	}
+	for (j = 0; j < num - 1; j++)
+	{
+		cout << array[j] << " x ";
+	}
+	cout << array[j] << endl;
+}
+
+int main()
+{
+	get_prime();
+	int n;
+	while (cin >> n)
+	{
+		if (n == 0)
+		{
+			break;
+		}
+		if (n < 0)
+		{
+			cout << n << " = -1 x ";
+			n *= -1;
+			if (judge_prime(n) == true)
+			{
+				cout << n << endl;
+			}
+			else
+			{
+				process(n);
 			}
 		}
-		if (N > 1) V[M++] = N;
-		
-		printf("%lld = %lld", I, V[0]);
-		for (long long i = 1; i < M; i++) {
-			printf(" x %lld", V[i]);
+		else
+		{
+			cout << n << " = ";
+			if (judge_prime(n) == true)
+			{
+				cout << n << endl;
+			}
+			else
+			{
+				process(n);
+			}
 		}
-		printf("\n");
 	}
 	return 0;
 }

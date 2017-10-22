@@ -1,32 +1,60 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    int t;
-    cin>>t;
-    for(int z=1;z<=t;z++){
-            int a,b,c;
-            cin>>a>>b>>c;
-            int player[1000],board[101][2],die[1000];
-            for(int i=0;i<=100;i++)
-                    for(int j=0;j<2;j++)
-                            board[i][j]=i;
-            for(int i=1;<=b;i++){
-                    int x,y;
-                    cin>>x>>y;
-                    board[x][0]=x;
-                    board[x][1]=y;
-            }
-            for(int i=1;i<=c;i++){
-                    cin>>die[i];
-            }
-            int ctr=1;
-            for(int i=1;i<=c;i++){
-                    player[ctr]+=die[i];
-                    if(board[player[ctr]])
-                    if(ctr%a==0)
-                                ctr=1;
-            
-    }
-    return 0;
+int main()
+{
+	int t, n, k, c, start, end, roll;
+	int *players = new int[1000001];
+	map<int, int> ladder;
+	cin >> t;
+	while (t--)
+	{
+		cin >> n >> k >> c;
+		ladder.clear();
+		fill(players, players + n + 1, 1);
+		while (k--)
+		{
+			cin >> start >> end;
+			ladder[start] = end;
+		}
+		bool game_finished = false;
+		int current_player = 0;
+		for (int i = 0; i < c; i++)
+		{
+			cin >> roll;
+			if (game_finished)
+			{
+				continue;
+			}
+			players[current_player] += roll;
+			if (players[current_player] >= 100)
+			{
+				players[current_player] = 100;
+				game_finished = true;
+				continue;
+			}
+			if (ladder.find(players[current_player]) != ladder.end())
+			{
+				players[current_player] = ladder[players[current_player]];
+				if (players[current_player] >= 100)
+				{
+					players[current_player] = 100;
+					game_finished = true;
+					continue;
+				}
+			}
+			current_player++;
+			if (current_player >= n)
+			{
+				current_player = 0;
+			}
+		}
+		for (int i = 0; i < n; i++)
+		{
+			cout << "Position of player " << i + 1 << " is " << players[i] << "." << endl;
+		}
+	}
+	delete[] players;
+	return 0;
 }

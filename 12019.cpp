@@ -1,58 +1,36 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
-
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	string day[] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-	int month[]  = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-	vector< vector<int> > week(12);
-	int S = 5;
-	int i, j;
-	FOI(i, 0, 11){
-		FOI(j, 0, month[i]-1){
-			week[i].push_back(S);
-			S = (S + 1) % 7;
+int main()
+{
+	int months[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	map<int, string> m;
+	m[0] = "Saturday";
+	m[1] = "Sunday";
+	m[2] = "Monday";
+	m[3] = "Tuesday";
+	m[4] = "Wednesday";
+	m[5] = "Thursday";
+	m[6] = "Friday";
+	int cur_d = 0;
+	int result[13][32];
+	for (int i = 1; i <= 12; i++)
+	{
+		for (int j = 1; j <= months[i - 1]; j++)
+		{
+			result[i][j] = cur_d;
+			cur_d++;
+			cur_d %= 7;
 		}
 	}
-	int T;
-	cin >> T;
-	while( T-- ){
-		int D, M;
-		cin >> M >> D;
-		cout << day[week[M - 1][D - 1]] << endl;
+	int t;
+	int mon, day;
+	cin >> t;
+	while (t--)
+	{
+		cin >> mon >> day;
+		cout << m[result[mon][day]] << endl;
 	}
 	return 0;
 }
-

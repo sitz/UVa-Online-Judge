@@ -1,71 +1,84 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for (i = A; i <= B; i++)
-#define FOD(i, A, B) for (i = A; i >= B; i--)
+bool validate(const string &s)
+{
+	int m = -100, e = -100;
+	bool m_q = false;
+	bool e_q = false;
+	for (int i = 0, sz = s.size(); i < sz; i++)
+	{
+		if (s[i] != '?' && s[i] != 'M' && s[i] != 'E')
+		{
+			return false;
+		}
+		if (i == 0 && s[i] != '?')
+		{
+			return false;
+		}
+		if (i == e + 1)
+		{
+			if (s[i] == '?')
+			{
+				e_q = true;
+			}
+		}
+		else if (i == m + 1)
+		{
+			if (s[i] == '?')
+			{
+				m_q = true;
+			}
+		}
+		if (s[i] == 'M')
+		{
+			if (m >= 0)
+			{
+				return false;
+			}
+			m = i;
+		}
+		else if (s[i] == 'E')
+		{
+			if (e >= 0)
+			{
+				return false;
+			}
+			e = i;
+		}
+	}
+	if (!m || !e || !m_q || !e_q)
+	{
+		return false;
+	}
+	int x = m;
+	int y = e - m - 1;
+	int z = s.size() - (e + 1);
+	if (y != z - x)
+	{
+		return false;
+	}
+	return true;
+}
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int T;
-	cin >> T;
-	while (T--) {
-		string S;
-		cin >> S;
-		int Q = 0, M = 0, E = 0;
-		int L = S.length();
-		int i, j;
-		FOI(i, 0, L-1) {
-			if (S[i] == '?') ++Q;
-			if (S[i] == 'M') ++M;
-			if (S[i] == 'E') ++E;
+int main()
+{
+	int n;
+	string input;
+	cin >> n;
+	cin.ignore(100, '\n');
+	while (n--)
+	{
+		getline(cin, input);
+		if (!validate(input))
+		{
+			cout << "no-theorem" << endl;
 		}
-		if (Q + M + E != L || M != 1 || E != 1 || Q < 4) {
-			cout << "no-theorem\n";
-			continue;
-		}
-		int q1 = 0, q2 = 0, q3 = 0;
-		int iM = (int) S.find("M");
-		int iE = (int) S.find("E");
-		if (!(iM > 0 && iE > iM + 1 && iE < L - 2)) {
-			cout << "no-theorem\n";
-			continue;
-		}
-		FOI(i, 0, iM-1)
-			if (S[i] == '?') ++q1;
-		FOI(i, iM+1, iE-1)
-			if (S[i] == '?') ++q2;
-		FOI(i, iE+1, L-1)
-			if (S[i] == '?') ++q3;
-			
-		if (q1 > 0 && q2 > 0 && q3 > 1 && q2 == q3 - q1)
-			cout << "theorem\n";
 		else
-			cout << "no-theorem\n";
+		{
+			cout << "theorem" << endl;
+		}
 	}
 	return 0;
 }

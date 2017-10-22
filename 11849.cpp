@@ -1,30 +1,31 @@
-#include <cstdio>
-#include <vector>
-#include <algorithm>
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int main(){
-    while(true){
-                int64 M, N, run, num, i, tot=0;
-                scanf("%lld%lld", &N, &M);
-                if(M==0 && N==0)
-                        break;
-                vector <int> vec(N);
-                for(i=0; i<N; i++){
-                         scanf("%lld", &num);
-                         vec[i] = num;
-                }
-                for(i=0; i<M; i++){
-                         scanf("%lld", &num);
-                         if(binary_search(vec.begin(), vec.end(), num))
-                                                       tot++;
-                }
-                printf("%lld\n", tot);
-    }
-    return 0;
+#define pb push_back
+#define MAX 1000000
+
+int main()
+{
+	long long int n, m;
+	while (scanf("%lld %lld", &n, &m) && (n || m))
+	{
+		int a, val = 0;
+		map<int, int> check;
+		for (long long int i = 1; i <= n; i++)
+		{
+			scanf("%d", &a);
+			check[a] = 1;
+		}
+		for (long long int i = 1; i <= m; i++)
+		{
+			scanf("%d", &a);
+			if (check[a] == 1)
+			{
+				val++;
+			}
+		}
+		cout << val << endl;
+	}
+	return 0;
 }

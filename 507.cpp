@@ -1,73 +1,82 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
-
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define PI		acos(-1.0)
-#define INF		1<<30
-#define EPS		1e-9
-#define sqr(x)	(x)*(x)
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int T, t;
-	cin >> T;
-	FOI(t, 1, T){
-		int N, i, j;
-		cin >> N;
-		--N;
-		int arr[N];
-		FOI(i, 0, N-1)
-			cin >> arr[i];
-		int maxSum = -INF, maxSta = 0, maxEnd = 0;
-		int curSum = 0, curSta = 0, curEnd = 0;
-		FOI(curEnd, 0, N-1){
-			curSum += arr[curEnd];
-			if (curSum > maxSum ||
-			   ((curSum == maxSum && ((curEnd - curSta > maxEnd - maxSta) || (curEnd - curSta == maxEnd - maxSta && curSta < maxSta))))){
-				maxSum = curSum;
-				maxSta = curSta;
-				maxEnd = curEnd;
+/*
+Jill Rides Again
+507
+*/
+#define MAXN 20002
+int stop, maxlen, maxst, maxend, maxval;
+int Nice[MAXN];
+struct ss
+{
+	int val;
+	int st;
+} table[MAXN];
+void Dynamic()
+{
+	int i, j, k;
+	table[1].val = Nice[1];
+	table[1].st = 1;
+	maxval = Nice[1];
+	maxlen = maxst = maxend = 1;
+	for (i = 2; i <= stop - 1; i++)
+	{
+		k = Nice[i] + table[i - 1].val;
+		if (k >= Nice[i])
+		{
+			table[i].val = k;
+			table[i].st = table[i - 1].st;
+			j = i - table[i].st + 1;
+			if (table[i].val > maxval)
+			{
+				maxval = table[i].val;
+				maxlen = i - table[i].st + 1;
+				maxend = i;
+				maxst = table[i].st;
 			}
-			if (curSum < 0){
-				curSum = 0;
-				curSta = curEnd + 1;
+			else if (table[i].val == maxval && maxlen < j)
+			{
+				maxlen = i - table[i].st + 1;
+				maxend = i;
+				maxst = table[i].st;
 			}
 		}
-		if (maxSum <= 0)
-			cout << "Route " << t << " has no nice parts" << endl;
 		else
-			cout << "The nicest part of route " << t << " is between stops " << maxSta + 1 << " and " << maxEnd + 2 << endl;
+		{
+			table[i].val = Nice[i];
+			table[i].st = i;
+			if (table[i].val > maxval)
+			{
+				maxval = table[i].val;
+				maxlen = i - table[i].st + 1;
+				maxend = i;
+				maxst = table[i].st;
+			}
+		}
+	}
+}
+int main()
+{
+	int route, i, j;
+	scanf("%d", &route);
+	for (i = 1; i <= route; i++)
+	{
+		scanf("%d", &stop);
+		for (j = 1; j <= stop - 1; j++)
+		{
+			scanf("%d", &Nice[j]);
+		}
+		Dynamic();
+		if (maxval > 0)
+		{
+			printf("The nicest part of route %d is between stops %d and %d\n", i, maxst, maxend + 1);
+		}
+		else
+		{
+			printf("Route %d has no nice parts\n", i);
+		}
 	}
 	return 0;
 }
-

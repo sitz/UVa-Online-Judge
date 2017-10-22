@@ -1,74 +1,46 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
-
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define PI		acos(-1.0)
-#define INF		1<<30
-#define EPS		1e-9
-#define sqr(x)	(x)*(x)
-
-int main(){
-	freopen("testI.txt", "r", stdin);
-	freopen("testO.txt", "w", stdout);
-	int N;
-	bool flag = false;
-	while( cin >> N ){
-		map<string, int> Map;
-		vector<string> nam;
-		int i, j;
-		FOI(i, 1, N){
-			string name;
+int main()
+{
+	int n, money, a;
+	string name, friends;
+	vector<string> names;
+	int cnt = 0;
+	while (cin >> n)
+	{
+		names.clear();
+		map<string, int> group;
+		for (int i = 0; i < n; i++)
+		{
 			cin >> name;
-			nam.push_back(name);
-			Map[name] = 0;
+			group[name] = 0;
+			names.push_back(name);
 		}
-		FOI(i, 1, N){
-			string S, R;
-			int A, M;
-			cin >> S >> A >> M;
-			if( M == 0 )
-				continue;
-			FOI(j, 1, M){
-				cin >> R;
-				Map[R] += (A / M);
-				Map[S] -= (A / M);
+		for (int i = 0; i < n; i++)
+		{
+			cin >> name >> money >> a;
+			if (a > 0)
+			{
+				group[name] += money % a;
+				group[name] -= money;
+				for (int j = 0; j < a; j++)
+				{
+					cin >> friends;
+					group[friends] += money / a;
+				}
 			}
-			Map[S] += (A % M);
 		}
-		if( flag )
-			cout << endl;
-		FOI(i, 0, N-1)
-			cout << nam[i] << " " << Map[nam[i]] << endl;
-		flag = true;
+		if (cnt > 0)
+		{
+			printf("\n");
+		}
+		for (int i = 0; i < names.size(); i++)
+		{
+			cout << names[i] << " " << group[names[i]] << endl;
+		}
+		cnt++;
 	}
 	return 0;
 }

@@ -1,67 +1,53 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int main(){
-    int test;
-    cin>>test;
-    for(int t=1; t<=test; t++){
-            int N, line;
-            int i, j, k;
-            cin>>N>>line;
-            int mat[N][N];
-            for(i=0; i<N; i++){
-                     for(j=0; j<N; j++){
-                              if(i==j)
-                                      mat[i][j]=0;
-                              else
-                                  mat[i][j]=999999999;
-                     }
-            }
-            while(line--){
-                          int s, d;
-                          cin>>s>>d;
-                          mat[s][d]=1;
-                          mat[d][s]=1;
-            }
-            for(k=0; k<N; k++)
-                         for(i=0; i<N; i++)
-                                  for(j=0; j<N; j++)
-                                           mat[i][j] = min(mat[i][j], mat[i][k]+mat[k][j]);
-            int S, D;
-            cin>>S>>D;
-            int tot=0;
-            for(i=0; i<N; i++)
-                     tot = max(tot, mat[S][i]+mat[i][D]);
-            cout<<"Case "<<t<<": "<<tot<<endl;
-    }
-    return 0;
+int INF = 1000000000;
+
+int main()
+{
+	int t, n, r;
+	int a, b;
+	int dist[101][101];
+	cin >> t;
+	for (int c = 0; c < t; c++)
+	{
+		cin >> n >> r;
+		for (int i = 0; i < n; i++)
+			for (int j = 0; j < n; j++)
+			{
+				dist[i][j] = INF;
+			}
+		for (int i = 0; i < r; i++)
+		{
+			cin >> a >> b;
+			dist[a][b] = 1;
+			dist[b][a] = 1;
+		}
+		for (int i = 0; i < n; i++)
+		{
+			dist[i][i] = 0;
+		}
+		for (int k = 0; k < n; k++)
+		{
+			for (int i = 0; i < n; i++)
+			{
+				for (int j = 0; j < n; j++)
+				{
+					dist[i][j] = min(dist[i][j], dist[k][j] + dist[i][k]);
+				}
+			}
+		}
+		cin >> a >> b;
+		int result = 0;
+		for (int i = 0; i < n; i++)
+		{
+			if (dist[a][i] + dist[i][b] > result)
+			{
+				result = dist[a][i] + dist[i][b];
+			}
+		}
+		cout << "Case " << c + 1 << ": " << result << endl;
+	}
+	return 0;
 }

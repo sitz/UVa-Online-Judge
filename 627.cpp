@@ -1,99 +1,140 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <complex>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <limits>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef long long int64;
-typedef unsigned long long uint64;
-
-#define PI				acos(-1.0)
-#define EPS				1e-9
-#define INF				1<<30
-
-#define FOI(I, A, B)	for (I=A; I<=B; I++)
-#define FOD(I, A, B)	for (I=A; I>=B; I--)
-
-void showGraph(vector< vector <int> > G){
+/*
+The net
+672
+*/
+#define MAXN 302
+int D[MAXN][MAXN];
+int P[MAXN][MAXN];
+int N;
+char input[10000];
+void Ini()
+{
 	int i, j;
-	FOI(i, 0, G.size()-1){
-		FOI(j, 0, G[i].size()-1)
-			cout << G[i][j] << " ";
-			
-		cout << endl;
+	for (i = 1; i < N; i++)
+	{
+		for (j = i + 1; j <= N; j++)
+		{
+			D[i][j] = D[j][i] = 100000;
+			P[i][j] = P[j][i] = -1;
+		}
+		P[i][i] = -1;
+		D[i][i] = 0;
+	}
+	P[i][i] = -1;
+	D[i][i] = 0;
+}
+void Sep()
+{
+	int i, j, k = 0, n, f = 0;
+	char temp[100];
+	for (i = 0; input[i] != '-'; i++)
+	{
+		temp[k++] = input[i];
+	}
+	temp[k] = NULL;
+	sscanf(temp, "%d", &n);
+	k = 0;
+	for (j = i + 1; input[j]; j++)
+	{
+		f = 1;
+		if (input[j] != ',')
+		{
+			temp[k++] = input[j];
+		}
+		else
+		{
+			temp[k] = NULL;
+			sscanf(temp, "%d", &i);
+			D[n][i] = 1;
+			P[n][i] = n;
+			k = 0;
+		}
+	}
+	if (f)
+	{
+		temp[k] = NULL;
+		sscanf(temp, "%d", &i);
+		D[n][i] = 1;
+		P[n][i] = n;
 	}
 }
-
-void showVector( vector <int> vec ){
+void Floyd()
+{
+	int i, j, k;
+	for (k = 1; k <= N; k++)
+	{
+		for (i = 1; i <= N; i++)
+		{
+			for (j = 1; j <= N; j++)
+			{
+				if (D[i][j] > (D[i][k] + D[k][j]))
+				{
+					D[i][j] = D[i][k] + D[k][j];
+					P[i][j] = P[k][j];
+				}
+				else
+				{
+					P[i][j] = P[i][j];
+					D[i][j] = D[i][j];
+				}
+			}
+		}
+	}
+}
+void Print(int i, int j)
+{
+	if (i == j)
+	{
+		printf("%d", i);
+	}
+	else
+	{
+		Print(i, P[i][j]);
+		printf(" %d", j);
+	}
+}
+void Cal()
+{
+	int i, j, k;
+	printf("-----\n");
+	gets(input);
+	sscanf(input, "%d", &k);
+	if (k)
+	{
+		Floyd();
+	}
+	while (k--)
+	{
+		gets(input);
+		sscanf(input, "%d%d", &i, &j);
+		if (P[i][j] == -1)
+		{
+			printf("connection impossible");
+		}
+		else
+		{
+			Print(i, j);
+		}
+		printf("\n");
+	}
+}
+int main()
+{
 	int i;
-	FOI(i, 0, vec.size()-1)
-		cout << vec[i] << " ";
-}
-
-int toInt(string s){
-	stringstream ss;
-	int I;
-	ss << s;
-	ss >> I;
-	return I;
-}
-
-void Tokenize(const string& str, vector<int>& tokens, const string& delimiters = " -,\n"){
-
-    string::size_type lastPos = str.find_first_not_of(delimiters, 0);
-    string::size_type pos     = str.find_first_of(delimiters, lastPos);
-
-    while (string::npos != pos || string::npos != lastPos){
-        tokens.push_back(toInt(str.substr(lastPos, pos - lastPos)));
-        lastPos = str.find_first_not_of(delimiters, pos);
-        pos = str.find_first_of(delimiters, lastPos);
-    }
-}
-
-int main(){
-	freopen("testI.txt", "r", stdin);
-	freopen("testO.txt", "w", stdout);
-	int N, n;
-    while( scanf("%d", &N) ){
-    	vector< vector <int> > graph(N);
-    	FOI(n, 1, N){
-			string str;
-			vector<int> tokens;
-			getline(cin, str);
-			Tokenize(str, tokens);
-			int I = n - 1;
-			tokens.erase(tokens.begin());
-			graph[I] = tokens;
-    	}
-    	cout << "-----" << endl;
-    	int Q, S, D;
-    	cin >> Q;
-    	while( Q-- )
-    		cin >> S >> D;
-    	showGraph(graph);
-    }
+	while (gets(input))
+	{
+		sscanf(input, "%d", &N);
+		Ini();
+		for (i = 0; i < N; i++)
+		{
+			gets(input);
+			Sep();
+		}
+		Cal();
+	}
 	return 0;
 }

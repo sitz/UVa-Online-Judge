@@ -1,69 +1,36 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <ctime>
-#include <sstream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-bool comp(string A, string B) {
-	if (A == B) return true;
-	
-	int aL = A.length(), bL = B.length();
-	int Lmin = min(aL, bL);
-	int Lmax = max(aL, bL);
-	
-	string X = A.substr(0, Lmin);
-	string Y = B.substr(0, Lmin);
-	if (X != Y) return X > Y;
-	
-	if (aL > bL) {
-		X = A.substr(Lmin);
-		return comp(X, B);
-	}
-	else {
-		Y = B.substr(Lmin);
-		return comp(A, Y);
-	}
-}
+#define pi acos(-1.0)
+#define N 1000000
 
-int main() {
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	while (true) {
-		int N;
-		cin >> N;
-		if (!N) break;
-		
-		string Arr[N];
-		for (int i = 0; i < N; i++)
-			cin >> Arr[i];
-			
-		sort(Arr, Arr + N, comp);
-		
-		for (int i = 0; i < N; i++)
-			cout << Arr[i];
-			
-		cout << endl;
+bool cmp(string x, string y)
+{
+	string t1 = x + y;
+	string t2 = y + x;
+	if (t1 > t2)
+	{
+		return true;
+	}
+	return false;
+}
+int main()
+{
+	int n;
+	string a[50 + 5];
+	while (scanf("%d", &n) && n)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			cin >> a[i];
+		}
+		sort(a, a + n, cmp);
+		for (int i = 0; i < n; i++)
+		{
+			cout << a[i];
+		}
+		printf("\n");
 	}
 	return 0;
 }

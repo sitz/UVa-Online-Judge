@@ -1,31 +1,45 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
-int main(){
-    int test;
-    scanf("%d\n",&test);
-    while(test--){
-                  int n,m,i,j,k;
-                  scanf("%d\n",&n);
-                  char chars[n];
-                  double value[n];
-                  double amount=0.0;
-                  for(i=0;i<n;i++)
-                                   scanf("%c%lf\n",&chars[i],&value[i]);
-                  scanf("%d\n",&m);
-                  for(i=0;i<m;i++){
-                                   string str;
-                                   getline(cin,str);
-                                   int len=str.length();
-                                   for(j=0;j<len;j++){
-                                           for(k=0;k<n;k++){
-                                                   if(str[j]==chars[k]){
-                                                             amount+=value[k];
-                                                             break;
-                                                   }
-                                           }
-                                   }
-                  }
-                  printf("%.2lf$\n",amount/100.0);
-    }
-    return 0;
+
+int main()
+{
+	int cases;
+	char c;
+	int p;
+	int k;
+	string input;
+	map<char, int> m;
+	cin >> cases;
+	while (cases--)
+	{
+		m.clear();
+		cin >> k;
+		getline(cin, input);// \n
+		while (k--)
+		{
+			stringstream ss;
+			getline(cin, input);
+			ss << input;
+			c = ss.get();
+			ss >> p;
+			m[c] = p;
+		}
+		cin >> k;
+		int result = 0;
+		getline(cin, input);// \n
+		while (k--)
+		{
+			getline(cin, input);
+			for (int i = 0, sz = input.size(); i < sz; i++)
+			{
+				if (m.find(input[i]) != m.end())
+				{
+					result += m[input[i]];
+				}
+			}
+		}
+		printf("%.2f$\n", result / 100.0);
+	}
+	return 0;
 }

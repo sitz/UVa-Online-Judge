@@ -1,22 +1,53 @@
-#include<iostream>
-#include<cstdio>
-#include<cmath>
-#include<algorithm>
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
-typedef long double ldouble;
+#include <bits/stdc++.h>
+
 using namespace std;
-int main(){
-    uint64 a,b,c;
-    int test;
-    cin>>test;
-    for(int z=1;z<=test;z++){
-            cin>>a>>b;
-            if(a==b)
-                    cout<<"Case "<<z<<": 2\n";
-            else
-                    cout<<"Case "<<z<<": "<<a+b<<endl;
-    }
-    return 0;
+
+#define MAX 1048576
+char buf[MAX], *lim = buf + MAX, *now = lim;
+void readint(int *n)
+{
+	while (now != lim && !isdigit(*now))
+	{
+		now++;
+	}
+	if (now == lim)
+	{
+		int r = fread(buf, 1, MAX - 1, stdin);
+		buf[r] = 0;
+		lim = buf + r - 1;
+		while (isdigit(*lim))
+		{
+			ungetc(*lim--, stdin);
+		}
+		now = buf;
+	}
+	while (!isdigit(*now))
+	{
+		now++;
+	}
+	*n = 0;
+	while (isdigit(*now))
+	{
+		*n = *n * 10 + *now++ - '0';
+	}
+}
+int gcd(int a, int b)
+{
+	if (!b)
+	{
+		return a;
+	}
+	return gcd(b, a % b);
+}
+int main()
+{
+	int a, b, t;
+	readint(&t);
+	for (int cnum = 0; cnum++ < t;)
+	{
+		readint(&a);
+		readint(&b);
+		printf("Case %d: %d\n", cnum, (a + b) / gcd(a, b));
+	}
+	return 0;
 }

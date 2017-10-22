@@ -1,94 +1,168 @@
-#include <string>
-#include <iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main() {
-	for (int p = 1; ; p++) {		
-		string str;
-		string mat[5];
-		bool valid = true;
-		while (true) {
-			getline(cin, mat[0]);
-			if (mat[0] == "Z") {
-				return 0;
+char B[7][7], com[1000];
+int er, ec, F;
+
+void Above()
+{
+	char tc;
+	if (er == 0)
+	{
+		F = 1;
+		return;
+	}
+	tc = B[er - 1][ec];
+	B[er][ec] = tc;
+	B[er - 1][ec] = ' ';
+	er--;
+}
+void Right()
+{
+	char tc;
+	if (ec == 4)
+	{
+		F = 1;
+		return;
+	}
+	tc = B[er][ec + 1];
+	B[er][ec + 1] = ' ';
+	B[er][ec] = tc;
+	ec++;
+}
+void Below()
+{
+	char tc;
+	if (er == 4)
+	{
+		F = 1;
+		return;
+	}
+	tc = B[er + 1][ec];
+	B[er + 1][ec] = ' ';
+	B[er][ec] = tc;
+	er++;
+}
+void Left()
+{
+	char tc;
+	if (ec == 0)
+	{
+		F = 1;
+		return;
+	}
+	tc = B[er][ec - 1];
+	B[er][ec - 1] = ' ';
+	B[er][ec] = tc;
+	ec--;
+}
+void Print()
+{
+	int i, j;
+	if (F)
+	{
+		printf("This puzzle has no final configuration.\n");
+		return;
+	}
+	for (i = 0; i < 5; i++)
+	{
+		printf("%c", B[i][0]);
+		for (j = 1; j < 5; j++)
+			printf(" %c", B[i][j]);
+		printf("\n");
+	}
+}
+void Cal()
+{
+	int i;
+	F = 0;
+	while (1)
+	{
+		gets(com);
+		for (i = 0; com[i]; i++)
+		{
+			if (com[i] == '\n')
+			{
+				com[i] = '\0';
 			}
-			getline(cin, mat[1]);
-			getline(cin, mat[2]);
-			getline(cin, mat[3]);
-			getline(cin, mat[4]);
-			
-			int I, J;
-			for (int i = 0; i < 5; i++) {
-				for (int j = 0; j < 5; j++) {
-					if (mat[i][j] == ' ') {
-						I = i; J = j;
-						i = j = 5;
-					}
-				}
+		}
+		for (i = 0; com[i]; i++)
+		{
+			if (com[i] == '0')
+			{
+				return;
 			}
-					
-			bool endPuzzle = false;
-			while (!endPuzzle && getline(cin, str)) {
-				
-				for (int i = 0; i < str.length(); i++) {
-				
-					if (str[i] == '0' || !valid) {
-						endPuzzle = true;
-						break;
-					}
-					
-					if (str[i] == 'A') {
-						if (I <= 0) valid = false;
-						else {
-							mat[I][J] = mat[I - 1][J];
-							--I;
-							mat[I][J] = ' ';
-						}
-					}
-					if (str[i] == 'B') {
-						if (I >= 4) valid = false;
-						else {
-							mat[I][J] = mat[I + 1][J];
-							++I;
-							mat[I][J] = ' ';
-						}
-					}
-					if (str[i] == 'L') {
-						if (J <= 0) valid = false;
-						else {
-							mat[I][J] = mat[I][J - 1];
-							--J;
-							mat[I][J] = ' ';
-						}
-					}
-					if (str[i] == 'R') {
-						if (J >= 4) valid = false;
-						else {
-							mat[I][J] = mat[I][J + 1];
-							++J;
-							mat[I][J] = ' ';
-						}
-					}
+			if (F)
+			{
+				continue;
+			}
+			switch (com[i])
+			{
+			case 'A':
+				Above();
+				break;
+			case 'R':
+				Right();
+				break;
+			case 'B':
+				Below();
+				break;
+			case 'L':
+				Left();
+				break;
+			default:
+				F = 1;
+			}
+		}
+	}
+}
+
+int main()
+{
+	int i, j, f, kase = 0;
+	while (1)
+	{
+		gets(B[0]);
+		if (!strcmp(B[0], "Z"))
+		{
+			break;
+		}
+		f = 1;
+		for (i = 0; B[0][i]; i++)
+		{
+			if (B[0][i] == ' ')
+			{
+				f = 0;
+				er = 0;
+				ec = i;
+				break;
+			}
+		}
+		for (i = 1; i < 5; i++)
+		{
+			gets(B[i]);
+			if (!f)
+			{
+				continue;
+			}
+			for (j = 0; B[i][j]; j++)
+			{
+				if (B[i][j] == ' ')
+				{
+					f = 0;
+					er = i;
+					ec = j;
 				}
 			}
 		}
-		
-		if (p > 1)
-			cout << endl;
-			
-		cout << "Puzzle #" << p << ":\n";
-		if (!valid) {
-			for (int i = 0; i < 5; i++) {
-				for (int j = 0; j < 5; j++) {
-					if (j) cout << " ";
-					cout << mat[i][j];
-				}
-				cout << endl;
-			}
+		if (kase++)
+		{
+			printf("\n");
 		}
-		else {
-			cout << "This puzzle has no final configuration.\n";
-		}
+		Cal();
+		printf("Puzzle #%d:\n", kase);
+		Print();
 	}
 	return 0;
 }

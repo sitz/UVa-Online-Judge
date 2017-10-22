@@ -1,44 +1,31 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-
-int main(){
-	int T;
-	cin >> T;
-	while( T-- ){
-		int A, B, C;
-		cin >> A >> B >> C;
-		if( A + B > C && B + C > A && A + C > B )
-			cout << "OK\n";
+int main()
+{
+	int n;
+	int a, b, c;
+	cin >> n;
+	for (int i = 0; i < n; i++)
+	{
+		cin >> a >> b >> c;
+		if (a > b)
+		{
+			swap(a, b);
+		}
+		if (b > c)
+		{
+			swap(b, c);
+		}
+		if (a + b <= c)
+		{
+			cout << "Wrong!!" << endl;
+		}
 		else
-			cout << "Wrong!!\n";
+		{
+			cout << "OK" << endl;
+		}
 	}
 	return 0;
 }
-

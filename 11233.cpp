@@ -1,70 +1,61 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int main(){
-    int L, N, i;
-    map <string, string> irr;
-    map <string, string>::iterator it;
-    cin>>L>>N;
-    for(i=0; i<L; i++){
-             string first, second;
-             cin>>first>>second;
-             irr[first] = second;
-    }
-    for(i=0; i<N; i++){
-             string str;
-             cin>>str;
-             it = irr.find(str);
-             if(it != irr.end()){
-                   cout<< it->second <<endl;
-                   continue;
-             }
-             int len = str.length();
-             if( str[len-1]=='y' && !(str[len-2]=='a' || str[len-2]=='e' || 
-                 str[len-2]=='i' || str[len-2]=='o' || str[len-2]=='u') ){
-                                 str.erase(len-1);
-                                 str += "ies";
-                                 cout<<str<<endl;
-                 }
-             else if( str[len-1]=='o' ||  str[len-1]=='s' ||  str[len-1]=='x' ||  
-                  (str[len-1]=='h' && (str[len-2]=='c' || str[len-2]=='s') ) ){
-                                   str += "es";
-                                   cout<<str<<endl;
-                  }
-             else{
-                  str += "s";
-                 cout<<str<<endl;
-             }
-             
-    }
-    return 0;
+bool is_vowel(char c)
+{
+	return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
+}
+
+bool special_case(const string &s)
+{
+	if (s[s.size() - 1] == 'o' || s[s.size() - 1] == 's' || s[s.size() - 1] == 'x')
+	{
+		return true;
+	}
+	if (s.size() < 2)
+	{
+		return false;
+	}
+	if (s[s.size() - 2] == 'c' && s[s.size() - 1] == 'h' || s[s.size() - 2] == 's' && s[s.size() - 1] == 'h')
+	{
+		return true;
+	}
+	return false;
+}
+
+int main()
+{
+	int L, N;
+	string w1, w2;
+	map<string, string> irregular;
+	cin >> L >> N;
+	while (L--)
+	{
+		cin >> w1 >> w2;
+		irregular[w1] = w2;
+	}
+	while (N--)
+	{
+		cin >> w1;
+		if (irregular.find(w1) != irregular.end())
+		{
+			cout << irregular[w1] << endl;
+			continue;
+		}
+		if (w1[w1.size() - 1] == 'y' && w1.size() > 1 && !is_vowel(w1[w1.size() - 2]))
+		{
+			w1[w1.size() - 1] = 'i';
+			cout << w1 << "es" << endl;
+		}
+		else if (special_case(w1))
+		{
+			cout << w1 << "es" << endl;
+		}
+		else
+		{
+			cout << w1 << "s" << endl;
+		}
+	}
+	return 0;
 }

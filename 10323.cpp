@@ -1,48 +1,44 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    long long n;
-    while(cin>>n){
-                  if(n<0){
-                         if(n%2==0)
-                                   cout<<"Underflow!"<<endl;
-                         else
-                                   cout<<"Overflow!"<<endl;
-                         continue;
-                  }
-                  if(n<8 && n>=0){
-                         cout<<"Underflow!"<<endl;
-                         continue;
-                  }
-                  if(n>13){
-                            cout<<"Overflow!"<<endl;
-                            continue;
-                  }
-                  if(n==8){
-                           cout<<"40320"<<endl;
-                           continue;
-                  }
-                  if(n==9){
-                           cout<<"362880"<<endl;
-                           continue;
-                  }
-                  if(n==10){
-                            cout<<"3628800"<<endl;
-                            continue;
-                  }
-                  if(n==11){
-                            cout<<"39916800"<<endl;
-                            continue;
-                  }
-                  if(n==12){
-                            cout<<"479001600"<<endl;
-                            continue;
-                  }
-                  if(n==13){
-                            cout<<"6227020800"<<endl;
-                            continue;
-                  }
-    }
-    return 0;
+int main()
+{
+	long long fac[20];
+	int i, n;
+	fac[0] = 1;
+	for (i = 1; i <= 13; i++)
+	{
+		fac[i] = fac[i - 1] * i;
+	}
+	while (cin >> n)
+	{
+		if (n >= 0)
+		{
+			if (n > 13)
+			{
+				cout << "Overflow!" << endl;
+			}
+			else if (n < 8)
+			{
+				cout << "Underflow!" << endl;
+			}
+			else
+			{
+				cout << fac[n] << endl;
+			}
+		}
+		else
+		{
+			if ((n * -1) % 2 == 1)
+			{
+				cout << "Overflow!" << endl;
+			}
+			else
+			{
+				cout << "Underflow!" << endl;
+			}
+		}
+	}
+	return 0;
 }

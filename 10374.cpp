@@ -1,78 +1,86 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
+#define MAXN 22
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int T;
-	cin >> T;
-	while (T--){
-		map<string, string> Party;
-		map<string, string>::iterator itp;
-		map<string, int> Vote;
-		map<string, int>::iterator itv;
-		
-		int N, i, j;
-		string str;
-		cin >> N;
-		getline(cin, str);
-		while (N--){
-			string A, B;
-			getline(cin, A);
-			getline(cin, B);
-			Party[A] = B;
-			Vote[A] = 0;
-		}
-		cin >> N;
-		getline(cin, str);
-		int maxm = 0;
-		while (N--){
-			getline(cin, str);
-			Vote[str] += 1;
-			maxm = max(maxm, Vote[str]);
-		}
-		int cnt = 0;
-		for (itv = Vote.begin(); itv != Vote.end(); itv++){
-			if (maxm == (*itv).second){
-				++cnt;
-				str = Party[(*itv).first];
+int N, M, C[MAXN];
+struct ss
+{
+	char candidate[82];
+	char party[82];
+	int cand_number;
+} V[MAXN], Temp;
+int com(const void *a, const void *b)
+{
+	ss *x = (ss *)a;
+	ss *y = (ss *)b;
+	return strcmp(x->candidate, y->candidate);
+}
+int Cal()
+{
+	int i, j, max = 0, c = 0;
+	ss *p;
+	qsort(V, N, sizeof(V[0]), com);
+	for (j = 0; j < N; j++)
+	{
+		V[j].cand_number = j;
+		C[j] = 0;
+	}
+	for (i = 0; i < M; i++)
+	{
+		gets(Temp.candidate);
+		p = (ss *)bsearch(&Temp, V, N, sizeof(V[0]), com);
+		if (p)
+		{
+			C[p->cand_number]++;
+			if (C[p->cand_number] > max)
+			{
+				max = C[p->cand_number];
 			}
 		}
-		if (cnt > 1)
-			cout << "tie" << endl;
-		else
-			cout << str << endl;
-		
-		if (T)
-			cout << endl;
 	}
+	for (i = 0; i < N; i++)
+	{
+		if (C[i] == max)
+		{
+			j = i;
+			c++;
+			if (c > 1)
+			{
+				printf("tie\n");
+				return 0;
+			}
+		}
+	}
+	printf("%s\n", V[j].party);
 	return 0;
 }
 
+int main()
+{
+	char input[100];
+	int kase, i;
+	gets(input);
+	sscanf(input, "%d", &kase);
+	gets(input);
+	while (kase--)
+	{
+		gets(input);
+		sscanf(input, "%d", &N);
+		for (i = 0; i < N; i++)
+		{
+			gets(V[i].candidate);
+			gets(V[i].party);
+		}
+		gets(input);
+		sscanf(input, "%d", &M);
+		Cal();
+		if (kase)
+		{
+			printf("\n");
+			gets(input);
+		}
+	}
+	return 0;
+}

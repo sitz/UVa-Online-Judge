@@ -1,61 +1,57 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define INF	1<<30
-#define FOI(i, A, B) for (i = A; i <= B; i++)
-#define FOD(i, A, B) for (i = A; i >= B; i--)
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	while (true) {
-		int N, i, j;
-		cin >> N;
-		if (N == 0) break;
-		int preR = INF, preD = INF, mm = INF;
-		string S;
-		cin >> S;
-		FOI(i, 0, N-1) {
-			if (S[i] == 'Z') {
-				mm = 0;
-				break;
-			}
-			if (S[i] == 'R') {
-				preR = i;
-				mm = min(mm, abs(preR - preD));
+int main()
+{
+	int L;
+	char c;
+	while (cin >> L)
+	{
+		if (L == 0)
+		{
+			break;
+		}
+		int prev_d = -1;
+		int prev_r = -1;
+		int result = 1000000000;
+		bool z_found = false;
+		for (int i = 0; i < L; i++)
+		{
+			cin >> c;
+			if (z_found)
+			{
 				continue;
 			}
-			if (S[i] == 'D') {
-				preD = i;
-				mm = min(mm, abs(preD - preR));
+			if (c == '.')
+			{
 				continue;
+			}
+			if (c == 'D')
+			{
+				prev_d = i;
+				if (prev_r != -1 && prev_d - prev_r < result)
+				{
+					result = prev_d - prev_r;
+				}
+				continue;
+			}
+			if (c == 'R')
+			{
+				prev_r = i;
+				if (prev_d != -1 && prev_r - prev_d < result)
+				{
+					result = prev_r - prev_d;
+				}
+				continue;
+			}
+			if (c == 'Z')
+			{
+				z_found = true;
+				result = 0;
 			}
 		}
-		cout << mm << endl;
+		cout << result << endl;
 	}
 	return 0;
 }

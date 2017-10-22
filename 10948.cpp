@@ -1,72 +1,62 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define MAX	1000000
+bool primes[1000001];
 
-bool prime[MAX + 5];
-vector<int> P;
-
-void seive(){
-	memset(prime, true, sizeof prime);
-	prime[0] = false; prime[1] = false;
-	int i, j;
-	FOI(i, 2, MAX)
-		if( prime[i] ){
-			P.push_back(i);
-			for (j = 2*i; j <= MAX; j += i)
-				prime[j] = false;
+void sieve()
+{
+	fill(primes, primes + 1000001, true);
+	for (int i = 2; i < 1002; i++)
+	{
+		for (int j = i * i; j < 1000001; j += i)
+		{
+			primes[j] = false;
 		}
+	}
+	primes[0] = primes[1] = false;
 }
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	seive();
-	int M = P.size();
-	while( true ){
-		int N, i;
-		cin >> N;
-		if( N == 0 )
+int main()
+{
+	int n;
+	sieve();
+	while (cin >> n)
+	{
+		int last;
+		if (n == 0)
+		{
 			break;
-		cout << N << ":" << endl;
-		bool gold = false;
-		FOI(i, 0, M-1){
-			if( P[i] > N )
-				break;
-			if( prime[N - P[i]] ){
-				cout << P[i] << "+" << N - P[i] << endl;
-				gold = true;
+		}
+		if (n % 2 == 0)
+		{
+			last = n - 1;
+		}
+		else
+		{
+			last = n - 2;
+		}
+		cout << n << ":" << endl;
+		if (primes[n - 2])
+		{
+			cout << 2 << "+" << n - 2 << endl;
+			continue;
+		}
+		bool found = false;
+		while (n - last <= last)
+		{
+			if (primes[last] && primes[n - last])
+			{
+				cout << n - last << "+" << last << endl;
+				found = true;
 				break;
 			}
+			last -= 2;
 		}
-		if( !gold )
+		if (!found)
+		{
 			cout << "NO WAY!" << endl;
+		}
 	}
 	return 0;
 }

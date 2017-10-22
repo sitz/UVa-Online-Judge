@@ -1,88 +1,102 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef long long int64;
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define MAX 1000000
+// nCr
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int T, t;
-	scanf("%d\n", &T);
-	FOI(t, 1, T){
-		string str, temp = "";
-		string A, B, K;
-		getline(cin, str);
-		int i, j;
-		FOI(i, 0, str.length()-1){
-			if(str[i] == '(' || str[i] == ' ')
-				continue;
-			else if(str[i] == '+'){
-				A = temp;
-				temp = "";
-			}
-			else if(str[i] == ')'){
-				B = temp;
-				temp = "";
-			}
-			else if(str[i] == '^')
-				continue;
-			else
-				temp += str[i];
+#define INF_MAX 2147483647
+#define INF_MIN -2147483647
+#define pi acos(-1.0)
+#define N 1000000
+#define LL long long
+
+#define For(i, a, b) for (int i = (a); i < (b); i++)
+#define Fors(i, sz) for (size_t i = 0; i < sz.size(); i++)
+#define Fore(it, x) for (typeof(x.begin()) it = x.begin(); it != x.end(); it++)
+#define Set(a, s) memset(a, s, sizeof(a))
+
+int dr[] = {-1, -1, 0, 1, 1, 1, 0, -1};
+int dc[] = {0, 1, 1, 1, 0, -1, -1, -1};
+
+char ch[1000 + 10], a[1000 + 10], b[1000 + 10], p[10];
+int power;
+
+void parseInput()
+{
+	int ind = 1;
+	int k = 0;
+	while (ch[ind] != '+')
+		a[k++] = ch[ind++];// 1st operand
+	a[k] = 0;
+	ind++;
+	k = 0;
+	while (ch[ind] != ')')
+		b[k++] = ch[ind++];// 2nd operand
+	b[k] = 0;
+	ind += 2;
+	k = 0;
+	while (ch[ind])
+		p[k++] = ch[ind++];
+	p[k] = 0;
+	power = atoi(p);
+}
+
+void printCoefficients(int n, int k)
+{
+	int maxi = max(n - k, k);
+	LL res = 1;
+	int p = 1;
+	for (int i = maxi + 1; i <= n; i++)
+	{
+		res *= i;
+		res /= p;
+		p++;
+	}
+	if (res > 1)
+		cout << res;
+}
+
+void printA(int p)
+{
+	if (p == 1)
+		printf("*%s", a);
+	else if (p == power)
+		printf("%s^%d", a, p);
+	else if (p > 1)
+		printf("*%s^%d", a, p);
+}
+
+void printB(int p)
+{
+	if (p == 1)
+		printf("*%s", b);
+	else if (p == power)
+		printf("%s^%d", b, p);
+	else if (p > 1)
+		printf("*%s^%d", b, p);
+}
+
+int main()
+{
+	int testCase;
+	scanf("%d", &testCase);
+	int cases = 0;
+	while (testCase--)
+	{
+		scanf("%s", ch);
+		parseInput();
+		printf("Case %d: ", ++cases);
+		if (power == 1)
+		{
+			printf("%s+%s\n", a, b);
+			continue;
 		}
-		K = temp;
-		//cout << A << " " << B << " " << K << endl;
-		/*
-		A[0] = 'a'; A[1] = '\0';
-		B[0] = 'b'; B[1] = '\0';
-		K[0] = '2'; K[1] = '\0';
-		*/
-		int k = atoi(K.c_str());
-		int64 cof[k+1];
-		cof[0] = 1;
-		FOI(i, 1, k)
-			cof[i] = (cof[i-1] * (k - i + 1)) / i;
-		printf("Case %d: ", t);
-		FOI(i, 0, k){
-			if( cof[i] > 1 )
-				printf("%lld*", cof[i]);
-			if(k - i > 0)
-				printf("%s", A.c_str());
-			if(k - i > 1)
-				printf("^%d", k-i);
-			if((cof[i] > 1 || k - i > 0) && i > 0)
-				printf("*");
-			if(i > 0)
-				printf("%s", B.c_str());
-			if(i > 1)
-				printf("^%d", i);
-			if(i < k)
+		for (int i = 0; i <= power; i++)
+		{
+			printCoefficients(power, i);
+			printA(power - i);
+			printB(i);
+			if (i != power)
 				printf("+");
 		}
 		printf("\n");

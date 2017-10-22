@@ -1,54 +1,48 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
+char line1[1010], line2[1010];
 
-string alpha = "abcdefghijklmnopqrstuvwxyz";
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	string A, B;
-	while (getline(cin, A) && getline(cin, B)) {
-		int arr[26], brr[26] ;
-		memset(arr, 0, sizeof arr);
-		memset(brr, 0, sizeof brr);
-		int aL = A.length() - 1;
-		int bL = B.length() - 1;
-		int i, j;
-		FOI(i, 0, aL) ++arr[A[i] - 'a'];
-		FOI(i, 0, bL) ++brr[B[i] - 'a'];
-		FOI(i, 0, 25){
-			int M = min(arr[i], brr[i]) - 1;
-			FOI(j, 0, M) cout << alpha[i];
+int main()
+{
+	while (cin.getline(line1, 1010))
+	{
+		cin.getline(line2, 1010);
+		int i;
+		int cnt1[26], cnt2[26];
+		memset(cnt1, 0, sizeof(cnt1));
+		memset(cnt2, 0, sizeof(cnt2));
+		for (i = 0; line1[i]; i++)
+		{
+			line1[i] = tolower(line1[i]);
+			if (isalpha(line1[i]))
+			{
+				cnt1[line1[i] - 'a']++;
+			}
+		}
+		for (i = 0; line2[i]; i++)
+		{
+			line2[i] = tolower(line2[i]);
+			if (isalpha(line2[i]))
+			{
+				cnt2[line2[i] - 'a']++;
+			}
+		}
+		for (i = 0; i < 26; i++)
+		{
+			if (cnt1[i] && cnt2[i])
+			{
+				int j;
+				int min;
+				min = cnt1[i] < cnt2[i] ? cnt1[i] : cnt2[i];
+				for (j = 0; j < min; j++)
+				{
+					cout << (char)(i + 'a');
+				}
+			}
 		}
 		cout << endl;
 	}
 	return 0;
 }
-

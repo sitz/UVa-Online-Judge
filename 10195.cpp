@@ -1,14 +1,22 @@
-#include<iostream>
-#include<cstdio>
-#include<cmath>
-#include<algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
-int main(){
-    double a,b,c;
-    while(scanf("%lf%lf%lf",&a,&b,&c)!=EOF){
-                                       double s=(a+b+c)/2;
-                                       double rad=sqrt((s-a)*(s-b)*(s-c)/s);
-                                       printf("The radius of the round table is: %.3lf\n",rad);
-    }
-    return 0;
+
+int main()
+{
+	double a, b, c, s, r;
+	while (scanf("%lf%lf%lf", &a, &b, &c) == 3)
+	{
+		s = (a + b + c) / 2.0;
+		if (s != 0)
+		{
+			r = sqrt((s - a) * (s - b) * (s - c) / s);
+		}
+		else
+		{
+			r = 0;
+		}
+		printf("The radius of the round table is: %.3lf\n", r);
+	}
+	return 0;
 }

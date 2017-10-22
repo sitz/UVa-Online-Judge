@@ -1,59 +1,77 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define sqr(X) 			((X) * (X))
-#define FOI(I, A, B)	for (I = A; I <= B; I++)
-struct Cod{
-       double X;
-       double Y;
-};
+typedef unsigned long long ULL;
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-    for (int t = 1; ; t++){
-		int N;
-		cin >> N;
-		if (N == 0)
-			break;
-		Cod frog[N];
-		int i, j, k;
-		FOI(i, 0, N-1)
-			cin >> frog[i].X >> frog[i].Y;
-		double mat[N][N];
-		FOI(i, 0, N-1)
-			FOI(j, 0, N-1)
-				mat[i][j] = sqrt(sqr(frog[i].X - frog[j].X) + sqr(frog[i].Y - frog[j].Y));
-		
-		FOI(k, 0, N-1)
-			FOI(i, 0, N-1)
-				FOI(j, 0, N-1)
-					mat[i][j] = min(mat[i][j], max(mat[i][k], mat[k][j]));
-		printf("Scenario #%d\nFrog Distance = %.3lf\n\n", t, mat[0][1]);
-    }
-	return 0;
+const ULL MAX_VAL = 1000000000ULL;
+
+int main()
+{
+	int t = 1, c, r, q;
+	while (scanf("%d%d%d", &c, &r, &q) == 3, c + r + q)
+	{
+		if (t != 1)
+		{
+			printf("\n");
+		}
+		++c;
+		vector<vector<ULL> > worst_feast_costs(c, vector<ULL>(c, MAX_VAL));
+		for (int i = 1; i < c; ++i)
+		{
+			scanf("%llu", &worst_feast_costs[i][i]);
+		}
+
+		vector<vector<ULL> > travel_costs(c, vector<ULL>(c, MAX_VAL));
+		for (int i = 0; i < r; ++i)
+		{
+			int start, end;
+			ULL curr;
+			scanf("%d%d%llu", &start, &end, &curr);
+			if (curr < travel_costs[start][end])
+			{
+				travel_costs[start][end] = curr;
+				travel_costs[end][start] = curr;
+				ULL feast_cost = max(worst_feast_costs[start][start],
+														 worst_feast_costs[end][end]);
+				worst_feast_costs[start][end] = feast_cost;
+				worst_feast_costs[end][start] = feast_cost;
+			}
+		}
+
+		// run floyd-warshall 2x because of interaction with worst_feast_costs
+		for (int p = 0; p < 2; ++p)
+		{
+			for (int k = 1; k < c; ++k)
+			{
+				for (int i = 1; i < c; ++i)
+				{
+					for (int j = 1; j < c; ++j)
+					{
+						ULL worst_feast = max(worst_feast_costs[i][k], worst_feast_costs[k][j]);
+						if (travel_costs[i][j] + worst_feast_costs[i][j] > travel_costs[i][k] + travel_costs[k][j] + worst_feast)
+						{
+							travel_costs[i][j] = travel_costs[i][k] + travel_costs[k][j];
+							worst_feast_costs[i][j] = worst_feast;
+						}
+					}
+				}
+			}
+		}
+
+		printf("Case #%d\n", t++);
+		for (int i = 0; i < q; ++i)
+		{
+			int start, end;
+			scanf("%d%d", &start, &end);
+			if (travel_costs[start][end] == MAX_VAL)
+			{
+				printf("-1\n");
+			}
+			else
+			{
+				printf("%llu\n", travel_costs[start][end] + worst_feast_costs[start][end]);
+			}
+		}
+	}
 }

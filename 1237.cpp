@@ -1,38 +1,64 @@
-#include <string>
-#include <iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-struct Car {
+struct manufacturer
+{
 	string name;
-	int L, H;
+	int low, high;
 };
 
-int main() {
-	int T;
-	cin >> T;
-	while (T--) {
-		int N;
-		cin >> N;
-		Car db[N];
-		for (int i = 0; i < N; i++)
-			cin >> db[i].name >> db[i].L >> db[i].H;
-		int Q;
-		cin >> Q;
-		while (Q--) {
-			int P, C = 0;
-			string Ans = "";
-			cin >> P;
-			for (int i = 0; i < N; i++) {
-				if (db[i].L <= P && db[i].H >= P) {
-					++C;
-					Ans = db[i].name;
-				}
-				if (C > 1) break;
-			}
-			if (C == 1) cout << Ans << endl;
-			else cout << "UNDETERMINED\n";
+int main()
+{
+	int t, d, low, high, q, p;
+	string name;
+	manufacturer tmp;
+	vector<manufacturer> manufacturers;
+	cin >> t;
+	while (t--)
+	{
+		cin >> d;
+		manufacturers.clear();
+		while (d--)
+		{
+			cin >> tmp.name >> tmp.low >> tmp.high;
+			manufacturers.push_back(tmp);
 		}
-		if (T) cout << endl;
+		cin >> q;
+		while (q--)
+		{
+			cin >> p;
+			bool ok = false;
+			string result = "";
+			for (int i = 0, sz = manufacturers.size(); i < sz; i++)
+			{
+				if (manufacturers[i].low <= p && manufacturers[i].high >= p)
+				{
+					if (result == "")
+					{
+						ok = true;
+						result = manufacturers[i].name;
+					}
+					else if (result != "")
+					{
+						ok = false;
+						break;
+					}
+				}
+			}
+			if (ok)
+			{
+				cout << result << endl;
+			}
+			else
+			{
+				cout << "UNDETERMINED" << endl;
+			}
+		}
+		if (t)
+		{
+			cout << endl;
+		}
 	}
 	return 0;
 }

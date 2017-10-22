@@ -1,35 +1,41 @@
-#include <iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int hexa[] = {0, 1, 1, 2, 1, 2, 2, 3, 1, 2};
+#define FOR(i, a, b) for (int(i) = int(a); (i) < int(b); (i)++)
 
-int countHex(int N){
-	int cnt = 0;
-	while( N ){
-		cnt += hexa[N%10];
-		N /= 10;
+int mypower(int a, int b)
+{
+	int result = 1;
+	FOR(i, 0, b)
+	{
+		result *= a;
 	}
-	return cnt;
+	return result;
 }
 
-int countDec(int N){
-	int cnt = 0;
-	while( N ){
-		cnt += N%2;
-		N /= 2;
+int hex_to_int(int n)
+{
+	int result = 0, counter = 0, tmp;
+	while (n > 0)
+	{
+		tmp = n % 10;
+		n /= 10;
+		result += tmp * mypower(16, counter);
+		counter++;
 	}
-	return cnt;
+	return result;
 }
 
-int main(){
-	int T;
-	cin >> T;
-	while( T-- ){
-		int N;
-		cin >> N;
-		int B1 = countDec(N);
-		int B2 = countHex(N);
-		//int V = N ^ ( B1 * B2 );
-		cout << B1 << " " << B2 << endl;
+static unsigned int n, num;
+
+int main()
+{
+	scanf("%u", &n);
+	while (n--)
+	{
+		scanf("%u", &num);
+		printf("%d %d\n", __builtin_popcount(num), __builtin_popcount(hex_to_int(num)));
 	}
+	return 0;
 }

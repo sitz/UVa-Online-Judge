@@ -1,30 +1,45 @@
-#include <algorithm>
-#include <cstring>
-#include <cstdio>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main() {
+int main()
+{
 	int N;
-	char image[30];
-	while (true) {
-		scanf("%d\n", &N);
-		if (!N)
+	char p[20][30];
+	int cnt[20], sum, min;
+	while (cin >> N)
+	{
+		if (N == 0)
+		{
 			break;
-		int totBlank = 0, minBlank = 50;
-		for (int n = 0; n < N; n++) {
-			gets(image);
-			//puts(image);
-			//scanf("%[A-Z ][^\n]s", image);
-			//printf("%s\n", image);
-			int blank = 0;
-			for (int i = 0; i < 25; i++) {
-				if (image[i] == ' ') ++blank;
-			}
-			totBlank = totBlank + blank;
-			minBlank = min(blank, minBlank);
 		}
-		totBlank -= (N * minBlank);
-		printf("%d\n", totBlank);
+		int i, j;
+		for (i = 0; i <= N; i++)
+		{
+			cin.getline(p[i], 30);
+		}
+		for (i = 0; i <= N; i++)
+		{
+			cnt[i] = 0;
+		}
+		sum = 0;
+		min = 10000;
+		for (i = 1; i <= N; i++)
+			for (j = 0; j < 25; j++)
+				if (p[i][j] == ' ')
+				{
+					cnt[i]++;
+				}
+		for (i = 1; i <= N; i++)
+			if (cnt[i] < min)
+			{
+				min = cnt[i];
+			}
+		for (i = 1; i <= N; i++)
+		{
+			sum += cnt[i];
+		}
+		cout << sum - N * min << endl;
 	}
 	return 0;
 }

@@ -1,75 +1,64 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-
-struct Switch{
-	bool S;
-	int V;
-};
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	for (int t = 1; ; t++){
-		int N, M, C;
-		cin >> N >> M >> C;
-		if( N == 0 && M == 0 && C == 0 )
+int main()
+{
+	unsigned long *device;
+	bool *state;
+	unsigned long n, m, c, d;
+	unsigned long cases = 0;
+	while (cin >> n >> m >> c)
+	{
+		if (n == 0 && m == 0 && c == 0)
+		{
 			break;
-		int curr = 0, maxm = -1;
-		bool fuse = false;
-		Switch swit[N];
-		int i, j;
-		FOI(i, 0, N-1){
-			cin >> swit[i].V;
-			swit[i].S = false;
 		}
-		while( M-- ){
-			int P;
-			cin >> P;
-			--P;
-			swit[P].S = !swit[P].S;
-			if( !swit[P].S )
-				curr -= swit[P].V;
+		device = new unsigned long[n];
+		state = new bool[n];
+		for (unsigned long i = 0; i < n; i++)
+		{
+			state[i] = false;
+		}
+		for (unsigned long i = 0; i < n; i++)
+		{
+			cin >> device[i];
+		}
+		unsigned long max = 0;
+		unsigned long cur = 0;
+		while (m--)
+		{
+			cin >> d;
+			d--;
+			if (state[d])
+			{
+				state[d] = false;
+				cur -= device[d];
+			}
 			else
-				curr += swit[P].V;
-			maxm = max(curr, maxm);
-			if( maxm > C )
-				fuse = true;
+			{
+				state[d] = true;
+				cur += device[d];
+				if (cur > max)
+				{
+					max = cur;
+				}
+			}
 		}
-		cout << "Sequence " << t << "\n";
-		if( fuse )
-			cout << "Fuse was blown.\n";
-		else{
-			cout << "Fuse was not blown.\n";
-			cout << "Maximal power consumption was " << maxm << " amperes.\n";
+		cases++;
+		cout << "Sequence " << cases << endl;
+		if (max > c)
+		{
+			cout << "Fuse was blown." << endl;
 		}
-		cout << "\n";
+		else
+		{
+			cout << "Fuse was not blown." << endl;
+			cout << "Maximal power consumption was " << max << " amperes." << endl;
+		}
+		cout << endl;
+		delete[] device;
+		delete[] state;
 	}
 	return 0;
 }

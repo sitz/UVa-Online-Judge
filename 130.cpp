@@ -1,48 +1,71 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int64 josephus(int64 n, int64 k){
-      if(n==1)
-              return 0;
-      return (josephus(n-1, k) + k)%n;
+int queue_[101];
+int n, k;
+
+void roman()
+{
+	int cnt, i, nxt = -1, killed;
+	for (i = 0; i < n; i++)
+	{
+		queue_[i] = i + 1;
+	}
+	cnt = 0;
+	i = n;
+	while (i > 1)
+	{
+		cnt = 0;
+		while (cnt < k)
+		{
+			nxt = (nxt + 1) % n;
+			if (queue_[nxt])
+			{
+				cnt++;
+			}
+		}
+		killed = nxt;
+		queue_[nxt] = 0;
+		cnt = 0;
+		nxt--;
+		while (cnt < k)
+		{
+			nxt = (nxt + 1) % n;
+			if (queue_[nxt])
+			{
+				cnt++;
+			}
+		}
+		queue_[killed] = queue_[nxt];
+		queue_[nxt] = 0;
+		nxt = killed;
+		i--;
+	}
+	for (i = 0; i < n; i++)
+		if (queue_[i])
+		{
+			if (queue_[i] == 1)
+			{
+				printf("1\n");
+			}
+			else
+			{
+				printf("%d\n", n - queue_[i] + 2);
+			}
+			break;
+		}
 }
-int main(){
-    while(true){
-                int64 n, k;
-                scanf("%lld%lld", &n, &k);
-                if(n==0 && k==0)
-                        break;
-                int64 val = josephus(n ,k) + 1;
-                printf("%lld\n", val);
-    }
-    return 0;
+
+int main()
+{
+	while (scanf("%d%d", &n, &k))
+	{
+		if (n == 0 && k == 0)
+		{
+			break;
+		}
+		roman();
+	}
+	return 0;
 }

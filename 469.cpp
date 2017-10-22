@@ -1,89 +1,137 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
+int n, m;
+int num;
+char field[100][100];
+bool visited[100][100];
 
-string mat[105];
-bool used[105][105];
-int R = 0, C = 0;
-
-int dfs(int r, int c){
-	if( r < 0 || r >= R )
+int bfs(int a, int b)
+{
+	int counter = 0;
+	pair<int, int> tmp;
+	queue<pair<int, int>> q;
+	tmp.first = a;
+	tmp.second = b;
+	if (field[a][b] != 'W')
+	{
 		return 0;
-	if( c < 0 || c >= C )
-		return 0;
-	if( !used[r][c] )
-		return 0;
-	
-	used[r][c] = false;
-	
-	return 1 + dfs(r-1,c-1) + dfs(r-1,c) + dfs(r-1,c+1) + dfs(r,c+1) + dfs(r+1,c+1) + dfs(r+1,c) + dfs(r+1,c-1) + dfs(r,c-1);
+	}
+	counter++;
+	visited[a][b] = true;
+	q.push(tmp);
+	while (!q.empty())
+	{
+		tmp = q.front();
+		q.pop();
+		if (tmp.first > 0 && !visited[tmp.first - 1][tmp.second] && field[tmp.first - 1][tmp.second] == 'W')
+		{
+			visited[tmp.first - 1][tmp.second] = true;
+			q.push(make_pair(tmp.first - 1, tmp.second));
+			counter++;
+		}
+		if (tmp.second > 0 && !visited[tmp.first][tmp.second - 1] && field[tmp.first][tmp.second - 1] == 'W')
+		{
+			visited[tmp.first][tmp.second - 1] = true;
+			q.push(make_pair(tmp.first, tmp.second - 1));
+			counter++;
+		}
+		if (tmp.first < n - 1 && !visited[tmp.first + 1][tmp.second] && field[tmp.first + 1][tmp.second] == 'W')
+		{
+			visited[tmp.first + 1][tmp.second] = true;
+			q.push(make_pair(tmp.first + 1, tmp.second));
+			counter++;
+		}
+		if (tmp.second < m - 1 && !visited[tmp.first][tmp.second + 1] && field[tmp.first][tmp.second + 1] == 'W')
+		{
+			visited[tmp.first][tmp.second + 1] = true;
+			q.push(make_pair(tmp.first, tmp.second + 1));
+			counter++;
+		}
+		if (tmp.first > 0 && tmp.second > 0 && !visited[tmp.first - 1][tmp.second - 1] && field[tmp.first - 1][tmp.second - 1] == 'W')
+		{
+			visited[tmp.first - 1][tmp.second - 1] = true;
+			q.push(make_pair(tmp.first - 1, tmp.second - 1));
+			counter++;
+		}
+		if (tmp.first < n - 1 && tmp.second > 0 && !visited[tmp.first + 1][tmp.second - 1] && field[tmp.first + 1][tmp.second - 1] == 'W')
+		{
+			visited[tmp.first + 1][tmp.second - 1] = true;
+			q.push(make_pair(tmp.first + 1, tmp.second - 1));
+			counter++;
+		}
+		if (tmp.first > 0 && tmp.second < m - 1 && !visited[tmp.first - 1][tmp.second + 1] && field[tmp.first - 1][tmp.second + 1] == 'W')
+		{
+			visited[tmp.first - 1][tmp.second + 1] = true;
+			q.push(make_pair(tmp.first - 1, tmp.second + 1));
+			counter++;
+		}
+		if (tmp.first < n - 1 && tmp.second < m - 1 && !visited[tmp.first + 1][tmp.second + 1] && field[tmp.first + 1][tmp.second + 1] == 'W')
+		{
+			visited[tmp.first + 1][tmp.second + 1] = true;
+			q.push(make_pair(tmp.first + 1, tmp.second + 1));
+			counter++;
+		}
+	}
+	return counter;
 }
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	string str;
-	bool stat = false;
-	int T;
-	int i, j;
-	cin >> T;
-	if( T <= 0 )
-		return 0;
-	getline(cin, str);
-	getline(cin, str);
-	while( T-- ){
-		if( stat )
-			cout << endl;
-		while( true ){
-			getline(cin, str);
-			if( str[0] != 'L' && str[0] != 'W' ){
+int main()
+{
+	int cases;
+	string input;
+	int a, b;
+	stringstream ss;
+	map<int, int> result;
+	cin >> cases;
+	cin.ignore(100, '\n');
+	cin.ignore(100, '\n');
+	while (cases--)
+	{
+		n = 0;
+		m = 0;
+		num = 1;
+		result.clear();
+		for (int i = 0; i < 100; i++)
+			for (int j = 0; j < 100; j++)
+			{
+				visited[i][j] = false;
+				field[i][j] = 'L';
+			}
+		while (getline(cin, input))
+		{
+			if (input == "")
+			{
 				break;
 			}
-			mat[R++] = str;
-		}
-		C = mat[0].length();
-		do{
-			FOI(i, 0, R-1){
-				FOI(j, 0, C-1){
-					if( mat[i][j] == 'W' )
-						used[i][j] = true;
-					else
-						used[i][j] = false;
+			if (input[0] == 'L' || input[0] == 'W')
+			{
+				for (int i = 0, sz = input.size(); i < sz; i++)
+				{
+					field[n][i] = input[i];
 				}
+				n++;
+				m = input.size();
 			}
-			stringstream ss( str );
-			int r, c;
-			ss >> r >> c;
-			r--; c--;
-			cout << dfs(r, c) << endl;
-		}while( getline(cin, str) && str.length() > 0 );
-		stat = true;
+			else
+			{
+				for (int i = 0; i < 100; i++)
+					for (int j = 0; j < 100; j++)
+					{
+						visited[i][j] = false;
+					}
+				ss << input;
+				ss >> a >> b;
+				ss.str("");
+				ss.clear();
+				cout << bfs(a - 1, b - 1) << endl;
+			}
+		}
+		if (cases)
+		{
+			cout << endl;
+		}
 	}
 	return 0;
 }

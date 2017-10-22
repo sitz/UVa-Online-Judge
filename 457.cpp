@@ -1,46 +1,41 @@
-#include <cstring>
-#include <cstdio>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int DNA[11];
-int mat[51][41];
+const char CH[] = {' ', '.', 'x', 'W'};
 
-void init() {
-	memset(DNA, 0, sizeof DNA);
-	memset(mat[0], 0, sizeof mat[0]);
-	mat[0][19] = 1;
-}
-
-void printMatrix() {
-	char C[4] = {' ', '.', 'x', 'W'};
-	for (int i = 0; i < 50; i++) {
-		for (int j = 0; j < 40; j++) {
-			printf("%c", C[mat[i][j]]);
+int main()
+{
+	int kase, first = 1;
+	int dna[10], disk[2][50];
+	scanf("%d", &kase);
+	while (kase--)
+	{
+		if (!first)
+		{
+			printf("\n");
 		}
-		printf("\n");
-	}
-}
-
-int main() {
-	int T;
-	scanf("%d", &T);
-	while (T--) {
-		init();
-		
-		for (int i = 0; i < 10; i++) {
-			scanf("%d", &DNA[i]);
+		first = 0;
+		for (int i = 0; i < 10; i++)
+		{
+			scanf("%d", dna + i);
 		}
-		for (int i = 1; i < 50; i++) {
-			for (int j = 0; j < 40; j++) {
-				int K = mat[i - 1][j];
-				if (j > 0) K += mat[i - 1][j - 1];
-				if (j < 39)K += mat[i - 1][j + 1];
-				mat[i][j] = DNA[K];
+		int now = 0;
+		memset(disk, 0, sizeof(disk));
+		disk[now][20] = 1;
+		for (int i = 0; i < 50; i++)
+		{
+			for (int j = 1; j <= 40; j++)
+			{
+				printf("%c", CH[disk[now][j]]);
+			}
+			printf("\n");
+			now = 1 - now;
+			for (int j = 1; j <= 40; j++)
+			{
+				disk[now][j] = dna[disk[1 - now][j] + disk[1 - now][j - 1] + disk[1 - now][j + 1]];
 			}
 		}
-		
-		printMatrix();
-		if (T) printf("\n");
 	}
 	return 0;
 }

@@ -1,47 +1,66 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int T;
-	cin >> T;
-	for (int t = 1; t <= T; t++){
-		string url[10];
-		int val[10];
-		int M = 0, i;
-		for (i = 0; i < 10; i++){
-			cin >> url[i] >> val[i];
-			M = max(val[i], M);
+bool starts_with_www(const string &s)
+{
+	if (s.size() > 3 && string(s.begin(), s.begin() + 4) == "www.")
+	{
+		return true;
+	}
+	return false;
+}
+
+bool theTruthIsOutThere(const pair<string, int> &a, const pair<string, int> &b)
+{
+	if (a.second == b.second)
+	{
+		if (starts_with_www(a.first) && starts_with_www(b.first))
+		{
+			return a.first < b.first;
 		}
-		cout << "Case #" << t << ":\n";
-		for (i = 0; i < 10; i++)
-			if( val[i] == M )
-				cout << url[i] << endl;
+		else if (starts_with_www(a.first) && !starts_with_www(b.first))
+		{
+			return true;
+		}
+		else if (!starts_with_www(a.first) && starts_with_www(b.first))
+		{
+			return false;
+		}
+		else
+		{
+			return a.first < b.first;
+		}
+	}
+	return a.second > b.second;
+}
+
+int main()
+{
+	int cases;
+	string url;
+	int relevance;
+	vector<pair<string, int>> v;
+	cin >> cases;
+	for (int casenum = 0; casenum < cases; casenum++)
+	{
+		v.clear();
+		for (int i = 0; i < 10; i++)
+		{
+			cin >> url >> relevance;
+			v.push_back(make_pair(url, relevance));
+		}
+		sort(v.begin(), v.end(), theTruthIsOutThere);
+		int best = v[0].second;
+		cout << "Case #" << casenum + 1 << ":" << endl;
+		for (int i = 0; i < 10; i++)
+		{
+			if (v[i].second < best)
+			{
+				break;
+			}
+			cout << v[i].first << endl;
+		}
 	}
 	return 0;
 }

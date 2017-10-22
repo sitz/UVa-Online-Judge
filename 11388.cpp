@@ -1,45 +1,29 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int main(){
-    int test;
-    cin>>test;
-    while(test--){
-                  int G, L;
-                  cin>>G>>L;
-                  if(L % G == 0)
-                       cout<<G<<" "<<L<<endl;
-                  else
-                      cout<<"-1\n";
-    }
-    return 0;
+/*
+ * UVa 11388
+ * Author: chchwy
+ * Last Modified: 2009.11.13
+ */
+
+int main()
+{
+	int numCase;
+	scanf("%d", &numCase);
+	while (numCase--)
+	{
+		int gcd, lcm;
+		scanf("%d %d", &gcd, &lcm);
+		if (lcm % gcd != 0)
+		{
+			puts("-1");
+		}
+		else
+		{
+			printf("%d %d\n", gcd, lcm);
+		}
+	}
+	return 0;
 }

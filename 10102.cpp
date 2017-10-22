@@ -1,101 +1,84 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define INF			 1<<30
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
+typedef unsigned long long ULL;
+typedef long long LL;
 
-string mat[500];
-string use[500];
-int N;
+vector<string> G;
+int dist[1000][1000];
+int cx[] = {0, 0, 1, -1};
+int cy[] = {1, -1, 0, 0};
+vector<pair<int, int>> axis1;
+vector<pair<int, int>> axis3;
+int M;
 
-void display(string matrix[]){
-	int i;
-	FOI(i, 0, N-1)
-		cout << matrix[i] << endl;
-	
-	cout << endl;
-}
-			
-
-struct Node{
-	int II, JJ, DD;
-	Node(){};
-	Node(int _I, int _J, int _D){
-		II = _I; JJ = _J; DD = _D;
+void BFS()
+{
+	queue<pair<int, int>> Q;
+	memset(dist, -1, sizeof(dist));
+	for (int i = 0; i < axis3.size(); i++)
+	{
+		int x = axis3[i].first;
+		int y = axis3[i].second;
+		dist[x][y] = 0;
+		Q.push(make_pair(x, y));
 	}
-};
-
-int dI[] = {0, -1, 0, 1};
-int dJ[] = {-1, 0, 1, 0};
-
-int bfs(int I, int J){
-	queue<Node> q;
-	q.push(Node(I, J, 0));
-	while( !q.empty() ){
-		Node n = q.front();
-		q.pop();
-		if( n.II < 0 || n.II >= N )
-			continue;
-		if( n.JJ < 0 || n.JJ >= N )
-			continue;
-		if( use[n.II][n.JJ] == '0' )
-			continue;
-		
-		if( use[n.II][n.JJ] == '3' )
-			return n.DD;
-		use[n.II][n.JJ] = '0';
-		int j;
-		FOI(j, 0, 3)
-			q.push( Node(n.II + dI[j], n.JJ + dJ[j], n.DD + 1) );
+	while (!Q.empty())
+	{
+		int x = Q.front().first;
+		int y = Q.front().second;
+		Q.pop();
+		for (int i = 0; i < 4; i++)
+		{
+			int tempx = x + cx[i];
+			int tempy = y + cy[i];
+			if (tempx >= 0 && tempx < M && tempy >= 0 && tempy < M &&
+					dist[tempx][tempy] == -1)
+			{
+				dist[tempx][tempy] = dist[x][y] + 1;
+				Q.push(make_pair(tempx, tempy));
+			}
+		}
 	}
-	return 0;
 }
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	while( cin >> N ){
-		int i, j, k;
-		FOI(i, 0, N-1)
-			cin >> mat[i];
-		int gmin = 1;
-		FOI(i, 0, N-1){
-			FOI(j, 0, N-1){
-				if( mat[i][j] == '1' ){
-					FOI(k, 0, N-1)
-						use[k] = mat[k];
-					//display(use);
-					gmin = max(gmin, bfs(i, j));
+int main()
+{
+	while (cin >> M)
+	{
+		int maxstep = 0;
+		axis1.clear();
+		axis3.clear();
+		G.resize(M);
+		for (int i = 0; i < M; i++)
+		{
+			string line;
+			cin >> line;
+			G[i] = line;
+			for (int j = 0; j < M; j++)
+			{
+				if (G[i][j] == '1')
+				{
+					axis1.push_back(make_pair(i, j));
+				}
+				if (G[i][j] == '3')
+				{
+					axis3.push_back(make_pair(i, j));
 				}
 			}
 		}
-		//display(use);
-		cout << gmin << endl;
+		BFS();
+		for (int i = 0; i < axis1.size(); i++)
+		{
+			int x = axis1[i].first;
+			int y = axis1[i].second;
+			if (dist[x][y] > maxstep)
+			{
+				maxstep = dist[x][y];
+			}
+		}
+		cout << maxstep << endl;
 	}
 	return 0;
 }

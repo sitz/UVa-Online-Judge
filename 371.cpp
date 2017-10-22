@@ -1,33 +1,55 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    long long i,j;
-    for(;;){
-            cin>>i>>j;
-            if(i==0 && j==0)
-                    break;
-            long long x=0,y=0,k=0,max=0,maxn=0;
-            x=(i>j)?i:j;
-            y=(i<j)?i:j;
-            for(k=y;k<=x;k++){
-                              long long n=k;
-                              long long nc=0;
-                              if(n==1)
-                                      nc=3;
-                              while(n!=1){
-                                          nc++;
-                                          if(n%2!=0)
-                                                    n=3*n+1;
-                                          else
-                                                    n=n/2;
-                              }
-                              if(nc>max){
-                                         maxn=k;
-                                         max=nc;
-                              }
-            }
-            cout<<"Between "<<y<<" and "<<x<<", "<<maxn<<" generates the longest sequence of "<<max<<" values."<<endl;
-    }
-    return 0;
+/**
+ * 371 Ackermann function (AC)
+ * Author: chchwy
+ * Last Modified: 2010.03.18
+ */
+
+int getLength(long long n)
+{
+	int length = 0;
+	do
+	{
+		length++;
+		if (n % 2 == 0)
+		{
+			n = n >> 1;// div 2
+		}
+		else
+		{
+			n = n * 3 + 1;
+		}
+	} while (n != 1);
+	return length;
+}
+
+int main()
+{
+	int L, H;
+	while (scanf("%d %d", &L, &H))
+	{
+		if (L == 0 && H == 0)
+		{
+			break;
+		}
+		if (L > H)
+		{
+			std::swap(L, H);//L may be greater than H
+		}
+		int maxLen = 1, max = L;
+		for (int i = L; i <= H; ++i)
+		{
+			int curLen = getLength(i);
+			if (curLen > maxLen)
+			{
+				max = i;
+				maxLen = curLen;
+			}
+		}
+		printf("Between %d and %d, %d generates the longest sequence of %d values.\n", L, H, max, maxLen);
+	}
+	return 0;
 }

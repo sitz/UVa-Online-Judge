@@ -1,79 +1,61 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#define MP make_pair
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define PI		acos(-1.0)
-#define INF		1<<30
-#define EPS		1e-9
-#define sqr(x)	(x)*(x)
-
-int fun(int vec[], int N){
-	int i = 0, j = N - 1;
-	int D = 0;
-	while(i < j){
-		if(vec[i] == vec[j]){
-			++i;
-			--j;
+const int MAXN = 10048;
+map<pair<int, int>, int> m;
+int ans, max_insertions;
+int v[MAXN];
+void r(int left, int right, int insertions)
+{
+	if (insertions > max_insertions || left >= right)
+	{
+		ans = min(ans, insertions);
+		return;
+	}
+	int &x = m[MP(left, right)];
+	if (!x || insertions < x)
+	{
+		x = insertions;
+		if (v[left] == v[right])
+		{
+			r(left + 1, right - 1, insertions);
 		}
-		else{
-			++i;
-			++D;
+		else
+		{
+			r(left, right - 1, insertions + 1);
+			r(left + 1, right, insertions + 1);
 		}
 	}
-	return D;
 }
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int T, t;
-	cin >> T;
-	FOI(t, 1, T){
-		int N, K;
-		cin >> N >> K;
-		int vec[N];
-		int i, j;
-		FOI(i, 0, N-1)
-			cin >> vec[i];
-		int D1 = fun(vec, N);
-		reverse(vec, vec + N);
-		int D2 = fun(vec, N);
-		int D = min(D1, D2);
-		if(D < 1)
-			cout << "Case " << t << ": " << "Too easy" << endl;
-		else if(D > K)
-			cout << "Case " << t << ": " << "Too difficult" << endl;
+int main()
+{
+	int t;
+	scanf("%d", &t);
+	for (int cnum = 0, n; cnum++ < t && scanf("%d %d", &n, &max_insertions) == 2;)
+	{
+		for (int i = 0; i < n; ++i)
+		{
+			scanf("%d", v + i);
+		}
+		m.clear();
+		ans = max_insertions + 1;
+		r(0, n - 1, 0);
+		printf("Case %d: ", cnum);
+		if (ans == 0)
+		{
+			puts("Too easy");
+		}
+		else if (ans <= max_insertions)
+		{
+			printf("%d\n", ans);
+		}
 		else
-			cout << "Case " << t << ": " << D << endl;
+		{
+			puts("Too difficult");
+		}
 	}
 	return 0;
 }
-

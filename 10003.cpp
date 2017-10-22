@@ -1,87 +1,53 @@
-#include <algorithm>
-#include <iostream>
-#include <cstring>
-#include <cstdio>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define INF 1<<30
-#define MAX 53
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
-#define MAXINT 9999999
-#define NCUTS 50
+#define INF 0x7fffffff
+#define FOR(i, a, b) for (int(i) = int(a); (i) < int(b); (i)++)
+#define FOREQ(i, a, b) for (int(i) = int(a); (i) <= int(b); (i)++)
 
-int L, N;
-int C[MAX];
-int dp[MAX][MAX];
+static int n, j, i, l, k, length, num_of_cut, cutPos[55], table[55][55];
 
-int Cost(int J, int I) {
-	if (J - I <= 1) return 0;
-	return C[J] - C[I];
+void readData()
+{
+	scanf("%d", &num_of_cut);
+	FOREQ(i, 1, num_of_cut)
+	scanf("%d", &cutPos[i]);
+	cutPos[0] = 0;
+	cutPos[num_of_cut + 1] = length;
 }
 
-int memo(int I, int J) {
-	if (I + 1 == J)		return 0;
-	if (dp[I][J] != -1)	return dp[I][J];
-	
-	int gMin = INF, K;
-	
-	for (K = I + 1; K < J; K++) {
-		gMin = MIN(gMin, memo(I, K) + memo(K, J) + C[J] - C[I]);
-	}
-	return dp[I][J] = gMin;
-}
-
-void doIt() {
-	int i, j, k;
-	for (i = 0; i <= N; i++) {
-		for (j = 0; j <= N; j++) {
-			for (k = i + 1; k < j; k++) {
-				dp[i][j] = min(dp[i][j], dp[i][k] + dp[k + 1][j] + Cost(j, i));
+void solve()
+{
+	n = num_of_cut + 1;
+	FOREQ(i, 0, n)
+	table[i][i] = 0;
+	FOREQ(l, 2, n)
+	{
+		FOREQ(i, 1, n - l + 1)
+		{
+			j = i + l - 1;
+			table[i][j] = INF;
+			FOR(k, i, j)
+			{
+				int temp;
+				temp = table[i][k] + table[k + 1][j] + cutPos[j] - cutPos[i - 1];
+				if (temp < table[i][j])
+				{
+					table[i][j] = temp;
+				}
 			}
 		}
 	}
 }
 
-int main() {
-    int len;
-    int nc;
-    int places[NCUTS+2];
-    int mincost[NCUTS+2][NCUTS+2];
-        
-    while(scanf("%d", &len) && (len != 0)) {
-        scanf("%d", &nc);
-                
-        for(int i=0; i<nc; i++) {
-        	scanf("%d", &places[i + 1]);
-        }
-        
-        places[0] = 0;
-        nc++;
-        places[nc] = len;
-                
-        for(int i=0; i<=NCUTS+1; i++) {
-            for(int j=0;j<=NCUTS+1;j++) {
-                mincost[i][j] = MAXINT;
-            }
-        }
-        
-        for(int i=0; i<=nc; i++) {
-            mincost[i][i] = 0;
-            mincost[i][i+1] = 0;
-            mincost[i][i+2] = places[i+2] - places[i];
-        }
-
-        for(int k=3; k<=nc; k++) {
-            for(int i=0; i<=nc-k; i++) {
-                for(int j=i+1; j<=i+k-1; j++) {
-                    if((mincost[i][j] + mincost[j][i+k] + places[i+k] - places[i]) < mincost[i][i+k]) {
-                        mincost[i][i+k] = mincost[i][j] + mincost[j][i+k] + places[i+k] - places[i];
-                    }
-                }
-            }
-        }
-        
-        printf("The minimum cutting is %d.\n",mincost[0][nc]);
-    }
-    return 0;
+int main()
+{
+	while (scanf("%d", &length) && length)
+	{
+		readData();
+		solve();
+		printf("The minimum cutting is %d.\n", table[1][num_of_cut + 1]);
+	}
+	return 0;
 }
