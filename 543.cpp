@@ -1,71 +1,52 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define MAX	1000000
-
-bool prime[MAX + 5];
-vector<int> P;
-
-void seive(){
-	memset(prime, true, sizeof prime);
-	prime[0] = false; prime[1] = false;
+int n;
+int p[1000010];
+void compute_prime_table()
+{
 	int i, j;
-	FOI(i, 2, MAX)
-		if( prime[i] ){
-			P.push_back(i);
-			for (j = 2*i; j <= MAX; j += i)
-				prime[j] = false;
+	p[0] = p[1] = 0;
+	for (i = 2; i <= 1000000; i++)
+	{
+		p[i] = 1;
+	}
+	for (i = 2; i <= 1000;)
+	{
+		for (j = i + i; j <= 1000000; j += i)
+		{
+			p[j] = 0;
 		}
+		for (i++; !p[i]; i++)
+			;
+	}
 }
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	seive();
-	int M = P.size();
-	while( true ){
-		int N, i;
-		cin >> N;
-		if( N == 0 )
+int read_case()
+{
+	scanf("%d", &n);
+	if (n == 0)
+	{
+		return 0;
+	}
+	return 1;
+}
+void solve_case()
+{
+	int i, j;
+	for (i = 3, j = n - 3; i <= j; i++, j--)
+		if (p[i] && p[j])
+		{
 			break;
-		bool gold = false;
-		FOI(i, 0, M-1){
-			if( P[i] > N )
-				break;
-			if( prime[N - P[i]] ){
-				cout << N << " = " << P[i] << " + " << N - P[i] << endl;
-				gold = true;
-				break;
-			}
 		}
-		if( !gold )
-			cout << "Goldbach's conjecture is wrong." << endl;
+	printf("%d = %d + %d\n", n, i, j);
+}
+int main()
+{
+	compute_prime_table();
+	while (read_case())
+	{
+		solve_case();
 	}
 	return 0;
 }

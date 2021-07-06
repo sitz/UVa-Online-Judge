@@ -1,62 +1,81 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
+#define MAXN 502
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	while( true ){
-		int W, H, N;
-		scanf("%d%d%d", &W, &H, &N);
-		if( W==0 && H==0 && N==0 )
-			break;
-		bool mat[W][H];
-		int i, j;
-		memset(mat, false, sizeof(mat) );
-		while( N-- ){
-			int X1, Y1, X2, Y2;
-			scanf("%d%d%d%d", &X1, &Y1, &X2, &Y2);
-			FOI(i, min(X1, X2) - 1, max(X1, X2) - 1)
-				FOI(j, min(Y1, Y2) - 1, max(Y1, Y2) - 1)
-					mat[i][j] = true;
+char B[MAXN][MAXN];
+int R, C, cnt;
+
+void Ini()
+{
+	int i, j;
+	for (i = 0; i <= R; i++)
+	{
+		for (j = 0; j <= C; j++)
+		{
+			B[i][j] = 0;
 		}
-		int cnt = 0;
-		FOI(i, 0, W - 1)
-			FOI(j, 0, H - 1)
-				if( !mat[i][j] )
-					cnt++;
-		if( cnt == 0 )
+	}
+}
+void Mark(int r1, int c1, int r2, int c2)
+{
+	int tr, tc, i, j;
+	if (r1 > r2)
+	{
+		tr = r1;
+		r1 = r2;
+		r2 = tr;
+	}
+	if (c1 > c2)
+	{
+		tc = c1;
+		c1 = c2;
+		c2 = tc;
+	}
+	for (i = r1; i <= r2; i++)
+	{
+		for (j = c1; j <= c2; j++)
+		{
+			if (B[i][j])
+			{
+				continue;
+			}
+			B[i][j] = 1;
+			cnt++;
+		}
+	}
+}
+
+int main()
+{
+	int n, r1, c1, r2, c2;
+	while (scanf("%d%d%d", &C, &R, &n) == 3)
+	{
+		if (!R && !C && !n)
+		{
+			break;
+		}
+		cnt = 0;
+		Ini();
+		while (n--)
+		{
+			scanf("%d%d%d%d", &c1, &r1, &c2, &r2);
+			Mark(r1, c1, r2, c2);
+		}
+		int res = R * C - cnt;
+		if (!res)
+		{
 			printf("There is no empty spots.\n");
-		else if( cnt == 1)
+		}
+		else if (res == 1)
+		{
 			printf("There is one empty spot.\n");
+		}
 		else
-			printf("There are %d empty spots.\n", cnt);
+		{
+			printf("There are %d empty spots.\n", res);
+		}
 	}
 	return 0;
 }

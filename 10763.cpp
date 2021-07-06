@@ -1,40 +1,57 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    for(;;){
-            int n;
-            cin>>n;
-            if(n==0)
-                    break;
-            int max=0,min=0;
-            int original[10000]={0},destination[10000]={0};
-            for(int i=0;i<n;i++){
-                    int j,k;
-                    cin>>j;
-                           original[j]++;
-                    cin>>k;
-                           destination[k]++;
-                    if(k>max)
-                             max=k;
-                    if(k<min)
-                             min=k;
-                    if(j>max)
-                             max=j;
-                    if(j<min)
-                             min=j;
-            }
-            int ctr=0;
-            for(int i=min;i<=max;i++){
-                    if(original[i]!=destination[i]){
-                                                    ctr=1;
-                                                   break;
-                    }
-            }
-            if(ctr==1)
-                      cout<<"NO"<<endl;
-            else
-                      cout<<"YES"<<endl;
-    }
+/*
+Foreign Exchange
+10763
+*/
+struct xx
+{
+	int x, y;
+} X[500002], Y[500002];
+int totalcount, N;
+int com1(const void *a, const void *b)
+{
+	xx *p = (xx *)a;
+	xx *q = (xx *)b;
+	if (p->x != q->x)
+	{
+		return p->x - q->x;
+	}
+	return p->y - q->y;
 }
-            
+void Cal()
+{
+	int i;
+	qsort(X, N, sizeof(xx), com1);
+	qsort(Y, N, sizeof(xx), com1);
+	for (i = 0; i < N; i++)
+	{
+		if (X[i].x != Y[i].x || X[i].y != Y[i].y)
+		{
+			printf("NO\n");
+			return;
+		}
+	}
+	printf("YES\n");
+}
+int main()
+{
+	int i;
+	while (scanf("%d", &N), N)
+	{
+		if (!N)
+		{
+			break;
+		}
+		for (i = 0; i < N; i++)
+		{
+			scanf("%d%d", &X[i].x, &X[i].y);
+			Y[i].x = X[i].y;
+			Y[i].y = X[i].x;
+		}
+		Cal();
+	}
+	return 0;
+}

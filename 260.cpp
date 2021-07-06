@@ -1,86 +1,111 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
-
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-
-int N;
-char adjMat[205][205];
-bool visit[205][205];
-char output;
-
-void dfs(int X, int Y, char cur){
-	if ( X < 0 || Y < 0 || X >= N || Y >= N )
-		return;
-	if ( adjMat[X][Y] != cur || visit[X][Y] )
-		return;
-	
-	if( X == N-1 && adjMat[X][Y] == 'b' ){
-		output = 'B';
-		return;
-	}
-	if( Y == N-1 && adjMat[X][Y] == 'w' ){
-		output = 'W';
-		return;
-	}
-	visit[X][Y] = true;
-	
-	int dx[] = {-1, -1, 0, 0, 1, 1};
-	int dy[] = {-1, 0, -1, 1, 0, 1};
-	int j;
-	FOI(j, 0, 5)
-		dfs(X + dx[j], Y + dy[j], cur);
+/**************
+IL GIOCO DELL'X
+     260
+***************/
+#define MAXN 205
+#define MAX 1000
+/*10000*/
+int R[] = {-1, -1, 0, 0, 1, 1};
+int C[] = {-1, 0, -1, 1, 0, 1};
+char Game[MAXN][MAXN];
+int QR[MAX], QC[MAX];
+int QHR, QTR, QHC, QTC, N, Kase;
+void PushR(int r)
+{
+	QR[QHR++] = r;
+	QHR %= MAX;
 }
-
-int main(int argc, char **argv){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	for (int T = 1; ; T++){
-		scanf("%d", &N);
-		if( N == 0 )
+int PopR()
+{
+	int r = QR[QTR++];
+	QTR %= MAX;
+	return r;
+}
+void PushC(int r)
+{
+	QC[QHC++] = r;
+	QHC %= MAX;
+}
+int PopC()
+{
+	int r = QC[QTC++];
+	QTC %= MAX;
+	return r;
+}
+int IsEmpty()
+{
+	return QHR == QTR;
+}
+int BFS(int r, int c)
+{
+	int i, p, q, nr, nc;
+	QHR = QTR = QHC = QTC = 0;
+	PushR(r);
+	PushC(c);
+	Game[r][c] = 'A';
+	while (!IsEmpty())
+	{
+		p = PopR();
+		q = PopC();
+		for (i = 0; i < 6; i++)
+		{
+			nr = p + R[i];
+			nc = q + C[i];
+			if (nr >= N || nc >= N || nr < 0 || nc < 0)
+			{
+				continue;
+			}
+			if (Game[nr][nc] != 'w')
+			{
+				continue;
+			}
+			if (nc == N - 1 && Game[nr][nc] == 'w')
+			{
+				return 1;
+			}
+			Game[nr][nc] = 'A';
+			PushR(nr);
+			PushC(nc);
+		}
+	}
+	return 0;
+}
+void Com()
+{
+	int i, j;
+	for (i = 0; i < N; i++)
+	{
+		if (Game[i][0] == 'w')
+			if (BFS(i, 0))
+			{
+				printf("%d W\n", Kase++);
+				return;
+			}
+	}
+	printf("%d B\n", Kase++);
+}
+int main()
+{
+	int i;
+	char input[50];
+	Kase = 1;
+	while (1)
+	{
+		gets(input);
+		sscanf(input, "%d", &N);
+		if (!N)
+		{
 			break;
-		int i;
-		FOI(i, 0, N-1)
-			scanf("%s", adjMat[i]);
-			
-		memset( visit, false, sizeof (visit) );
-		
-		FOI(i, 0, N-1)
-			if( !visit[0][i] && adjMat[0][i] == 'b' )
-				dfs(0, i, 'b');
-		FOI(i, 0, N-1)
-			if( !visit[i][0] && adjMat[i][0] == 'w' )
-				dfs(i, 0, 'w');
-				
-		printf("%d %c\n", T, output);
+		}
+		for (i = 0; i < N; i++)
+		{
+			gets(Game[i]);
+		}
+		Com();
 	}
 	return 0;
 }

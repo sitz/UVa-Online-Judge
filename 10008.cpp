@@ -1,66 +1,67 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for (i = A; i <= B; i++)
-#define FOD(i, A, B) for (i = A; i >= B; i--)
+#define FOR(i, a, b) for (int(i) = int(a); (i) < int(b); (i)++)
+#define FOREQ(i, a, b) for (int(i) = int(a); (i) <= int(b); (i)++)
+#define FOREACH(c, itr) for (__typeof((c).begin()) itr = (c).begin(); itr != (c).end(); itr++)
 
-map<char, int> Map;
-map<char, int>::iterator it;
+#define ALL(a) (a).begin(), (a).end()
+#define SZ(a) ((int)(a).size())
 
-bool comp(char A, char B) {
-	if (Map[A] != Map[B])
-		return Map[A] > Map[B];
-	return A < B;
+#define fst first
+#define snd second
+#define pb push_back
+
+inline bool by_val_desc(const pair<char, int> &a, const pair<char, int> &b)
+{
+	if (a.second == b.second)
+	{
+		return a.first < b.first;
+	}
+	else
+	{
+		return a.second > b.second;
+	}
 }
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	string alfa = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	vector< char > Char;
-	int i, j, N;
-	FOI(i, 0, 25) Map[alfa[i]] = 0;
-	cin >> N;
-	string str;
-	getline(cin, str);
-	while (N--) {
-		getline(cin, str);
-		int L = str.length() - 1;
-		FOI(i, 0, L) {
-			if (isalpha(str[i])) {
-				char C = toupper(str[i]);
-				if (Map[C] == 0) Char.push_back(C);
-				++Map[C];
+static int n;
+static string input;
+static map<char, int> m;
+static vector<pair<char, int>> v;
+
+int main()
+{
+	cin >> n;
+	getline(cin, input); // fetch $'\n'
+	while (n--)
+	{
+		getline(cin, input);
+		int y = SZ(input);
+		FOR(i, 0, y)
+		{
+			if (isalpha(input[i]))
+			{
+				if (m.find(toupper(input[i])) != m.end())
+				{
+					m[toupper(input[i])]++;
+				}
+				else
+				{
+					m[toupper(input[i])] = 1;
+				}
 			}
 		}
 	}
-	sort(Char.begin(), Char.end(), comp);
-	int S = Char.size() - 1;
-	FOI(i, 0, S)
-		cout << Char[i] << " " << Map[Char[i]] << endl;
+	FOREACH(m, it)
+	{
+		v.pb(pair<char, int>(it->fst, it->snd));
+	}
+	sort(ALL(v), by_val_desc);
+	int y = SZ(v);
+	FOR(i, 0, y)
+	{
+		printf("%c %d\n", v[i].fst, v[i].snd);
+	}
 	return 0;
 }

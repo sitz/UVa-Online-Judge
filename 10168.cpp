@@ -1,73 +1,71 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for (i = A; i <= B; i++)
-#define FOD(i, A, B) for (i = A; i >= B; i--)
-#define MAX 3165
+#define MAXN 10000000
 
-int N;
-vector< int > Prime;
-bool P[MAX + 1];
-map<int, vector< int > > Map;
+char p[MAXN + 3];
 
-void seive() {
-	memset(P, true, sizeof P);
-	P[0] = false; P[1] = false;
+int prime_table()
+{
 	int i, j;
-	FOI(i, 2, MAX) {
-		if (P[i]) {
-			Prime.push_back(i);
-			for (j = i * i; j <= MAX; j+= i)
-				P[j] = false;
-		}
+	p[1] = 0;
+	for (i = 2; i <= MAXN; i++)
+	{
+		p[i] = 1;
 	}
-	N = Prime.size() - 1;
-	cout << N << endl;
+	for (i = 2; i < sqrt(MAXN);)
+	{
+		for (j = i + i; j <= MAXN; j += i)
+		{
+			p[j] = 0;
+		}
+		for (i++; !p[i]; i++)
+			;
+	}
+	return 0;
 }
 
-void Cal() {
-	FOI(a, 0, N) {
-		int V = Prime[a];
-		FOI(b, a, N) {
-			V += Prime[b];
-			FOI(c, b, N) {
-				V += Prime[c];
-				FOI(d, c, N) {
-					V += Prime[d];
-				}
-			}
+int even(int n)
+{
+	int i, j;
+	if (n == 4)
+	{
+		printf("2 2\n");
+		return 1;
+	}
+	for (i = 3, j = n - 3; i <= j; i++, j--)
+	{
+		if (p[i] && p[j])
+		{
+			printf("%d %d\n", i, j);
+			return 1;
 		}
 	}
+	return 0;
 }
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	seive();
-	Cal();
+int main()
+{
+	int n, a, b, k;
+	prime_table();
+	while (scanf("%d", &n) == 1)
+	{
+		if (n < 8)
+		{
+			printf("Impossible.\n");
+			continue;
+		}
+		if (n % 2 == 0)
+		{
+			printf("2 2 ");
+			even(n - 4);
+		}
+		else
+		{
+			printf("2 3 ");
+			even(n - 5);
+		}
+	}
 	return 0;
 }

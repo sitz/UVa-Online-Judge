@@ -1,29 +1,42 @@
-#include<iostream>
-#include<cstdio>
-#include<cmath>
-#include<algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
-int main(){
-    int test;
-    scanf("%d",&test);
-    while(test--){
-           int n,i,j,k,area=1000000000;
-           scanf("%d",&n);
-           for(i=1;i<=n;i++){
-                   for(j=1;j<=n;j++){
-                               if(i*j>n)
-                                        break;
-                          for(k=1;k<=n;k++){
-                                         if(i*j*k>n)
-                                                    break;
-                                  if(i*j*k==n){
-                                               int temp=2*(i*j+j*k+k*i);
-                                               area=area<=temp?area:temp;
-                                  }
-                          }
-                   }
-           }
-           printf("%d\n",area);
-    }
-    return 0;
+
+int Volume, numCase, minimum, height, weight, length;
+
+int main()
+{
+	while (cin >> numCase)
+	{
+		while (numCase)
+		{
+			minimum = 10000000;
+			numCase--;
+			cin >> Volume;
+			for (height = 1; height <= Volume; height++)
+			{
+				for (length = 1; length <= Volume; length++)
+				{
+					int tmp;
+					tmp = height * length;
+					if (tmp > Volume)
+					{
+						break;
+					}
+					weight = Volume / tmp;
+					if (weight * height * length == Volume)
+					{
+						int area;
+						area = 2 * (Volume / height + Volume / length + Volume / weight);
+						if (area < minimum)
+						{
+							minimum = area;
+						}
+					}
+				}
+			}
+			cout << minimum << endl;
+		}
+	}
+	return 0;
 }

@@ -1,32 +1,43 @@
-#include<iostream>
-#include<cstdio>
-#include<cmath>
-#include<algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
-int main(){
-        int test,i;
-        scanf("%d",&test);
-        for(i=0;i<test;i++){
-            int n,j;
-            scanf("%d",&n);
-            int sum[n], carry=0;
-            memset(sum, 0, sizeof(sum));
-            for(j=0; j<n; j++){
-                    int a=0, b=0;
-                    scanf("%d%d",&a,&b);
-                    sum[j] = a + b;
-            }
-            for(j=n-1 ;j>=0; j--){
-                                int temp = sum[j];
-                                sum[j] = (temp+carry)%10;
-                                carry = (temp+carry)/10;
-            }
-            for(j=0;j<n;j++)
-                            printf("%d",sum[j]);
-            printf("\n");
-            if(i < test-1)
-                      printf("\n");
-    }
-    //system("pause");
-    return 0;
+
+#define FOR(i, a, b) for (int(i) = int(a); (i) < int(b); (i)++)
+#define FOREQ(i, a, b) for (int(i) = int(a); (i) <= int(b); (i)++)
+#define RFOR(i, a, b) for (int(i) = (a), _b(b); (i) >= _b; --(i))
+
+static char a[1000003], b[1000010], s[1000010];
+static long n, m, i, j, k, t, c, sum, sp = 0;
+
+int main()
+{
+	scanf("%ld", &n);
+	FOREQ(t, 1, n)
+	{
+		scanf("%ld", &m);
+		FOREQ(i, 0, m)
+		a[i] = b[i] = s[i] = 0;
+		FOR(i, 0, m)
+		scanf("%ld %ld", &a[i], &b[i]);
+		c = 0;
+		k = 0;
+		RFOR(j, m - 1, 0)
+		{
+			sum = a[j] + b[j] + c;
+			s[k++] = sum % 10;
+			c = sum / 10;
+		}
+		if (sp++)
+		{
+			printf("\n");
+		}
+		if (c)
+		{
+			s[k++] = c;
+		}
+		RFOR(i, k - 1, 0)
+		printf("%d", s[i]);
+		printf("\n");
+	}
+	return 0;
 }

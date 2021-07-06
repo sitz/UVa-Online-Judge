@@ -1,15 +1,19 @@
-#include <cstdio>
+#include <bits/stdc++.h>
 
-int main() {
-	int T;
-	int L, W, H;
+using namespace std;
+
+int main()
+{
+	int T, L, W, H, C = 0;
 	scanf("%d", &T);
-	for (int t = 1; t <= T; t++) {
+	while (T--)
+	{
 		scanf("%d %d %d", &L, &W, &H);
+		printf("Case %d: ", ++C);
 		if (L > 20 || W > 20 || H > 20)
-			printf("Case %d: bad\n", t);
+			puts("bad");
 		else
-			printf("Case %d: good\n", t);
+			puts("good");
 	}
 	return 0;
 }

@@ -1,34 +1,42 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    for(int j=1;;j++){
-            int n;
-            cin>>n;
-            if(n<0)
-                   break;
-            int made[12]={0},comp[12]={0};
-            for(int i=0;i<12;i++)
-                    cin>>made[i];
-            for(int i=0;i<12;i++)
-                    cin>>comp[i];
-            int temp=n;
-            for(int i=0;i<12;i++){
-                    int ttemp=made[i];
-                    made[i]=temp;
-                    temp=ttemp;
-            }
-            cout<<"Case "<<j<<":"<<endl;
-            for(int i=0;i<12;i++){
-                    if(made[i]>=comp[i]){
-                                         cout<<"No problem! :D"<<endl;
-                                         made[i+1]+=(made[i]-comp[i]);
-                    }
-                    else{
-                         cout<<"No problem. :("<<endl;
-                         made[i+1]+=made[i];
-                    }
-            }
-    }
-    return 0;
+int main()
+{
+	int s;
+	int n[12], p[12];
+	int counter = 0;
+	while (cin >> s)
+	{
+		if (s < 0)
+		{
+			break;
+		}
+		counter++;
+		for (int i = 0; i < 12; i++)
+		{
+			cin >> n[i];
+		}
+		for (int i = 0; i < 12; i++)
+		{
+			cin >> p[i];
+		}
+		cout << "Case " << counter << ":" << endl;
+		for (int i = 0; i < 12; i++)
+		{
+			if (p[i] <= s)
+			{
+				s -= p[i];
+				s += n[i];
+				cout << "No problem! :D" << endl;
+			}
+			else
+			{
+				s += n[i];
+				cout << "No problem. :(" << endl;
+			}
+		}
+	}
+	return 0;
 }

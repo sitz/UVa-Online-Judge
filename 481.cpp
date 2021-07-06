@@ -1,59 +1,82 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-void find_lis(vector<int> &a, vector<int> &b)
+#define MIN(a, b) (a > b ? b :)
+#define MAXN 1000000
+
+int N, MAX, LIMIT, SEQ[MAXN], TEMP[MAXN], Par[MAXN];
+
+// binary search
+int FIND_BEST(int key)
 {
-	vector<int> p(a.size());
-	int u, v;
- 
-	if (a.empty()) return;
- 
-	b.push_back(0);
- 
-	for (size_t i = 1; i < a.size(); i++) {
-		if (a[b.back()] < a[i]) {
-			p[i] = b.back();
-			b.push_back(i);
-			continue;
+	int lo, up, mid;
+	lo = 1;
+	up = LIMIT;
+	mid = (lo + up) / 2;
+	if (SEQ[TEMP[1]] > key)
+		return 1;
+	else if (SEQ[TEMP[LIMIT]] < key)
+		return LIMIT + 1;
+	while (lo < up && SEQ[TEMP[mid]] != key)
+	{
+		if (SEQ[TEMP[mid]] < key)
+			lo = mid + 1;
+		else if (SEQ[TEMP[mid]] > key)
+		{
+			if (SEQ[TEMP[mid - 1]] < key)
+				return mid;
+			up = mid - 1;
 		}
- 
-		for (u = 0, v = b.size()-1; u < v;) {
-			int c = (u + v) / 2;
-			if (a[b[c]] < a[i]) u=c+1; else v=c;
-		}
- 
-		if (a[i] < a[b[u]]) {
-			if (u > 0) p[i] = b[u-1];
-			b[u] = i;
-		}	
+		mid = (lo + up) / 2;
 	}
- 
-	for (u = b.size(), v = b.back(); u--; v = p[v]) b[u] = v;
+	return mid;
 }
-int main(){
-    int test;
-    char ch[150];
-    scanf("%d", &test);
-    cin.getline(ch, 150);
-    while(test--){
-                  vector<int> seq;
-                  vector<int> lis;
-                  while(true){
-                              cin.getline(ch, 150);
-                              if(ch == "" || ch=="EOF")
-                                    break;
-                               int val = atoi(ch);
-                              seq.push_back(val);
-                  }
-                  find_lis(seq, lis);
-                  cout<<"Max hits: "<<lis.size()<<endl;
-	              for (size_t i = 0; i < lis.size(); i++)
-		              cout<<seq[lis[i]]<<endl;
-	              if(test > 0)
-	                      cout<<endl;
-    }
-    system("pause");
-    return 0;
+
+void FIND_LIS()
+{
+	int pos, i;
+	TEMP[1] = 0;
+	LIMIT = 1;
+	Par[0] = -1;
+	TEMP[0] = -1;
+	for (i = 1; i < N; i++)
+	{
+		pos = FIND_BEST(SEQ[i]);
+		if (pos > LIMIT)
+		{
+			LIMIT = pos;
+			TEMP[pos] = i;
+			Par[i] = TEMP[pos - 1];
+		}
+		else if (SEQ[TEMP[pos]] > SEQ[i])
+		{
+			TEMP[pos] = i;
+			Par[i] = TEMP[pos - 1];
+		}
+	}
+}
+
+void Print(int n)
+{
+	if (Par[n] == -1)
+	{
+		printf("%d\n", SEQ[n]);
+		return;
+	}
+	Print(Par[n]);
+	printf("%d\n", SEQ[n]);
+}
+
+int main()
+{
+	N = 0;
+	int n;
+	while (scanf("%d", &n) == 1)
+		SEQ[N++] = n;
+	FIND_LIS();
+	printf("%d\n", LIMIT);
+	printf("-\n");
+	Print(TEMP[LIMIT]);
+	return 0;
 }

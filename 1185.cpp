@@ -1,23 +1,24 @@
-#include <math.h>
-#include <stdio.h>
+#include <bits/stdc++.h>
 
-#define MAX 10000000
-double Arr[MAX + 1];
+using namespace std;
 
-void Cal() {
-	Arr[0] = 0;
-	for (int i = 1; i <= MAX; i++)
-		Arr[i] = Arr[i - 1] + log(i);
-}
+#define PI 3.141592653589793238462643383279502884197169399
+#define E 2.71828182845904523536028747135266249775724709369995
 
-int main() {
-	Cal();
-	int T;
-	scanf("%d", &T);
-	while (T--) {
-		int N;
-		scanf("%d", &N);
-		printf("%.0lf\n", floor(Arr[N]/log(10.0) + 1.0));
+int main()
+{
+	int t, n;
+	cin >> t;
+	while (t--)
+	{
+		cin >> n;
+		if (n == 1)
+		{
+			cout << 1 << endl;
+			continue;
+		}
+		long long result = ceil(log10(2 * PI * n) / 2 + n * (log10(n / E)));
+		cout << result << endl;
 	}
 	return 0;
 }

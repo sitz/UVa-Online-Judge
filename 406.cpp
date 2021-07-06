@@ -1,69 +1,70 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <ctime>
-#include <sstream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define MAX 1010
-bool prime[MAX];
-vector< int > P;
-
-void sieve() {
-	memset(prime, true, sizeof prime);
-	prime[1] = prime[0] = false;
-	P.push_back(1);
-	for (int i = 2; i < MAX; i++) {
-		if (prime[i]) {
-			P.push_back(i);
-			for (int j = i * i; j < MAX; j += i)
-				prime[j] = false;
+bool isPrime(int n)
+{
+	for (int i = 3; i <= sqrt((double)n); i += 2)
+	{
+		if (n % i == 0)
+		{
+			return false;
 		}
 	}
-	//printf("%d\n", P.size());
+	return true;
 }
 
-
-int main() {
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	sieve();
-	
-	int N, C;
-	while (scanf("%d%d", &N, &C) != EOF) {
-		printf("%d %d:", N, C);
-		vector< int > V;
-		for (int i = 0; i < P.size() && P[i] <= N; i++)
-			V.push_back(P[i]);
-		
-		C *= 2;
-		if (V.size() & 1) C -= 1;
-		int A = floor(C / 2.0);
-		int B = ceil(C / 2.0);
-		
-		for (int i = max(0, (int) V.size() / 2 - A); i < min((int)V.size(), (int)V.size() / 2 + B); i++)
-			printf(" %d", V[i]);
-		printf("\n\n");
+int main()
+{
+	vector<int> primes;
+	int n, c;
+	primes.push_back(1);
+	primes.push_back(2);
+	for (int i = 3; i < 1000; i += 2)
+	{
+		if (isPrime(i))
+		{
+			primes.push_back(i);
+		}
+	}
+	while (cin >> n >> c)
+	{
+		deque<int> p;
+		for (int i = 0; i < primes.size(); i++)
+		{
+			if (primes[i] > n)
+			{
+				break;
+			}
+			else
+			{
+				p.push_back(primes[i]);
+			}
+		}
+		if (p.size() % 2 == 0)
+		{
+			while (p.size() > c * 2)
+			{
+				p.pop_front();
+				p.pop_back();
+			}
+		}
+		else
+		{
+			while (p.size() > (c * 2 - 1))
+			{
+				p.pop_front();
+				p.pop_back();
+			}
+		}
+		cout << n << " " << c << ":";
+		while (!p.empty())
+		{
+			cout << " " << p.front();
+			p.pop_front();
+		}
+		cout << endl
+				 << endl;
 	}
 	return 0;
 }

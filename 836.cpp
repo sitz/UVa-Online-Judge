@@ -1,90 +1,109 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef long long int64;
-
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define INF		1LL<<50
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int64 T;
-	cin >> T;
-	while (T--){
-		vector< string > vec;
-		string str;
-		cin >> str;
-		int64 i, j, k;
-		int64 N = str.length();
-		vec.push_back(str);
-		FOI(i, 1, N-1){
-			cin >> str;
-			vec.push_back(str);
+/**
+836
+**/
+#define Dif(i, j, k) (Table[i + k][j] - Table[i][j])
+#define MAXN 110
+int N, M, MAX;
+int Table[MAXN][MAXN];
+void ReadCase()
+{
+	int i, j, k;
+	char input[100];
+	N = 1;
+	while (gets(input))
+	{
+		for (i = 0; input[i]; i++)
+			if (input[i] == '\n')
+			{
+				input[i] = NULL;
+			}
+		if (strlen(input) < 1)
+		{
+			break;
 		}
-		int64 mat[N][N];
-		FOI(i, 0, N-1){
-			FOI(j, 0, N-1){
-				if (vec[i][j] == '1')
-					mat[i][j] = 1;
-				else
-					mat[i][j] = -1 * INF;
+		for (j = 0; input[j]; j++)
+		{
+			k = input[j] - '0';
+			if (k == 1)
+			{
+				Table[N][j] = 1;
+			}
+			else
+			{
+				Table[N][j] = -1000;
 			}
 		}
-					
-		FOI(i, 1, N-1)
-			FOI(j, 0, N-1)
-				mat[i][j] += mat[i-1][j];
-				
-		int64 maxSum = -1 * INF;
-		FOI(i, 0, N-1){
-			FOI(j, i, N-1){
-				int64 arr[N];
-				FOI(k, 0, N-1)
-					arr[k] = mat[j][k];
-				if (i > 0)
-					FOI(k, 0, N-1)
-						arr[k] -= mat[i-1][k];
-					
-				int64 curSum = 0;
-				FOI(k, 0, N-1){
-					curSum += arr[k];
-					maxSum = max(curSum, maxSum);
-					if (curSum < 0)
-						curSum = 0;
+		N++;
+	}
+	N--;
+}
+void Cal()
+{
+	int i, j, k, t;
+	for (i = 1; i <= N; i++)
+	{
+		for (j = 0; j < N; j++)
+		{
+			Table[i][j] = Table[i][j] + Table[i - 1][j];
+		}
+	}
+	MAX = Table[1][0];
+	for (k = 1; k <= N; k++)
+	{
+		for (i = 0; i <= N - k; i++)
+		{
+			for (t = 0, j = 0; j < N; j++)
+			{
+				if (t >= 0)
+				{
+					t += Dif(i, j, k);
+				}
+				else
+				{
+					t = Dif(i, j, k);
+				}
+				if (t > MAX)
+				{
+					MAX = t;
 				}
 			}
 		}
-		maxSum = max(0LL, maxSum);
-		cout << maxSum << endl;
-		if (T)
-			cout << endl;
+	}
+	if (MAX <= 0)
+	{
+		MAX = 0;
+	}
+	printf("%d\n", MAX);
+}
+void FREE()
+{
+	int i, j;
+	for (i = 0; i <= N; i++)
+		for (j = 0; j <= N; j++)
+		{
+			Table[i][j] = 0;
+		}
+}
+int main()
+{
+	int f = 0, kase;
+	char input[100];
+	gets(input);
+	sscanf(input, "%d", &kase);
+	gets(input);
+	while (kase--)
+	{
+		ReadCase();
+		Cal();
+		if (kase)
+		{
+			FREE();
+			printf("\n");
+		}
 	}
 	return 0;
 }
-

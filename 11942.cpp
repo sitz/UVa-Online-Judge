@@ -1,61 +1,44 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-
-bool isInc(int arr[]){
-	int i;
-	FOI(i, 0, 8)
-		if( arr[i] > arr[i+1] )
+bool is_ordered(int len[10])
+{
+	bool result = true;
+	for (int i = 1; i < 10; i++)
+	{
+		if (len[i] < len[i - 1])
+		{
 			return false;
-	return true;
+		}
+	}
+	return result;
 }
 
-bool isDec(int arr[]){
-	int i;
-	FOI(i, 0, 8)
-		if( arr[i] < arr[i+1] )
-			return false;
-	return true;
-}
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int T, i, arr[10];
-	cin >> T;
-	cout << "Lumberjacks:\n";
-	while( T-- ){
-		FOI(i, 0, 9) cin >> arr[i];
-		if( isInc(arr) || isDec(arr) )
-			cout << "Ordered\n";
-		else
-			cout << "Unordered\n";
+int main()
+{
+	int n;
+	int len[10];
+	cin >> n;
+	cout << "Lumberjacks:" << endl;
+	while (n--)
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			cin >> len[i];
+		}
+		if (is_ordered(len))
+		{
+			cout << "Ordered" << endl;
+			continue;
+		}
+		reverse(len, len + 10);
+		if (is_ordered(len))
+		{
+			cout << "Ordered" << endl;
+			continue;
+		}
+		cout << "Unordered" << endl;
 	}
 	return 0;
 }

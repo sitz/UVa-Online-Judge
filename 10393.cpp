@@ -1,91 +1,109 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for (i = A; i <= B; i++)
-#define FOD(i, A, B) for (i = A; i >= B; i--)
+char FINGER[10][10] = {"aqz", "wsx", "edc", "rfvtgb", " ", " ", "yhnujm", "ik,", "ol.", "p;/"};
+char WORD[1002][52];
+char STORE[1002][52];
+char FLAG[300];
+int N, F, MAX;
+int CR[15], LEN;
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	map<char, int> Map;
-	Map['q'] = 1; Map['a'] = 1; Map['z'] = 1; 
-	Map['w'] = 2; Map['s'] = 2; Map['x'] = 2; 
-	Map['e'] = 3; Map['d'] = 3; Map['c'] = 3; 
-	Map['r'] = 4; Map['f'] = 4; Map['v'] = 4; Map['t'] = 4; Map['g'] = 4; Map['b'] = 4; 
-	//Special Case : ' ' -- > 5, 6
-	Map['y'] = 7; Map['h'] = 7; Map['n'] = 7; Map['u'] = 7; Map['j'] = 7; Map['m'] = 7;
-	Map['i'] = 8; Map['k'] = 8; Map[','] = 8; 
-	Map['o'] = 9; Map['l'] = 9; Map['.'] = 9; 
-	Map['p'] = 10; Map[';'] = 10; Map['/'] = 10; 
-	
-	int F, N;
-	while (cin >> F >> N) {
-		int i, j;
-		bool hand[11];
-		memset(hand, true, sizeof hand);
-		FOI(i, 1, F) {
-			int ind;
-			cin >> ind;
-			hand[ind] = false;
+int sort_function(const void *a, const void *s)
+{
+	char *c = (char *)a;
+	char *d = (char *)s;
+	if (strlen(c) == strlen(d))
+	{
+		return strcmp((char *)c, (char *)d);
+	}
+	return strlen(d) - strlen(c);
+}
+void MAKEZERO()
+{
+	int i, j, k, m;
+	for (i = 0; i < 300; i++)
+	{
+		FLAG[i] = 0;
+	}
+	for (i = 0; i < F; i++)
+	{
+		k = CR[i] - 1;
+		for (j = 0; FINGER[k][j]; j++)
+		{
+			m = FINGER[k][j];
+			FLAG[m] = 1;
 		}
-		vector< string > Vec(N);
-		vector< string > Ans, Print;
-		int L = 0;
-		FOI(i, 0, N-1) {
-			cin >> Vec[i];
-			L = max(L, (int)Vec[i].length());
+	}
+}
+int TYPEABLE(int i)
+{
+	int j, k;
+	for (j = 0; WORD[i][j]; j++)
+	{
+		k = WORD[i][j];
+		if (FLAG[k])
+		{
+			return 0;
 		}
-		do {
-			FOI(i, 0, N-1) {
-				bool flag = true;
-				if ((int)Vec[i].length() == L) {
-					FOI(j, 0, L-1) {
-						if ( !hand[Map[Vec[i][j]]] ) {
-							flag = false;
-							break;
-						}
-					}
-					if (flag) Ans.push_back(Vec[i]);
+	}
+	return 1;
+}
+void PRINT()
+{
+	int i;
+	printf("%d\n", MAX);
+	for (i = 0; i < MAX; i++)
+	{
+		if (strlen(STORE[i]) == LEN)
+		{
+			printf("%s\n", STORE[i]);
+		}
+	}
+}
+
+int main()
+{
+	int i;
+	char buf[60];
+	int x;
+	while (scanf("%d%d", &F, &N) == 2)
+	{
+		for (i = 0; i < F; i++)
+		{
+			scanf("%d", &CR[i]);
+		}
+		MAKEZERO();
+		for (i = 0; i < N; i++)
+		{
+			scanf("%s", WORD[i]);
+		}
+		qsort((void *)WORD, N, sizeof(WORD[0]), sort_function);
+		MAX = 0;
+		LEN = 0;
+		strcpy(buf, "$$$");
+		for (i = 0; i < N; i++)
+		{
+			x = strlen(WORD[i]);
+			if (!strcmp(buf, WORD[i]))
+			{
+				continue;
+			}
+			if (x < LEN)
+			{
+				break;
+			}
+			if (TYPEABLE(i))
+			{
+				if (x >= LEN)
+				{
+					LEN = x;
+					strcpy(STORE[MAX++], WORD[i]);
+					strcpy(buf, WORD[i]);
 				}
 			}
-			if (Ans.size() > 0) break;
-		}while (L--);
-		
-		int S = Ans.size();
-		sort(Ans.begin(), Ans.end());
-		FOI(i, 0, S-1) {
-			if (i > 0 && Ans[i] == Ans[i - 1]) continue;
-			else Print.push_back(Ans[i]);
 		}
-		
-		S = Print.size();
-		cout << S << endl;
-		FOI(i, 0, S-1)
-			cout << Print[i] << endl;
+		PRINT();
 	}
 	return 0;
 }

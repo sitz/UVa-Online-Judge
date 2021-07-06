@@ -1,34 +1,59 @@
-#include<iostream>
-#include<vector>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    for(int test=1; ; test++){
-            int m, n;
-            cin>>m>>n;
-            if(m==0 && n==0)
-                    break;
-            int tower[m+1][n+1];
-            int row[m+1], col[n+1];
-            int i, j;
-            for(i=0; i<m+1; i++)
-                     tower[i][0]=0;
-            for(j=0; j<n+1; j++)
-                     tower[0][j]=0;
-            for(i=1; i<m+1; i++)
-                     cin>>row[i];
-            for(i=1; i<n+1; i++)
-                     cin>>col[i];
-            for(i=1; i<m+1; i++){
-                     for(j=1; j<n+1; j++){
-                              if(row[i] == col[j])
-                                        tower[i][j] = tower[i-1][j-1] + 1;
-                              else
-                                  tower[i][j] = max(tower[i-1][j], tower[i][j-1]);
-                                        
-                     }
-            }
-            cout<<"Twin Towers #"<<test<<endl;
-            cout<<"Number of Tiles : "<<tower[m][n]<<endl<<endl;
-    }
+const int MAXSIZE = 100;
+
+int N1, N2;
+int T1[MAXSIZE + 1], T2[MAXSIZE + 1];
+int lcs[MAXSIZE + 1][MAXSIZE + 1];
+
+void input()
+{
+	for (int i = 1; i <= N1; i++)
+	{
+		scanf("%d", T1 + i);
+	}
+	for (int i = 1; i <= N2; i++)
+	{
+		scanf("%d", T2 + i);
+	}
+}
+
+void solve(int kase)
+{
+	int i, j;
+	for (i = 0; i <= N1; i++)
+	{
+		lcs[i][0] = 0;
+	}
+	for (j = 0; j <= N2; j++)
+	{
+		lcs[0][j] = 0;
+	}
+	for (i = 1; i <= N1; i++)
+		for (j = 1; j <= N2; j++)
+		{
+			if (T1[i] == T2[j])
+			{
+				lcs[i][j] = lcs[i - 1][j - 1] + 1;
+			}
+			else
+			{
+				lcs[i][j] = max(lcs[i - 1][j], lcs[i][j - 1]);
+			}
+		}
+	printf("Twin Towers #%d\n", kase);
+	printf("Number of Tiles : %d\n\n", lcs[N1][N2]);
+}
+
+int main()
+{
+	int kase = 0;
+	while (EOF != scanf("%d%d", &N1, &N2) && N1)
+	{
+		input();
+		solve(++kase);
+	}
+	return 0;
 }

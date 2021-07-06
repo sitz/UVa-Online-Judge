@@ -1,82 +1,101 @@
-#include<iostream>
-#include<queue>
+#include <bits/stdc++.h>
+
 using namespace std;
-#define FOR(i,N) for(i=0;i<(N);i++)
-bool visited[30];
-int NNode,i,j;
-int node[30];
-bool mat[30][30];
-int TTL[30];
 
-void gen(){
-     FOR(i,30){
-     node[i]==-1;
-     visited[i]=false;
-     TTL[i]=-1;
-     }
-     FOR(i,30)
-     FOR(j,30)
-     mat[i][j]=0;
-     NNode=-1;
-}
-void init(){
-     FOR(i,NNode+1){
-                    TTL[i]=-1;
-                    visited[i]=false;
-                    }
-}
-    
-     
-int find(int i){
-    FOR(j,NNode+1)
-    {if(node[j]==i) return j;}
-    NNode++;
-    node[NNode]=i;
-    return NNode;
+const int MAXNODE = 35;
+
+struct Node
+{
+	int id, ttl;
+};
+
+bool adj[MAXNODE][MAXNODE];
+int NC, kase = 1;
+int nodeID[MAXNODE], cntNode;
+
+int getIndex(int id)
+{
+	for (int i = 0; i < cntNode; i++)
+		if (nodeID[i] == id)
+		{
+			return i;
+		}
+	return -1;
 }
 
-int calc(int p,int ttl){
-    init();
-    int m,ans=0;
-    queue<int> q;
-    m=find(p);
-    q.push(m);
-    visited[m]=true;
-    TTL[m]=ttl;
-    while (!q.empty()){
-          m=q.front();
-          q.pop();
-          if(!TTL[m]) continue;
-          if(TTL[m]>=1)
-          FOR(i,NNode+1){
-                      if (mat[m][i] && !visited[i]){
-                         q.push(i);
-                         TTL[i]=TTL[m]-1;
-                         visited[i]=true;}
-          }
-    }
-    FOR(i,NNode+1)
-    if(!visited[i]) ans++;
-    return ans;
+void input()
+{
+	cntNode = 0;
+	memset(adj, 0, sizeof(adj));
+	int x, y;
+	for (int i = 0; i < NC; i++)
+	{
+		cin >> x >> y;
+		int xID = getIndex(x);
+		if (xID < 0)
+		{
+			xID = cntNode;
+			nodeID[cntNode++] = x;
+		}
+		int yID = getIndex(y);
+		if (yID < 0)
+		{
+			yID = cntNode;
+			nodeID[cntNode++] = y;
+		}
+		adj[xID][yID] = adj[yID][xID] = true;
+	}
 }
-                   
-int main(){
-    int ans,NC,p,q,m,n,ttl,cases=0;
-    while (cin>>NC){
-          if(!NC) break;
-          gen();
-          FOR (i,NC){
-              cin>>p>>q;
-              m=find(p);
-              n=find(q);
-              mat[m][n]=true;
-              mat[n][m]=true;
-              }
-          while (cin>>p>>ttl){
-                if(!p && !ttl) break;
-                ans=calc(p,ttl);
-                cout<<"Case "<<++cases<<": "<<ans<<" nodes not reachable from node "<<p<<" with TTL = "<<ttl<<"."<<endl;
-                }
-          }
-    return 0;
+
+int bfs(int start, int ttl)
+{
+	bool vis[MAXNODE] = {false};
+	Node node;
+	queue<Node> q;
+	node.id = start;
+	node.ttl = 0;
+	q.push(node);
+	while (!q.empty())
+	{
+		node = q.front();
+		q.pop();
+		if (node.ttl > ttl || vis[node.id])
+		{
+			continue;
+		}
+		vis[node.id] = true;
+		for (int i = 0; i < cntNode; i++)
+		{
+			if (adj[node.id][i] && node.ttl < ttl && !vis[i])
+			{
+				Node p;
+				p.id = i;
+				p.ttl = node.ttl + 1;
+				q.push(p);
+			}
+		}
+	}
+	int res = 0;
+	for (int i = 0; i < cntNode; i++)
+		if (!vis[i])
+		{
+			res++;
+		}
+	return res;
+}
+
+int main()
+{
+	while (cin >> NC && NC)
+	{
+		input();
+		int start, ttl;
+		while (cin >> start >> ttl && start)
+		{
+			int s = getIndex(start);
+			cout << "Case " << kase++ << ": " << bfs(s, ttl) << " nodes not reachable from node ";
+			cout << start << " with TTL = " << ttl << "." << endl;
+		}
+	}
+	return 0;
 }

@@ -1,30 +1,41 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    for(;;){
-            int t;
-            cin>>t;
-            if(t==0)
-                    break;
-            int x0,y0;
-            cin>>x0>>y0;
-            for(int i=0;i<t;i++){
-                    int x,y;
-                    cin>>x>>y;
-                    int dx=x-x0;
-                    int dy=y-y0;
-                    if(dx>0 && dy>0)
-                            cout<<"NE"<<endl;
-                    else if(dx<0 && dy>0)
-                            cout<<"NO"<<endl;
-                    else if(dx<0 && dy<0)
-                            cout<<"SO"<<endl;
-                    else if(dx>0 && dy<0)
-                            cout<<"SE"<<endl;
-                    else
-                            cout<<"divisa"<<endl;
-            }
-    }
-    return 0;
+int main()
+{
+	int k, n, m, x, y;
+	while (cin >> k)
+	{
+		if (k == 0)
+		{
+			break;
+		}
+		cin >> n >> m;
+		while (k--)
+		{
+			cin >> x >> y;
+			if (x == n || y == m)
+			{
+				cout << "divisa" << endl;
+			}
+			else if (x < n && y < m)
+			{
+				cout << "SO" << endl;
+			}
+			else if (x < n && y > m)
+			{
+				cout << "NO" << endl;
+			}
+			else if (x > n && y < m)
+			{
+				cout << "SE" << endl;
+			}
+			else if (x > n && y > m)
+			{
+				cout << "NE" << endl;
+			}
+		}
+	}
+	return 0;
 }

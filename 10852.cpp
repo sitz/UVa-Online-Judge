@@ -1,47 +1,57 @@
-#include <cstdio>
-#include <vector>
-#include <cstring>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define MAX 10010
-bool prime[MAX];
-vector< int > P;
-
-void sieve() {
-	memset(prime, true, sizeof prime);
-	prime[1] = prime[0] = false;
-	
-	for (int i = 2; i < MAX; i++) {
-		if (prime[i]) {
-			P.push_back(i);
-			for (int j = i * i; j < MAX; j += i)
-				prime[j] = false;
+bool is_prime(int n)
+{
+	for (int i = 3, sq = sqrt(n); i <= sq; i += 2)
+	{
+		if (n % i == 0)
+		{
+			return false;
 		}
 	}
-	//printf("%d\n", P.size());
+	return true;
 }
 
-int main() {
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
+struct result
+{
+	int p;
+	int diff;
+};
 
-	sieve();
-
-	int T;
-	scanf("%d", &T);
-	while (T--) {
-		int N;
-		scanf("%d", &N);
-		int Max = -1, X = -1;
-		for (int i = 0; i < P.size(); i++) {
-			if (P[i] > N) break;
-			int x = P[i];
-			int p = (int) N / x;
-			if (p * x <= N && N < (p + 1) * x && Max < N - p * x) {
-				Max = N - p * x;
-				X	= x;
+int main()
+{
+	int t, n;
+	vector<int> primes;
+	result best;
+	primes.push_back(2);
+	for (int i = 3; i < 15000; i += 2)
+		if (is_prime(i))
+		{
+			primes.push_back(i);
+		}
+	cin >> t;
+	while (t--)
+	{
+		cin >> n;
+		best.diff = 0;
+		for (int i = 0, sz = primes.size(); primes[i] <= n; i++)
+		{
+			for (int p = 0; p * primes[i] <= n; p++)
+			{
+				if ((p + 1) * primes[i] <= n)
+				{
+					continue;
+				}
+				if (n - primes[i] * p > best.diff)
+				{
+					best.p = primes[i];
+					best.diff = n - primes[i] * p;
+				}
 			}
 		}
-		printf("%d\n", X);
+		cout << best.p << endl;
 	}
+	return 0;
 }

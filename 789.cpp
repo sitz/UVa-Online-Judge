@@ -1,70 +1,56 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-#include <sstream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for (i = A; i <= B; i++)
-#define FOD(i, A, B) for (i = A; i >= B; i--)
-
-string convert(string S) {
-	int i, L = S.length() - 1;
-	FOI(i, 0, L)
-		if (!isalpha(S[i]))
-			S[i] = ' ';
-	return S;
-}
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	char Key;
-	cin >> Key;
-	string str;
-	map< string, set< int > > Map;
-	map< string, set< int > >::iterator mit;
-
-	int Ind = 1;
-	getline(cin, str);
-	while (getline(cin, str)){
-		str = convert(str);
-		stringstream ss(str);
-		string S;
-		while (ss >> S)
-			if (S[0] == Key)
-				Map[S].insert(Ind);
-		++Ind;
+int main()
+{
+	char key = getchar();
+	cin.ignore(1024, '\n');
+	string s;
+	int idx = 0;
+	map<string, set<int>> r;
+	while (getline(cin, s))
+	{
+		++idx;
+		int i, len = s.length();
+		for (i = 0; i < len; i++)
+		{
+			if (!isalpha(s[i]))
+				continue;
+			int j(i);
+			string t = "";
+			while (j < len)
+			{
+				if (isalpha(s[j]))
+					t += s[j];
+				else
+					break;
+				j++;
+			}
+			i = j;
+			if (t[0] == key)
+			{
+				r[t].insert(idx);
+			}
+		}
 	}
-	for (mit = Map.begin(); mit != Map.end(); mit++) {
-		cout << (*mit).first;
-		set< int > Set;
-		set< int >::iterator sit;
-		Set = (*mit).second;
-		for (sit = Set.begin(); sit != Set.end(); sit++)
-			cout << " " << *sit;
+	for (map<string, set<int>>::iterator i = r.begin(); i != r.end(); i++)
+	{
+		cout << i->first;
+		for (set<int>::iterator j = i->second.begin(); j != i->second.end(); j++)
+			cout << " " << *j;
 		cout << endl;
 	}
 	return 0;
 }
+/*
+T
+CONSIDER SEVERAL LINES OF TEXT AND ONE CHARCTER CALLED KEY,
+SPECIFIED ON A LINE PRECEDING THE TEXT. THE WORDS IN THE TEXT ARE
+SEPARAED BY SINGLE SPACE. THERE ARE NO WORDS SPLITTED BETWEEN TWO
+LINES.
+WRITE A PROGRAM TO DISPLAY AN INDEX OF ALL WORDS WIHIN THE TEXT
+STARTING WITH THE KEY. THE INDEX MUST BE ALPHABETICALLY SORTED. EACH
+WORD IN THE INDEX MUST BE FOLLOWED BY THE LIST OF THE LINE NUMBERS IN
+WHICH IT APPEARS.
+*/

@@ -1,61 +1,91 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#define INF_MAX 2147483647
+#define INF_MIN -2147483647
+#define pi acos(-1.0)
+#define N 1000000
+#define LL long long
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define REP(i, N)    for(i=1; i<=N; i++)
-#define INF    INT_MAX
-#define EPS    1e-10
-#define sqr(x) (x)*(x)
+#define For(i, a, b) for (int i = (a); i < (b); i++)
+#define Fors(i, sz) for (size_t i = 0; i < sz.size(); i++)
+#define Fore(it, x) for (typeof(x.begin()) it = x.begin(); it != x.end(); it++)
+#define Set(a, s) memset(a, s, sizeof(a))
 
-int main(){
-    int T, t;
-    cin >> T;
-    FOI(t, 1, T){
-           int N, i, j, k;
-           cin >> N;
-           int mat[N][N];
-           FOI(i, 0, N-1)
-                  FOI(j, 0, N-1)
-                         cin >> mat[i][j];
-           FOI(k, 0, N-1)
-                  FOI(i, 0, N-1)
-                         FOI(j, 0, N-1)
-                                mat[i][j] = min ( mat[i][j], mat[i][k] + mat[k][j] );
-           FOI(i, 0, N-1){
-                  FOI(j, 0, N-1)
-                         cout << mat[i][j] << " ";
-                  cout << endl;
-           }
-    }
-    system("pause");
-    return 0;
+int n;
+bool mat[100 + 3][100 + 3], vis[100 + 3];
+
+void printLine()
+{
+	printf("+");
+	for (int i = 0; i < n * 2 - 1; i++)
+		printf("-");
+	printf("+\n");
+}
+
+void dfs(int at, int absent)
+{
+	if (at == absent)
+		return;
+	vis[at] = true;
+	for (int i = 0; i < n; i++)
+		if (mat[at][i] && !vis[i])
+			dfs(i, absent);
+}
+
+int main()
+{
+	int testCase;
+	scanf("%d", &testCase);
+	int cases = 0;
+	while (testCase--)
+	{
+		scanf("%d", &n);
+		Set(mat, false);
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				int a;
+				scanf("%d", &a);
+				mat[i][j] = a;
+			}
+		}
+		bool output[100 + 3][100 + 3];
+		bool firstVis[100 + 3];
+		Set(vis, false);
+		dfs(0, -1);
+		for (int i = 0; i < 103; i++)
+			firstVis[i] = vis[i];
+		for (int i = 0; i < n; i++)
+		{
+			Set(vis, false);
+			dfs(0, i);
+			for (int j = 0; j < n; j++)
+			{
+				if (firstVis[j] && !vis[j])
+					output[i][j] = true;
+				else
+					output[i][j] = false;
+			}
+			output[i][i] = firstVis[i];
+		}
+		printf("Case %d:\n", ++cases);
+		printLine();
+		for (int i = 0; i < n; i++)
+		{
+			printf("|");
+			for (int j = 0; j < n; j++)
+			{
+				if (output[i][j])
+					printf("Y|");
+				else
+					printf("N|");
+			}
+			printf("\n");
+			printLine();
+		}
+	}
+	return 0;
 }

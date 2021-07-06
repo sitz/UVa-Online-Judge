@@ -1,78 +1,80 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#define MAX(a, b) (a > b ? a : b)
+#define MIN(a, b) (a > b ? b : a)
+#define INF 21474836
+#define MAXN 102
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define PI		acos(-1.0)
-#define INF		1<<30
-#define EPS		1e-9
-#define sqr(x)	(x)*(x)
+int N, M, Q, A[MAXN][MAXN];
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	for (int t = 1; ; t++){
-		int C, S, Q;
-		scanf("%d%d%d", &C, &S, &Q);
-		if (C == 0 && S == 0 && Q == 0)
+void Floyd()
+{
+	int i, j, k;
+	for (k = 1; k <= N; k++)
+	{
+		for (i = 1; i <= N; i++)
+		{
+			for (j = 1; j <= N; j++)
+			{
+				A[i][j] = MIN(A[i][j], MAX(A[i][k], A[k][j]));
+			}
+		}
+	}
+}
+void Cal()
+{
+	int a, b;
+	Floyd();
+	while (Q--)
+	{
+		scanf("%d%d", &a, &b);
+		if (A[a][b] == INF)
+		{
+			printf("no path\n");
+		}
+		else
+		{
+			printf("%d\n", A[a][b]);
+		}
+	}
+}
+void INI()
+{
+	int i, j;
+	for (i = 1; i <= N; i++)
+	{
+		for (j = 1; j <= N; j++)
+		{
+			A[i][j] = INF;
+		}
+		A[i][i] = 0;
+	}
+}
+
+int main()
+{
+	int i, kase = 1;
+	int a, b, c;
+	while (scanf("%d%d%d", &N, &M, &Q) == 3)
+	{
+		if (!N && !M && !Q)
+		{
 			break;
-		int mat[C][C];
-		int i, j, k;
-		FOI(i, 0, C-1)
-			FOI(j, 0, C-1)
-				mat[i][j] = INF;
-		FOI(i, 1, S){
-			int C1, C2, D;
-			scanf("%d%d%d", &C1, &C2, &D);
-			--C1; --C2;
-			mat[C1][C2] = D;
-			mat[C2][C1] = D;
 		}
-		FOI(k, 0, C-1)
-			FOI(i, 0, C-1)
-				FOI(j, 0, C-1)
-					mat[i][j] = min(mat[i][j], max(mat[i][k], mat[k][j]));
-		if (t > 1)
-			printf("\n");
-		printf("Case #%d\n", t);
-		while (Q--){
-			int C1, C2;
-			scanf("%d%d", &C1, &C2);
-			--C1; --C2;
-			if (mat[C1][C2] == INF)
-				printf("no path\n");
-			else
-				printf("%d\n", mat[C1][C2]);
+		INI();
+		for (i = 0; i < M; i++)
+		{
+			scanf("%d%d%d", &a, &b, &c);
+			A[a][b] = A[b][a] = c;
 		}
+		if (kase > 1)
+		{
+			putchar('\n');
+		}
+		printf("Case #%d\n", kase++);
+		Cal();
 	}
 	return 0;
 }
-

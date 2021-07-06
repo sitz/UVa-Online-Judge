@@ -1,73 +1,58 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int T;
-	cin >> T;
-	while (T--){
-		int N;
-		cin >> N;
-		int i, j;
-		map<string, string> Map;
-		vector< string > Word(N);
-		FOI(i, 0, N-1){
-			cin >> Word[i];
-			string temp = Word[i];
-			sort(temp.begin(), temp.end());
-			Map[Word[i]] = temp;
+int main()
+{
+	int cases;
+	int words;
+	int count;
+	string input;
+	multimap<string, string> m;
+	multimap<string, string>::iterator it;
+	pair<multimap<string, string>::iterator, multimap<string, string>::iterator> ret;
+	cin >> cases;
+	while (cases--)
+	{
+		m.clear();
+		cin >> words;
+		cin.ignore(100, '\n');
+		for (int i = 0; i < words; i++)
+		{
+			getline(cin, input);
+			string tmp(input);
+			sort(tmp.begin(), tmp.end());
+			m.insert(make_pair(tmp, input));
 		}
-		while (true){
-			string str, temp;
-			cin >> str;
-			if (str == "END")
+		while (getline(cin, input))
+		{
+			if (input == "END")
+			{
 				break;
-			temp = str;
-			sort(temp.begin(), temp.end());
-			vector< string > vec;
-			cout << "Anagrams for: " << str << endl;
-			FOI(i, 0, N-1){
-				if (Map[Word[i]] == temp)
-					vec.push_back(Word[i]);
 			}
-			int SZ = vec.size();
-			if (SZ == 0)
-				cout << "No anagrams for: " << str << endl;
+			string tmp(input);
+			sort(tmp.begin(), tmp.end());
+			cout << "Anagrams for: " << input << endl;
+			if (m.count(tmp) == 0)
+			{
+				cout << "No anagrams for: " << input << endl;
+			}
 			else
-				FOI(i, 0, SZ-1)
-					printf("%3d) %s\n", i+1, vec[i].c_str());
+			{
+				count = 0;
+				ret = m.equal_range(tmp);
+				for (it = ret.first; it != ret.second; it++)
+				{
+					count++;
+					printf("%3d) ", count);
+					cout << (*it).second << endl;
+				}
+			}
 		}
-		if (T)
+		if (cases)
+		{
 			cout << endl;
+		}
 	}
 	return 0;
 }
-

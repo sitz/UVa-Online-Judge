@@ -1,66 +1,92 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
+/*
+10930
+*/
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int N, t = 1;
-	while( cin >> N ){
-		int vec[N];
-		int i, j, k;
-		FOI(i, 0, N-1)
-			cin >> vec[i];
-		vector<int> V;
-		V.push_back(vec[0]);
-		FOI(i, 1, N-1){
-			int SZ = V.size() - 1;
-			FOI(j, 0, SZ)
-				V.push_back(V[j] + vec[i]);
+#define maxn 40
+char Fg[31000];
+int A[maxn];
+int Recur(int n, int sum, int level, int lim, int k)
+{
+	int i, j = sum, d;
+	if (level > 1 && Fg[sum] == 1)
+	{
+		return 1;
+	}
+	for (i = n + 1; i < k; i++)
+	{
+		if (A[i] + sum > lim)
+		{
+			return 0;
 		}
-		V.erase(V.begin());
-		sort(V.begin(), V.end());
-		bool isA = true;
-		FOI(k, 0, N-1){
-			if( binary_search(V.begin(), V.end(), vec[k]) ){
-				isA = false;
-				break;
+		d = Recur(i, A[i] + sum, level + 1, lim, k);
+		if (d)
+		{
+			return 1;
+		}
+	}
+	return 0;
+}
+void Cal(int n)
+{
+	int d, k;
+	for (k = 1; k < n; k++)
+	{
+		d = Recur(k, A[k], 1, A[n], n);
+		if (d)
+		{
+			break;
+		}
+	}
+	if (d == 0)
+	{
+		cout << "This is an A-sequence.\n";
+	}
+	else
+	{
+		cout << "This is not an A-sequence.\n";
+	}
+}
+void Free(int n)
+{
+	int i;
+	for (i = 1; i <= n; i++)
+	{
+		Fg[A[i]] = 0;
+	}
+}
+int main()
+{
+	int n, i, fg = 0, pre = 0, k;
+	int ks = 1;
+	while (cin >> n)
+	{
+		fg = 0;
+		pre = 0;
+		cout << "Case #" << ks++ << ":";
+		for (i = 1; i <= n; i++)
+		{
+			cin >> A[i];
+			cout << " " << A[i];
+			if (pre >= A[i])
+			{
+				fg = 1;
 			}
+			pre = A[i];
+			Fg[A[i]] = 1;
 		}
-		cout << "Case #" << t++ << ":";
-		FOI(i, 0, N-1)
-			cout << " " << vec[i];
 		cout << endl;
-		if( isA )
-			cout << "This is an A-sequence.\n";
-		else
+		if (fg)
+		{
 			cout << "This is not an A-sequence.\n";
+			Free(n);
+			continue;
+		}
+		Cal(n);
+		Free(n);
 	}
 	return 0;
 }

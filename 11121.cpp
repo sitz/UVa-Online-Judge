@@ -1,28 +1,38 @@
-#include <cstring>
-#include <string>
-#include <cstdio>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef long long int64;
-
-int main() {
-	int64 T, t;
-	scanf("%lld", &T);
-	for (t = 1; t <= T; t++) {
-		int64 N, Base = -2;
-		string str = "";
-		scanf("%lld", &N);
-		while (N != 0) {
-			int64 Rem = N % Base;
-			N /= Base;
-			if (Rem < 0) {
-				N	+= 1;
-				Rem += 2;
-			}
-			str = char('0' + Rem) + str;
-		}
-		if (str.empty()) str = "0";
-		printf("Case #%lld: %s\n", t, str.c_str());
+string negativetwobase(int n)
+{
+	string result = "";
+	int remainder;
+	if (n == 0)
+	{
+		return "0";
 	}
-	return 0;
+	while (n != 0)
+	{
+		remainder = n % -2;
+		n /= -2;
+		if (remainder < 0)
+		{
+			n += 1;
+			remainder += 2;
+		}
+		result += (char)('0' + remainder);
+	}
+	return string(result.rbegin(), result.rend());
+}
+
+int main()
+{
+	int cases;
+	int num;
+	cin >> cases;
+	for (int i = 0; i < cases; i++)
+	{
+		cout << "Case #" << i + 1 << ": ";
+		cin >> num;
+		cout << negativetwobase(num) << endl;
+	}
 }

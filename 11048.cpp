@@ -1,88 +1,119 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for (i = A; i <= B; i++)
-#define FOD(i, A, B) for (i = A; i >= B; i--)
-
-int EditDistance(string s1, string s2) {
-	int m = s1.length();
-    int n = s2.length();
-    int i, j;
-    int cost[m + 1][n + 1];
-    cost[0][0] = 0;
-    FOI(i, 1, m) cost[i][0] = i;
-    FOI(j, 1, n) cost[0][j] = j;
-    
-    FOI(i, 1, m) {
-		FOI(j, 1, n) {
-			int val = (s1[i - 1] == s2[j - 1] ? 0 : 1);
-				cost[i][j] = min(cost[i - 1][j - 1] + val, min(cost[i - 1][j] + 1, cost[i][j - 1] + 1));
+bool is_extra_or_missing(string &a, string &b)
+{
+	int diff = 0;
+	string &shorter = (a.size() > b.size() ? b : a);
+	string &longer = (a.size() > b.size() ? a : b);
+	for (int i = 0, j = 0, sz1 = longer.size(), sz2 = shorter.size(); i < sz1 && j < sz2;)
+	{
+		if (longer[i] == shorter[j])
+		{
+			i++;
+			j++;
+		}
+		else
+		{
+			diff++;
+			i++;
+			if (diff > 1)
+			{
+				return false;
+			}
 		}
 	}
-    return cost[m][n];
+	return true;
 }
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int N, Q;
-	int i, j;
-	set< string > Set;
-	cin >> N;
-	string str[N];
-	FOI(i, 0, N-1) {
-		cin >> str[i];
-		Set.insert(str[i]);
+void find_difference(string &a, string &b, vector<int> &pos)
+{
+	for (int i = 0, sz = a.size(); i < sz; i++)
+	{
+		if (a[i] != b[i])
+		{
+			pos.push_back(i);
+			if (pos.size() > 2)
+			{
+				return;
+			}
+		}
 	}
-	cin >> Q;
-	while (Q--) {
-		string S;
-		cin >> S;
-		if (Set.find(S) != Set.end()) {
-			cout << S << " is correct\n";
+}
+
+void automatic_correction(string &input, vector<pair<string, int>> &dictionary, map<string, bool> &m)
+{
+	vector<int> pos;
+	int input_size = input.size();
+	bool found = false;
+	if (m.find(input) != m.end())
+	{
+		cout << input << " is correct" << endl;
+		return;
+	}
+	for (int i = 0, sz = dictionary.size(); i < sz; i++)
+	{
+		if (abs(dictionary[i].second - input_size) > 1)
+		{
 			continue;
 		}
-		bool flag = false;
-		int A[26], B[26];
-		memset(A, 0, sizeof A);
-		FOI(i, 0, S.length()) ++A[S[i] - 'a'];
-		FOI(i, 0, N-1) {
-			memset(B, 0, sizeof B);
-			FOI(j, 0, str[i].length()-1) ++B[str[i][j] - 'a'];
-			int diff = 0;
-			FOI(j, 0, 25) diff += abs(A[j] - B[j]);
-			if (diff == 1 || (diff) {
-				cout << S << " is a misspelling of " << str[i] << endl;
-				flag = true;
+		if (dictionary[i].second == input_size)
+		{
+			pos.clear();
+			find_difference(input, dictionary[i].first, pos);
+			if (pos.size() == 1)
+			{
+				found = true;
+				cout << input << " is a misspelling of " << dictionary[i].first << endl;
+				break;
+			}
+			else if (pos.size() == 2)
+			{
+				if (pos[0] + 1 == pos[1] && input[pos[0]] == dictionary[i].first[pos[1]] && input[pos[1]] == dictionary[i].first[pos[0]])
+				{
+					found = true;
+					cout << input << " is a misspelling of " << dictionary[i].first << endl;
+					break;
+				}
+			}
+		}
+		else
+		{
+			if (is_extra_or_missing(input, dictionary[i].first))
+			{
+				found = true;
+				cout << input << " is a misspelling of " << dictionary[i].first << endl;
 				break;
 			}
 		}
-		if (!flag)
-			cout << S << " is unknown\n";
-	}	
+	}
+	if (!found)
+	{
+		cout << input << " is unknown" << endl;
+	}
+}
+
+int main()
+{
+	int n, q;
+	string input;
+	vector<pair<string, int>> dictionary;
+	map<string, bool> m;
+	cin >> n;
+	getline(cin, input);// \n after n
+	while (n--)
+	{
+		getline(cin, input);
+		dictionary.push_back(make_pair(input, input.size()));
+		m[input] = true;
+	}
+	cin >> q;
+	getline(cin, input);// \n after q
+	while (q--)
+	{
+		getline(cin, input);
+		automatic_correction(input, dictionary, m);
+	}
 	return 0;
 }

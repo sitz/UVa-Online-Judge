@@ -1,84 +1,99 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int main(){
-    int N;    
-    while(cin>>N){
-                  double best[20][20][20];
-                  int path[20][20][20];
-                  int i, j, k, steps;
-                  memset(best, 0, sizeof(double)*20*20*20);
-                  for(i=0; i<N; i++){
-                           for(j=0; j<N; j++){
-                                    path[i][j][0] = i;
-                                    if(i==j)
-                                            best[i][j][0] = 1.0;
-                                    else
-                                        cin>>best[i][j][0];
-                           }
-                  }
-                  bool stat=false;
-                  for(steps=1; steps<N; steps++){
-                            for(k=0; k<N; k++){
-                                     for(i=0; i<N; i++){
-                                              for(j=0; j<N; j++){
-                                                       double tmp = best[i][k][steps-1] * best[k][j][0];
-                                                       if (tmp > best[i][j][steps]){
-                                                               best[i][j][steps] = tmp;
-                                                               path[i][j][steps] = k;
-                                                       }
-                                              }
-                                     }
-                            }
-                  }
-                  for(steps=1; steps<N; steps++){
-                  for(i=0; i<N; i++){
-                           if(best[i][i][steps] > 1.01){
-                                                int seq[steps];
-                                                seq[steps]=path[i][i][steps];
-                                                for(j=steps-1; j>=0; j--)
-                                                      seq[j]=path[i][seq[j+1]][j];
-                                                for(j=0;j<=steps;j++)
-                                                      cout<<seq[j]+1<<" ";
-                                                cout<<seq[0]+1<<endl;
-                                                stat = true;
-                                                break;
-                           }
-                  }
-                   if(stat)
-                           break;
-                  }
-                  if(!stat)
-                           cout<<"no arbitrage sequence exists\n";
-    }
-    return 0;
+enum
+{
+	MAX = 20
+};
+
+int main()
+{
+	int n; // dim(tbl)
+	double profit[MAX][MAX][MAX];
+	int path[MAX][MAX][MAX]; // baktrk
+	while (scanf("%d", &n) == 1)
+	{
+		memset(profit, 0, sizeof(profit));
+		// profit[0][i][j] = input
+		// profit[0][i][i] = 1, for all i
+		// path[0][i][j] = i, for all i, j
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				if (i == j)
+				{
+					profit[0][i][j] = 1.0;
+				}
+				else
+				{
+					scanf("%lf", &profit[0][i][j]);
+				}
+				path[0][i][j] = i;
+			}
+		}
+
+		// Floyd-Warshall
+		for (int steps = 1; steps < n; ++steps)
+		{
+			for (int k = 0; k < n; ++k) // intermediate node k
+			{
+				for (int i = 0; i < n; ++i) // path from i -> j
+				{
+					for (int j = 0; j < n; ++j)
+					{
+						double tmp = profit[steps - 1][i][k] * profit[0][k][j];
+						if (tmp > profit[steps][i][j])
+						{
+							profit[steps][i][j] = tmp;
+							path[steps][i][j] = k;
+						}
+					}
+				}
+			}
+		}
+
+		// find SP to profit 1%
+		int steps, tgtNo = -1; // #currency wanted
+		for (steps = 1; steps < n; steps++)
+		{
+			for (int i = 0; i < n; i++)
+			{
+				if (profit[steps][i][i] > 1.01)
+				{
+					tgtNo = i;
+					break;
+				}
+			}
+			if (tgtNo != -1)
+			{
+				break;
+			}
+		}
+
+		if (tgtNo == -1)
+		{
+			printf("no arbitrage sequence exists\n");
+		}
+		else
+		{
+			int outSeq[MAX]; // rev seq
+			int idx = 0;
+			int currNo = tgtNo;
+			outSeq[idx++] = tgtNo;
+			// tgtNo -> currNo
+			for (int s = steps; s >= 0; --s)
+			{
+				currNo = path[s][tgtNo][currNo];
+				outSeq[idx++] = currNo;
+			}
+			for (int i = idx - 1; i > 0; --i)
+			{
+				printf("%d ", outSeq[i] + 1);
+			}
+			printf("%d\n", outSeq[0] + 1);
+		}
+	}
+	return 0;
 }

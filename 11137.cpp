@@ -1,24 +1,27 @@
-#include<iostream>
-#include<string>
-#include<cmath>
-#include<algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef long long int64;
-typedef unsigned long long uint64;
+int coin[25];
+long long dp[10010];
 
-int main(){
-    int N, i, j;
-    int coin[21]={1, 8, 27, 64, 125, 216, 343, 512, 729, 1000, 1331, 1728, 2197, 2744, 3375, 4096, 4913, 5832, 6859, 8000, 9261};
-    uint64 ways[10000];
-    ways[0] = 1;
-    for(i=0; i<21; i++){
-             int c = coin[i];
-             for(j=c; j<10000; j++)
-                      ways[j]+=ways[j-c];
-    }
-    int in;
-    while(cin>>in)
-                  cout<<ways[in]<<endl;
-    return 0;
+int main()
+{
+	int i, j, n;
+	for (i = 0; i < 21; i++)
+	{
+		coin[i] = (i + 1) * (i + 1) * (i + 1);
+	}
+	memset(dp, 0, sizeof(dp));
+	dp[0] = 1;
+	for (i = 0; i < 21; i++)
+		for (j = 0; j + coin[i] <= 10000; j++)
+		{
+			dp[j + coin[i]] += dp[j];
+		}
+	while (cin >> n)
+	{
+		cout << dp[n] << endl;
+	}
+	return 0;
 }

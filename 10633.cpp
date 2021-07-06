@@ -1,51 +1,29 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef long long int64;
-typedef unsigned long long uint64;
-
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	while (true){
-		int64 N, A, i;
-		scanf("%lld", &N);
-		if (N == 0)
-			break;
-		A = N + N/9;
-		if (N % 9 == 0)
-			printf("%lld %lld", A-1, A);
+/*
+10633
+Rare Easy Problem
+*/
+typedef unsigned long long ss;
+int main()
+{
+	ss d, m;
+	ss x, y;
+	while (scanf("%llu", &d) && d)
+	{
+		m = d % 9;
+		x = d * 10;
+		y = x / 9;
+		if (!m)
+		{
+			printf("%llu %llu\n", y - 1, y);
+		}
 		else
-			printf("%lld", A);
-		printf("\n");
+		{
+			printf("%llu\n", y);
+		}
 	}
 	return 0;
 }
-

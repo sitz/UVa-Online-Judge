@@ -1,86 +1,68 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int main(){
-    string orig;
-    while(cin>>orig){
-                    bool pal=false, mir=true;
-                    string dup=orig ,mirr="";
-                    reverse(dup.begin(), dup.end());
-                    if(dup == orig)
-                           pal=true;
-                    int len=orig.length(), i;
-                    map <char, char> palin;
-                    map <char, char>::iterator it;
-                    palin['A']='A';
-                    palin['E']='3';
-                    palin['H']='H';
-                    palin['I']='I';
-                    palin['J']='L';
-                    palin['L']='J';
-                    palin['M']='M';
-                    palin['O']='O';
-                    palin['S']='2';
-                    palin['T']='T';
-                    palin['U']='U';
-                    palin['V']='V';
-                    palin['W']='W';
-                    palin['X']='X';
-                    palin['Y']='Y';
-                    palin['Z']='5';
-                    palin['1']='1';
-                    palin['2']='S';
-                    palin['3']='E';
-                    palin['5']='Z';
-                    palin['8']='8';
-                    for(i=0; i<len; i++){
-                             it = palin.find(dup[i]);
-                             if(it==palin.end()){
-                                                 mir = false;
-                                                 break;
-                             }
-                             mirr += it->second;
-                    }
-                    if(mirr != orig)
-                           mir = false;
-                    
-                    if(pal && mir)
-                           cout<<orig<<" -- is a mirrored palindrome.\n\n";
-                    else if(pal && !mir)
-                         cout<<orig<<" -- is a regular palindrome.\n\n";
-                    else if(!pal && mir)
-                         cout<<orig<<" -- is a mirrored string.\n\n";
-                    else
-                        cout<<orig<<" -- is not a palindrome.\n\n";
-    }
-    return 0;
+char mirror1[50] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+char mirror2[50] = "A***3**HIL*JM*O***2TUVWXY51SE*Z**8*";
+
+bool ispalindrome(char *p)
+{
+	int i, j, length = (int)strlen(p);
+	for (i = 0, j = length - 1; p[i] != '\0'; i++, j--)
+		if (p[i] != p[j])
+		{
+			return false;
+		}
+	return true;
+}
+
+bool ismirrored(char *p)
+{
+	int i, j, length = (int)strlen(p);
+	for (i = 0, j = length - 1; p[i] != '\0'; i++, j--)
+	{
+		if (isupper(p[i]))
+			if (mirror2[p[i] - 'A'] != p[j])
+			{
+				return false;
+			}
+			else if (isdigit(p[i]))
+				if (mirror2[p[i] - '1' + 26] != p[j])
+				{
+					return false;
+				}
+	}
+	return true;
+}
+
+int main()
+{
+	char p[100];
+	while (cin >> p)
+	{
+		bool ispal, ismirr;
+		ispal = ispalindrome(p);
+		ismirr = ismirrored(p);
+		if (ispal && ismirr)
+		{
+			cout << p << " -- is a mirrored palindrome.\n"
+					 << endl;
+		}
+		else if (ispal && !ismirr)
+		{
+			cout << p << " -- is a regular palindrome.\n"
+					 << endl;
+		}
+		else if (!ispal && ismirr)
+		{
+			cout << p << " -- is a mirrored string.\n"
+					 << endl;
+		}
+		else
+		{
+			cout << p << " -- is not a palindrome.\n"
+					 << endl;
+		}
+	}
+	return 0;
 }

@@ -1,16 +1,32 @@
-#include <cstdio>
-typedef long long int64;
-int main(){
-    while(true){
-                int64 A, B, C;
-                scanf("%lld%lld%lld", &A, &B, &C);
-                if(A==0 && B==0 && C==0)
-                              break;
-                int64 Asq=A*A, Bsq=B*B, Csq=C*C;
-                if(Asq+Bsq==Csq || Asq+Csq==Bsq || Csq+Bsq==Asq)
-                                printf("right\n");
-                else
-                    printf("wrong\n");
-    }
-    return 0;
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main()
+{
+	int a, b, c;
+	while (cin >> a >> b >> c)
+	{
+		if (a == 0 && b == 0 && c == 0)
+		{
+			break;
+		}
+		if (a > b)
+		{
+			swap(a, b);
+		}
+		if (b > c)
+		{
+			swap(b, c);
+		}
+		if (c * c == a * a + b * b)
+		{
+			cout << "right" << endl;
+		}
+		else
+		{
+			cout << "wrong" << endl;
+		}
+	}
+	return 0;
 }

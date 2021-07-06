@@ -1,49 +1,47 @@
-#include<iostream>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-long reverse(long n);
+unsigned long reverse(unsigned long n)
+{
+	unsigned long rev_n = 0;
+	while (n != 0)
+	{
+		rev_n = (rev_n * 10) + n % 10;
+		n /= 10;
+	}
+	return rev_n;
+}
+
+inline int is_palindrome(unsigned long n)
+{
+	return n == reverse(n);
+}
+
+int reverse_and_add(unsigned long num, unsigned long &result)
+{
+	int counter = 0;
+	do
+	{
+		num += reverse(num);
+		counter++;
+	} while (!is_palindrome(num));
+	result = num;
+	return counter;
+}
 
 int main()
 {
-    long num=0,rev_num=0;
-    int i=0,n=0,iter=0;
-    cin>>n;
-    
-    for(i=0;i<n;i++)
-    {
-                    num=0;rev_num=0;iter=0;
-                    cin>>num;
-                    rev_num=reverse(num);
-                    
-                    if(num==rev_num)
-                                   cout<<"0 "<<num<<endl;
-                                   
-                    else
-                    {
-                                   while(num!=rev_num)
-                                   {
-                                                      iter++;
-                                                      num=num+rev_num;
-                                                      rev_num=reverse(num);
-                                                      
-                                   }
-                                   cout<<iter<<" "<<num<<endl;
-                    }
-    }
-    return 0;
-}
-           
-    
-    
-long reverse(long n)    
-{
-     long rev_n=0;
-     while(n)
-     {
-               rev_n*=10;
-               rev_n+=n%10;
-               n/=10;
-     }
-     return rev_n;
+	int numOfCase;
+	scanf("%d", &numOfCase);
+	while (numOfCase--)
+	{
+		unsigned long num;
+		scanf("%lu", &num);
+		int iteration;			  // #iteration
+		unsigned long result; // final palindrome, like 9339
+		iteration = reverse_and_add(num, result);
+		printf("%d %lu\n", iteration, result);
+	}
+	return 0;
 }

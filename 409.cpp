@@ -1,41 +1,104 @@
-#include <set>
-#include <cstdio>
-#include <string>
-#include <iostream>
-#include <algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main() {
-	int K, E, t = 1;
-	string str;
-	while (scanf("%d %d\n", &K, &E) != EOF) {
-		set< string > keyword;
-		string excuse[E];
-		int score[E], Max = 0;
-		while (K--) {
-			getline(cin, str);
-			keyword.insert(str);
-		}
-		for (int i = 0; i < E; i++) {
-			getline(cin, str);
-			excuse[i] = str;
-			score[i] = 0;
-			string temp = "";
-			str = " " + str + " ";
-			for (int j = 0; j < str.length(); j++) {
-				if (isalpha(str[j])) temp += tolower(str[j]);
-				else {
-					if (keyword.find(temp) != keyword.end()) ++score[i];
-					temp = "";
-				}
+char sen[22][72], w[72][70], word[22][22];
+int c, wo, s;
+
+void word_cnt(char a[])
+{
+	int i, j, k, len;
+	c = 0;
+	len = strlen(a);
+	for (i = 0; a[i];)
+	{
+		if (isalpha(a[i]))
+		{
+			k = 0;
+			for (j = i; isalpha(a[j]) && a[j]; j++)
+			{
+				w[c][k++] = tolower(a[j]);
 			}
-			Max = max(Max, score[i]);
+			w[c][k] = '\0';
+			c++;
+			if (j >= len)
+			{
+				break;
+			}
+			i = j;
+			for (i++; !isalpha(a[i]) && a[i]; i++)
+				;
 		}
-		cout << "Excuse Set #" << t++ << endl;
-		for (int i = 0; i < E; i++) {
-			if (score[i] == Max) cout << excuse[i] << endl;
+		else
+		{
+			i++;
 		}
-		cout << endl;
+	}
+}
+
+int com()
+{
+	int i, cnt, j;
+	cnt = 0;
+	for (i = 0; i < c; i++)
+	{
+		for (j = 0; j < wo; j++)
+		{
+			if (!strcmp(w[i], word[j]))
+			{
+				cnt++;
+			}
+		}
+	}
+	return cnt;
+}
+
+int calc()
+{
+	int i, j, k, f[30], p[30], m;
+	int max = 0;
+	k = 0;
+	for (i = 1; i <= s; i++)
+	{
+		word_cnt(sen[i]);
+		m = com();
+		if (m > max)
+		{
+			k = 0;
+			f[k] = m;
+			p[k] = i;
+			max = m;
+			k++;
+		}
+		else if (m >= max)
+		{
+			f[k] = m;
+			p[k++] = i;
+		}
+	}
+	for (i = 0; i < k; i++)
+	{
+		printf("%s\n", sen[p[i]]);
+	}
+	printf("\n");
+	return 0;
+}
+
+int main()
+{
+	int i, t = 1;
+	while (scanf("%d%d", &wo, &s) == 2)
+	{
+		for (i = 0; i < wo; i++)
+		{
+			scanf("%s", word[i]);
+		}
+		for (i = 0; i <= s; i++)
+		{
+			gets(sen[i]);
+		}
+		printf("Excuse Set #%d\n", t++);
+		calc();
 	}
 	return 0;
 }

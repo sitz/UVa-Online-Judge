@@ -1,55 +1,74 @@
-/*
-106
-Fermat Vs Pythagoras
-*/
+#include <bits/stdc++.h>
 
-#include<stdio.h>
-#include<math.h>
-#include<string.h>
-#define min(a, b) (a<b?a:b)
+using namespace std;
 
-typedef long long INT;
-INT n, total;
+template <typename T>
+inline T gcd(T a, T b)
+{
+	T c;
+	while (b)
+	{
+		c = b, b = a % b, a = c;
+	}
+	return a;
+}
 
-char ss[1000002];
+int X[1000005] = {0}, Y[1000005] = {0}, M[1000005];
 
-INT gcd(INT a, INT b) { return b?gcd(b,a%b):a; }
-
-void Cal() {
-	INT m , r, s, x, y, k, z;
-	INT up;
-	INT tri = 0, total = 0;
-	m = (INT)sqrt(n);
-	if(m*m < n) m++;
-	for(r = 1; r<= m; r++) {
-		up = min((n - r*r),r-1);
-		for(s = 1; s<= up; s++) {
-			x = r*r - s*s;
-			y = 2*r*s;
-			z = r*r + s*s;
-			if(x*x + y*y == z*z && z<=n) {
-				if(gcd(x,y) == 1) {
-					tri++;
-					for(k = 1; k*z<=n; k++) {
-						ss[k*x] = 1;
-						ss[k*y] = 1;
-						ss[k*z] = 1;
+int main()
+{
+	int i, j, k, sum = 0, a, b, c, n;
+	for (i = 0; i < 1000005; i++)
+	{
+		M[i] = 2000000;
+	}
+	for (i = 1; i < 1001; i++)
+	{
+		for (j = 1; j < i; j++)
+		{
+			if (i * i + j * j > 1000000)
+			{
+				break;
+			}
+			a = i * i - j * j;
+			b = 2 * i * j;
+			c = i * i + j * j;
+			if (gcd(a, gcd(b, c)) == 1)
+			{
+				X[c]++;
+				for (k = 1; c * k <= 1000000; k++)
+				{
+					if (c * k < M[a * k])
+					{
+						M[a * k] = c * k;
+					}
+					if (c * k < M[b * k])
+					{
+						M[b * k] = c * k;
+					}
+					if (c * k < M[c * k])
+					{
+						M[c * k] = c * k;
 					}
 				}
 			}
 		}
 	}
-	for(k = 1; k<= n; k++) {
-		if(ss[k] == 0) total++;
-		ss[k] = 0;
+	for (i = 0; i < 1000005; i++)
+	{
+		if (M[i] != 2000000)
+		{
+			Y[M[i]]++;
+		}
 	}
-	printf("%lld %lld\n",tri, total);
-}
-
-
-int main() {
-	while(scanf("%lld",&n) == 1) {
-		Cal();
+	for (i = 1; i < 1000005; i++)
+	{
+		X[i] += X[i - 1];
+		Y[i] += Y[i - 1];
+	}
+	while (scanf("%d", &n) == 1)
+	{
+		printf("%d %d\n", X[n], n - Y[n]);
 	}
 	return 0;
 }

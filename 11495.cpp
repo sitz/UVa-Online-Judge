@@ -1,55 +1,74 @@
-#include <stdlib.h>
-#include <stdio.h>
+#include <bits/stdc++.h>
 
-int N;
-#define MAXN 100002
+using namespace std;
 
-int p[MAXN], Temp[MAXN];
-long  long count;
+unsigned long long result;
 
-void Cal(int a, int b){
-   int md, below, mdi, ni, i;
-   if (a >= b) return;
-   md = p[a+(b-a)/2];
-   for (mdi=i=a;i<b;i++){ 
-	   if (p[i] < md) mdi++;
-   }
-   below = mdi-a;
-   for (ni=i=a;i<b;i++){
-      if (p[i] < md) {
-         Temp[ni++] = p[i];
-         below--;
-      }else{
-         Temp[mdi++] = p[i];
-         count += below;
-      }
-   }
-
-   for (mdi=a;Temp[mdi] != md;mdi++);
-   for (mdi;mdi && Temp[mdi-1] > md;mdi--){
-      int tmp = Temp[mdi-1];
-      Temp[mdi-1] = Temp[mdi];
-      Temp[mdi] = tmp;
-      count++;
-   }
-   for (i=a;i<b;i++) p[i] = Temp[i];
-         
-   Cal(a,mdi);
-   while(mdi < b && p[mdi] == md) mdi++;  
-   Cal(mdi,b);
+template <typename RandIter, typename Less>
+void MergeSort(RandIter b, RandIter e, Less c)
+{
+	if (b >= e - 1)
+	{
+		return;
+	}
+	typedef typename iterator_traits<RandIter>::value_type Value;
+	RandIter i = b + (e - b) / 2;
+	MergeSort(b, i, c);
+	MergeSort(i, e, c);
+	vector<Value> L, R;
+	for (RandIter j = b; j != i; j++)
+	{
+		L.push_back(*j);
+	}
+	for (RandIter j = i; j != e; j++)
+	{
+		R.push_back(*j);
+	}
+	int sz = L.size();
+	RandIter l = L.begin(), r = R.begin();
+	for (RandIter j = b; j != e; j++)
+	{
+		if (l == L.end())
+		{
+			*j = *r++;
+		}
+		else if (r == R.end())
+		{
+			*j = *l++;
+		}
+		else
+		{
+			if (c(*l, *r))
+			{
+				*j = *l++;
+				sz--;
+			}
+			else
+			{
+				*j = *r++;
+				result += sz;
+			}
+		}
+	}
 }
 
-int main(){
-  int i;
-  while (scanf("%d",&N) && N) {
-  for (i=0;i<N;i++)
-       scanf("%d",&p[i]);
-   count=0;
-   Cal(0,N);
-   if(count%2 == 1)
-              printf("Marcelo\n");
-   else
-       printf("Carlos\n");
- }
- return 0;
+int main()
+{
+	int n, tmp;
+	vector<int> nums(100001);
+	while (cin >> n)
+	{
+		if (n == 0)
+		{
+			break;
+		}
+		result = 0;
+		for (int i = 0; i < n; i++)
+		{
+			cin >> nums[i];
+		}
+		MergeSort(nums.begin(), nums.begin() + n, less_equal<int>());
+		cout << (result % 2 ? "Marcelo" : "Carlos") << endl;
+	}
+	return 0;
 }

@@ -1,72 +1,102 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int64 PINF =  999999999;
-int64 NINF = -999999999;
+struct UnionFindDisjointSets
+{
+	UnionFindDisjointSets(int size);
+	int findSet(int a);
+	bool isSameSet(int a, int b);
+	void unionSet(int a, int b);
+	int numDisjointSets();
+	int sizeOfSet(int a);
 
-int main(){
-    while(true){
-                int64 N, M, i, j, k;
-                cin>>N>>M;
-                if(N==0 && M==0)
-                        break;
-                int64 mat[N][N], minm = NINF;
-                for(i=0; i<N; i++){
-                         for(j=0; j<N; j++){
-                                  mat[i][j] = PINF;
-                         }
-                }
-                for(i=0; i<M; i++){
-                         int64 X, Y, val;
-                         cin>>X>>Y>>val;
-                         mat[X][Y] = val;
-                         mat[Y][X] = val;
-                }
-                for(k=0; k<N; k++){
-                         for(i=0; i<N; i++){
-                                  for(j=0; j<N; j++){
-                                           mat[i][j] = min(mat[i][j], mat[i][k]+mat[k][j]);
-                                  }
-                         }
-                }
-                for(i=0; i<N; i++){
-                         for(j=0; j<N; j++){
-                                  minm = max(minm, mat[i][j]);
-                         }
-                }
-                if(minm < PINF)
-                        cout<<minm<<endl;
-                else
-                    cout<<"IMPOSSIBLE"<<endl;
-    }
-    return 0;
+	int size;
+	vector<int> pset;
+	vector<int> set_size;
+};
+
+UnionFindDisjointSets::UnionFindDisjointSets(int size)
+{
+	this->size = size;
+	set_size.assign(size, 1);
+	pset.assign(size, 0);
+	for (int i = 0; i < size; i++)
+	{
+		pset[i] = i;
+	}
+}
+
+int UnionFindDisjointSets::findSet(int a)
+{
+	return pset[a] == a ? a : (pset[a] = findSet(pset[a]));
+}
+
+bool UnionFindDisjointSets::isSameSet(int a, int b)
+{
+	return findSet(a) == findSet(b);
+}
+
+void UnionFindDisjointSets::unionSet(int a, int b)
+{
+	if (isSameSet(a, b))
+	{
+		return;
+	}
+	size--;
+	set_size[findSet(b)] += set_size[findSet(a)];
+	pset[findSet(a)] = findSet(b);
+}
+
+int UnionFindDisjointSets::numDisjointSets()
+{
+	return size;
+}
+
+int UnionFindDisjointSets::sizeOfSet(int a)
+{
+	return set_size[findSet(a)];
+}
+
+int main()
+{
+	int n, m;
+	int a, b, c;
+	while (cin >> n >> m)
+	{
+		if (!n && !m)
+		{
+			break;
+		}
+		UnionFindDisjointSets ds(n);
+		priority_queue<pair<int, pair<int, int>>> edgeList;
+		while (m--)
+		{
+			cin >> a >> b >> c;
+			edgeList.push(make_pair(-c, make_pair(a, b)));
+		}
+		int longest = 0;
+		while (!edgeList.empty())
+		{
+			pair<int, pair<int, int>> front = edgeList.top();
+			edgeList.pop();
+			if (!ds.isSameSet(front.second.first, front.second.second))
+			{
+				if (-front.first > longest)
+				{
+					longest = -front.first;
+				}
+				ds.unionSet(front.second.first, front.second.second);
+			}
+		}
+		if (ds.sizeOfSet(0) != n)
+		{
+			cout << "IMPOSSIBLE" << endl;
+		}
+		else
+		{
+			cout << longest << endl;
+		}
+	}
+	return 0;
 }

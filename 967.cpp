@@ -1,94 +1,87 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define MAX 1000000
-static bool prime[MAX + 1];
-static int cPrime[MAX + 1];
+map<int, bool> isprime;
 
-void sieve() {
-	prime[0] = true;
-	prime[1] = true;
-	
-	for (int i = 2; i * i <= MAX; i++) {
-		if (!prime[i]) {
-			for (int j = i; i * j <= MAX; j++) {
-				prime[i * j] = true;
-			}
+bool is_prime(int n)
+{
+	for (int i = 3, sq = sqrt(n); i <= sq; i += 2)
+	{
+		if (n % i == 0)
+		{
+			return false;
 		}
 	}
+	return true;
 }
 
-vector< int > digits(int I) {
-	vector< int > V;
-	while (I > 0) {
-		V.push_back(I % 10);
-		I /= 10;
-	}
-	reverse(V.begin(), V.end());
-	return V;
-}
-
-void cal() {
-	for (int i = 1; i <= MAX; i++) {
-		cPrime[i] = cPrime[i - 1];
-		if (!prime[i]) {
-			bool flag = true;
-			vector< int > V = digits(i);
-			for (int j = 0; j < V.size(); j++) {
-				int I = 0;
-				for (int k = 0; k < V.size(); k++)
-					I = I * 10 + V[(j + k) % V.size()];
-				if (prime[I])
-					flag = false;
-			}
-			if (flag)
-				++cPrime[i];
+bool is_circular(int prime)
+{
+	int size = (int)log10(prime) + 1;
+	for (int i = 0; i < size; i++)
+	{
+		prime = (prime % (int)pow(10, size - 1)) * 10 + prime / (int)pow(10, size - 1);
+		if (isprime[prime] == false)
+		{
+			return false;
 		}
 	}
+	return true;
 }
 
-int main() {
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	sieve();
-	cal();
-	while (true) {
-		int A, B;
-		scanf("%d", &A);
-		if (A == -1) break;
-		scanf("%d", &B);
-		
-		int C = cPrime[B] - cPrime[A - 1];
-		if (C <= 0)
-			printf("No Circular Primes.\n");
-		else if (C == 1)
-			printf("1 Circular Prime.\n");
+int main()
+{
+	int a, b;
+	vector<int> primes;
+	vector<int> circular;
+	for (int i = 101; i < 1000000; i += 2)
+	{
+		if (is_prime(i))
+		{
+			primes.push_back(i);
+			isprime[i] = true;
+		}
+	}
+	for (int i = 0, sz = primes.size(); i < sz; i++)
+	{
+		if (is_circular(primes[i]))
+		{
+			circular.push_back(primes[i]);
+		}
+	}
+	while (cin >> a)
+	{
+		if (a == -1)
+		{
+			break;
+		}
+		cin >> b;
+		int result = 0;
+		for (int i = 0, sz = circular.size(); i < sz; i++)
+		{
+			if (circular[i] > b)
+			{
+				break;
+			}
+			if (circular[i] < a)
+			{
+				continue;
+			}
+			result++;
+		}
+		if (result == 0)
+		{
+			cout << "No Circular Primes." << endl;
+		}
+		else if (result == 1)
+		{
+			cout << "1 Circular Prime." << endl;
+		}
 		else
-			printf("%d Circular Primes.\n", C);
+		{
+			cout << result << " Circular Primes." << endl;
+		}
 	}
 	return 0;
 }

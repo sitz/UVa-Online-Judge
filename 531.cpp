@@ -1,78 +1,85 @@
-#include<iostream>
-#include<vector>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    string str;
-    while(cin>>str)
-    {
-            bool ctr=true;
-            string row[110],col[110];
-            int m=1, n=1;
-            if(str=="#")
-            ctr=false;
-            else
-            row[m++]=str;
-            
-            while(ctr==true){
-                        cin>>str;
-                        if(str=="#")
-                        {
-                                    ctr=false;
-                                    break;
-                        }
-                        row[m++]=str;
-            }
-            while(true){
-                        cin>>str;
-                        if(str=="#")
-                        break;
-                        else
-                        col[n++]=str;
-            }
- //           cout<<row<<" :"<<col;
-            int tower[m][n];
-            int i, j;
-            for(i=0; i<m; i++)
-                     tower[i][0]=0;
-            for(j=0; j<n; j++)
-                     tower[0][j]=0;
-            for(i=1; i<m; i++){
-                     for(j=1; j<n; j++){
-                              if(row[i] == col[j])
-                                        tower[i][j] = tower[i-1][j-1] + 1;
-                              else
-                                  {
-                                        if(tower[i-1][j]>=tower[i][j-1])
-                                        tower[i][j]=tower[i-1][j];
-                                        else
-                                        tower[i][j] = tower[i][j-1];
-                                  }
-                                        
-                     }
-            }
-            string lcs[110];
-            int k=0;
-            i=m-1;
-            j=n-1;
-            while(i>0 && j>0)
-            {                                      if(row[i]==col[j])
-                                                {
-                                                                  lcs[k++]=col[j];
-                                                                  i--;
-                                                                  j--;
-                                                }
-                                                else if(tower[i-1][j]==tower[i][j])
-                                                i--;
-                                                else
-                                                j--;
-                              }
-            for(i=k-1;i>=0;i--)
-            {
-                               cout<<lcs[i];
-                               if(i)
-                               cout<<" ";
-            }
-            cout<<endl;
-    }
+#define MAX 100
+
+char s1[MAX + 1][30], s2[MAX + 1][30];
+int dp[MAX + 1][MAX + 1];
+int n, m;
+
+void LCS()
+{
+	int i, j;
+	for (i = 0; i <= n; i++)
+	{
+		dp[i][m] = 0;
+	}
+	for (j = 0; j <= m; j++)
+	{
+		dp[n][j] = 0;
+	}
+	for (i = n - 1; i >= 0; i--)
+	{
+		for (j = m - 1; j >= 0; j--)
+		{
+			if (strcmp(s1[i], s2[j]) == 0)
+			{
+				dp[i][j] = 1 + dp[i + 1][j + 1];
+			}
+			else
+			{
+				dp[i][j] = max(dp[i][j + 1], dp[i + 1][j]);
+			}
+		}
+	}
+}
+
+int main()
+{
+	int i, j;
+	bool first;
+	while (scanf("%s", s1[0]) != EOF)
+	{
+		n = 1;
+		while (scanf("%s", s1[n]) && (strcmp(s1[n], "#") != 0))
+		{
+			n++;
+		}
+		m = 0;
+		while (scanf("%s", s2[m]) && (strcmp(s2[m], "#") != 0))
+		{
+			m++;
+		}
+		LCS();
+		first = true;
+		i = j = 0;
+		while (dp[i][j] != 0)
+		{
+			if (strcmp(s1[i], s2[j]) == 0)
+			{
+				if (first == true)
+				{
+					printf("%s", s1[i]);
+					first = false;
+				}
+				else
+				{
+					printf(" %s", s1[i]);
+				}
+				i++;
+				j++;
+			}
+			else if (dp[i + 1][j] >= dp[i][j + 1])
+			{
+				i++;
+			}
+			else
+			{
+				j++;
+			}
+		}
+		printf("\n");
+	}
+	return 0;
 }

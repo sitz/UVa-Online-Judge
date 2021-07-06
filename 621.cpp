@@ -1,65 +1,38 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
-
-#define FOI(i, A, B) for (i = A; i <= B; i++)
-#define FOD(i, A, B) for (i = A; i >= B; i--)
-#define PI     acos(-1.0)
-#define INF    1<<30
-#define EPS    1e-9
-#define sqr(x) (x)*(x)
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int N;
-	cin >> N;
-	while (N--) {
-		  string S;
-		  cin >> S;
-		  if (S == "1" || S == "4" || S == "78") {
-		  	 cout << "+\n";
-		 	  continue;
-  	 	  }
-  	 	  int L = S.length() - 1;
-  	 	  if (S[L - 1] == '3' && S[L] == '5') {
-		  	 cout << "-\n";
- 	  		 continue;
-  	 	  }
-  	 	  if (S[0] == '9' && S[L] == '4') {
-		  	 cout << "*\n";
-		  	 continue;
-	   	  }
-	   	  if (S[0] == '1' && S[1] == '9' && S[2] == '0') 
-	   	  	 cout << "?\n";
- 	}
-	//system("pause");
-    return 0;
+char in[10000];
+int main()
+{
+	int t, len;
+	scanf("%d", &t);
+	while (t--)
+	{
+		scanf("%s", in);
+		if (strcmp(in, "1") == 0 || strcmp(in, "4") == 0 || strcmp(in, "78") == 0)
+		{
+			printf("+\n");
+			continue;
+		}
+		if ((len = strlen(in)) < 2)
+		{
+			continue;
+		}
+		if (in[len - 2] == '3' && in[len - 1] == '5')
+		{
+			printf("-\n");
+			continue;
+		}
+		if (in[0] == '9' && in[len - 1] == '4')
+		{
+			printf("*\n");
+			continue;
+		}
+		if (strncmp(in, "190", 3) == 0)
+		{
+			printf("?\n");
+		}
+	}
+	return 0;
 }

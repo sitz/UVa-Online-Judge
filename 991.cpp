@@ -1,43 +1,43 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int main(){
-    int64 catalan[]={1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012};
-    int n, ctr=0;
-    while(cin>>n){
-                  if(ctr > 0)
-                        cout<<endl;
-                 cout<<catalan[n]<<endl;
-                 ctr++;
-    }
-    return 0;
+/*
+  Name:  UVA 991
+  Author: zoom
+  Date: 22/07/11
+*/
+
+#define LLU long long unsigned int
+#define LLD long long double
+#define FOR(i, N) for (int i = 0; i < (N); i++)
+int ANS[11], j, k, first = 0;
+int main()
+{
+	ANS[0] = 1;
+	ANS[1] = 1;
+	ANS[2] = 2;
+	for (int i = 3; i < 11; i++)
+	{
+		ANS[i] = 0;
+		j = 0, k = i - 1;
+		while (j < i)
+		{
+			ANS[i] += ANS[j] * ANS[k];
+			j++, k--;
+		}
+	}
+	while (scanf("%d", &j) != EOF)
+	{
+		if (first)
+		{
+			printf("\n");
+		}
+		else
+		{
+			first = true;
+		}
+		printf("%d\n", ANS[j]);
+	}
+	return 0;
 }

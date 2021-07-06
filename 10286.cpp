@@ -1,13 +1,13 @@
-#include <cmath>
-#include <cstdio>
+#include <bits/stdc++.h>
 
-const double PI = acos(-1.0) / 180.0;
-const double D = sin(108.0 * PI) / sin(63.0 * PI);
+using namespace std;
 
-int main() {
-	double F;
-	while (scanf("%lf", &F) != EOF) {
-		printf("%.10lf\n", F * D);
+int main()
+{
+	double a, tmp = 1.0673956817111818692592637626711;
+	while (scanf("%lf", &a) == 1)
+	{
+		printf("%.10lf\n", a * tmp);
 	}
 	return 0;
 }

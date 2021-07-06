@@ -1,22 +1,39 @@
-#include <stdio.h>
+#include <bits/stdc++.h>
 
-int main() {
-	while (true) {
-		int N, I, F = 0;
-		scanf("%d", &N);
-		if (!N) break;
-		
-		while (N--) {
-			scanf("%d", &I);
-			if (I > 0) {
-				if (F) printf(" ");
-				printf("%d", I);
-				F = 1;
+using namespace std;
+
+int a[1001];
+int main()
+{
+	int i, j, k, n;
+	while (scanf("%d", &n) == 1)
+	{
+		if (!n)
+		{
+			break;
+		}
+		k = 1;
+		for (j = 0; j < n; j++)
+		{
+			scanf("%d", &i);
+			if (i)
+			{
+				if (k)
+				{
+					printf("%d", i);
+				}
+				else
+				{
+					printf(" %d", i);
+				}
+				k = 0;
 			}
 		}
-		if (!F) printf("0");
+		if (k)
+		{
+			printf("0");
+		}
 		printf("\n");
 	}
 	return 0;
 }
-

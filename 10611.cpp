@@ -1,28 +1,84 @@
-#include <cstdio>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int F[50000];
-
-int main() {
-	int N, M, Q, i, j, A, B;
-	scanf("%d", &N);
-	for (i = 0; i < N; i++) scanf("%d", &F[i]);
-	scanf("%d", &Q);
-	while (Q--) {
-		scanf("%d", &M);
-		A = -1; B = -1;
-		for (j = 0; j < N; j++) {
-			if (F[j] > M) {
-				B = F[j];
-				break;
+int M[50005];
+int main()
+{
+	int n, q, i, j, x;
+	scanf("%d", &n);
+	for (i = 1; i <= n; i++)
+	{
+		scanf("%d", M + i);
+	}
+	M[0] = -1;
+	M[n + 1] = 2147483647;
+	scanf("%d", &q);
+	while (q--)
+	{
+		scanf("%d", &x);
+		if (x > M[1])
+		{
+			for (i = n / 2, j = n / 4;; j = (j + 1) / 2)
+			{
+				if (i < 0)
+				{
+					i = 0;
+				}
+				else if (i > n)
+				{
+					i = n;
+				}
+				if (M[i] >= x)
+				{
+					i -= j;
+				}
+				else if (M[i + 1] < x)
+				{
+					i += j;
+				}
+				else
+				{
+					break;
+				}
 			}
-			if (F[j] < M) A = F[j];
+			printf("%d ", M[i]);
 		}
-		if (A == -1) printf("X ");
-		else printf("%d ", A);
-		
-		if (B == -1) printf("X\n");
-		else printf("%d\n", B);
+		else
+		{
+			printf("X ");
+		}
+		if (x < M[n])
+		{
+			for (i = n / 2, j = n / 4;; j = (j + 1) / 2)
+			{
+				if (i <= 0)
+				{
+					i = 1;
+				}
+				else if (i > n + 1)
+				{
+					i = n + 1;
+				}
+				if (M[i - 1] > x)
+				{
+					i -= j;
+				}
+				else if (M[i] <= x)
+				{
+					i += j;
+				}
+				else
+				{
+					break;
+				}
+			}
+			printf("%d\n", M[i]);
+		}
+		else
+		{
+			printf("X\n");
+		}
 	}
 	return 0;
 }

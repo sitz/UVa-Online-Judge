@@ -1,30 +1,49 @@
-#include <set>
-#include <cstdio>
-#include <cstring>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main() {
-	int N, M, I, A, B;
-	while (scanf("%d", &N) != EOF) {
-		set< int > S;
-		set< int >::iterator it;
-		
-		while (N--) {
-			scanf("%d", &I);
-			S.insert(I);
+struct solution
+{
+	int a;
+	int b;
+};
+
+int main()
+{
+	int n;
+	int books[10010];
+	int money;
+	solution best;
+	while (cin >> n)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			cin >> books[i];
 		}
-		scanf("%d", &M);
-		A = 0; B = 1000000;
-		for (it = S.begin(); it != S.end(); it++) {
-			if (S.find(M - *it) != S.end()) {
-				int V = M - 2 * (*it);
-				if (V >= 0 && V < B - A) {
-					A = *it;
-					B = M - (*it);
+		cin >> money;
+		sort(books, books + n);
+		best.a = 0;
+		best.b = 2000000000;
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				if (j == i)
+				{
+					continue;
+				}
+				if (books[i] + books[j] == money)
+				{
+					if (abs(books[i] - books[j]) < abs(best.a - best.b))
+					{
+						best.a = min(books[i], books[j]);
+						best.b = max(books[i], books[j]);
+					}
 				}
 			}
 		}
-		printf("Peter should buy books whose prices are %d and %d.\n\n", A, B);
+		cout << "Peter should buy books whose prices are " << best.a << " and " << best.b << "." << endl
+				 << endl;
 	}
 	return 0;
 }

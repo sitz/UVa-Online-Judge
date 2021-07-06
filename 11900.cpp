@@ -1,57 +1,36 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+// link: http://uva.onlinejudge.org/external/119/11900.html
+// Runtime: 0.008s
+// Tag: Adhoc
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define EPS    1e-10
-#define sqr(x) (x)*(x)
-
-int main(){
-    int T, t;
-    cin >> T;
-    FOI(t, 1, T){
-               int N, P, Q, i;
-               cin >> N >> P >> Q;
-               int vec[N];
-               FOI(i, 0, N-1)
-                      cin >> vec[i];
-               int wet = 0, cnt = 0;
-               for(i=0; i<min(N, P); i++){
-                        if( wet + vec[i] > Q )
-                                      break;
-                        wet += vec[i];
-                        cnt++;
-               }
-               cout << "Case " << t << ": " << cnt << endl;
-    }
-    //system("pause");
-    return 0;
+int main()
+{
+	int testCase;
+	scanf("%d", &testCase);
+	int cases = 0;
+	while (testCase--)
+	{
+		int n, p, q;
+		scanf("%d %d %d", &n, &p, &q);
+		int eggWeight[30 + 3];
+		for (int i = 0; i < n; i++)
+		{
+			scanf("%d", &eggWeight[i]);
+		}
+		sort(eggWeight, eggWeight + n);
+		int cnt = 0;
+		for (int i = 0; i < min(p, n); i++)
+		{
+			q -= eggWeight[i];
+			if (q >= 0)
+			{
+				cnt++;
+			}
+		}
+		printf("Case %d: %d\n", ++cases, cnt);
+	}
+	return 0;
 }

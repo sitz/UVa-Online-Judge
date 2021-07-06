@@ -1,61 +1,64 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
-int main(){
-    int test;
-    cin>>test;
-    cout<<"INTERSECTING LINES OUTPUT\n";
-    while(test--){
-                  double x1,y1,x2,y2;
-                  double x3,y3,x4,y4;
-                  double m1,m2,m3,m4;
-                  double ptx,pty;
-                  cin>>x1>>y1>>x2>>y2;
-                  cin>>x3>>y3>>x4>>y4;
-                  m1=(y2-y1)/(x2-x1);
-                  m2=(y4-y3)/(x4-x3);
-                  if(x1==x2 || x3==x4){
-                            if(x1==x2){
-                                       ptx=x1;
-                                       pty=m2*(x1-x3)+y3;
-                            }
-                            else{
-                                 ptx=x3;
-                                 pty=m1*(x3-x1)+y1;
-                            }
-                            printf("POINT %.2lf %.2lf\n",ptx,pty);
-                            continue;
-                  }
-                  else if(y1==y2 || y3==y4){
-                            if(y1==y2){
-                                       pty=y1;
-                                       ptx=(y1-y3)/m2 + x3;
-                            }
-                            else{
-                                       pty=y3;
-                                       ptx=(y3-y1)/m1 + x1;
-                            }
-                            printf("POINT %.2lf %.2lf\n",ptx,pty);
-                            continue;
-                  }
-                  else if(m1==m2){
-                              m3=(y3-y1)/(x3-x1);
-                              m4=(y4-y2)/(x4-x2);
-                              if(m3==m4){
-                                        cout<<"LINE"<<endl;
-                                        continue;
-                              }
-                              else{
-                                        cout<<"NONE"<<endl;
-                                        continue;
-                              }
-                  }
-                  else{
-                       ptx=(y3-y1+m1*x1-m2*x3)/(m1-m2);
-                       pty=(m1*(y3-m2*x3)-m2*(y1-m1*x1))/(m1-m2);
-                       printf("POINT %.2lf %.2lf\n",ptx,pty);
-                  }
-                  
-    }
-    cout<<"END OF OUTPUT\n";
-    return 0;
+
+int main()
+{
+	cout << "INTERSECTING LINES OUTPUT" << endl;
+	int t, N;
+	double k1, k2, k3, x1, y1, x2, y2, x3, y3, x4, y4;
+	double inter_x, inter_y;
+	cin >> N;
+	for (t = 0; t < N; t++)
+	{
+		cin >> x1 >> y1 >> x2 >> y2 >> x3 >> y3 >> x4 >> y4;
+		if (((x1 == x2) && (x2 == x3) && (x3 == x4)) || ((y1 == y2) && (y2 == y3) && (y3 == y4)))
+		{
+			cout << "LINE" << endl;
+			continue;
+		}
+		k1 = (y2 - y1) / (x2 - x1);//dot 1,2
+		k2 = (y4 - y3) / (x4 - x3);//dot 3,4
+		k3 = (y3 - y2) / (x3 - x2);//dot 2,3
+		if (x1 == x2 && x3 == x4 && x2 != x3)
+		{
+			cout << "NONE" << endl;
+			continue;
+		}
+		else if (y1 == y2 && y3 == y4 && y2 != y3)
+		{
+			cout << "NONE" << endl;
+			continue;
+		}
+		else if (x1 == x2 && k1 != k2)
+		{
+			inter_x = x1;
+			inter_y = k2 * (x1 - x3) + y3;
+			printf("POINT %.2f %.2f\n", inter_x, inter_y);
+		}
+		else if (x3 == x4 && k1 != k2)
+		{
+			inter_x = x3;
+			inter_y = k1 * (x3 - x1) + y1;
+			printf("POINT %.2f %.2f\n", inter_x, inter_y);
+		}
+		else if (k1 == k2 && k2 == k3)
+		{
+			cout << "LINE" << endl;
+			continue;
+		}
+		else if (k1 == k2 && k2 != k3)
+		{
+			cout << "NONE" << endl;
+			continue;
+		}
+		else if (k1 != k2)
+		{
+			inter_x = (y3 - k2 * x3 - y1 + k1 * x1) / (k1 - k2);
+			inter_y = k1 * (inter_x - x1) + y1;
+			printf("POINT %.2f %.2f\n", inter_x, inter_y);
+		}
+	}
+	cout << "END OF OUTPUT" << endl;
+	return 0;
 }

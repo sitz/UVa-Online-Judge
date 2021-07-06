@@ -1,66 +1,61 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int main(){
-    int test;
-    cin>>test;
-    while(test--){
-                  int N, i, j;
-                  cin>>N;
-                  string phone[N];
-                  bool stat = true;
-                  size_t found;
-                  for(i=0; i<N; i++){
-                           string temp;
-                           cin>>phone[i];
-                  }
-                  sort(phone, phone+N);
-                  for(i=0; i<N; i++){
-                           for(j=i+1; j<N; j++){
-                                      if(phone[i].length() >= phone[j].length())
-                                                           continue;
-                                      found = phone[j].find(phone[i]);
-                                      if(found == 0){
-                                               stat = false;
-                                               break;
-                                      }
-                           }
-                           if(!stat)
-                                    break;
-                  }
-                  if(stat)
-                          printf("YES\n");
-                  else
-                      printf("NO\n");
-    }             
-    return 0;
+#define INT_MAX 2147483647
+#define INT_MIN -2147483647
+#define pi acos(-1.0)
+#define N 1000000
+#define LL unsigned long long
+
+string nums[10000 + 10];
+
+bool prefix_check(string a, string b)
+{
+	if (b.size() < a.size())
+	{
+		return false;
+	}
+	for (size_t i = 0; i < a.length(); i++)
+	{
+		if (a[i] != b[i])
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+int main()
+{
+	int testCase;
+	scanf("%d", &testCase);
+	while (testCase--)
+	{
+		int n;
+		scanf("%d", &n);
+		for (int i = 0; i < n; i++)
+		{
+			cin >> nums[i];
+		}
+		sort(nums, nums + n);
+		bool flag = true;
+		for (int i = 0; i < n - 1; i++)
+		{
+			if (prefix_check(nums[i], nums[i + 1]))
+			{
+				flag = false;
+				break;
+			}
+		}
+		if (flag)
+		{
+			printf("YES\n");
+		}
+		else
+		{
+			printf("NO\n");
+		}
+	}
+	return 0;
 }

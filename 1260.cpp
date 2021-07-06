@@ -1,25 +1,34 @@
-#include <cstdio>
+#include <bits/stdc++.h>
 
-int main() {
-    //freopen("testI.txt", "r", stdin);
-    //freopen("testO.txt", "w", stdout);
+using namespace std;
 
-    int T;
-    scanf("%d", &T);
-    while (T--) {
-        int N;
-        scanf("%d", &N);
-        int Arr[N];
-        int Less = 0;
-        for (int i = 0; i < N; i++) {
-            scanf("%d", &Arr[i]);
-            int L = 0;
-            for (int j = 0; j < i; j++)
-                L += (Arr[j] <= Arr[i]);
+int T, n, A[1001];
 
-            Less += L;
-        }
-        printf("%d\n", Less);
-    }
-    return 0;
+int main()
+{
+	scanf("%d", &T);
+	while (T--)
+	{
+		scanf("%d", &n);
+		int ans = 0, tmp, j;
+		for (int i = 0; i < n; i++)
+		{
+			scanf("%d", &tmp);
+			for (j = i - 1; j >= 0; j--)
+			{
+				if (tmp < A[j])
+				{
+					A[j + 1] = A[j];
+				}
+				else
+				{
+					break;
+				}
+			}
+			A[j + 1] = tmp;
+			ans += j + 1;
+		}
+		printf("%d\n", ans);
+	}
+	return 0;
 }

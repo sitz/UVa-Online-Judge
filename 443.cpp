@@ -1,73 +1,89 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef long long int64;
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	map <int64, bool> Map;
-	vector< int64 > V;
-	V.push_back(1); V.push_back(2); V.push_back(3); V.push_back(5); V.push_back(7);
-	Map[1] = true; Map[2] = true; Map[3] = true; Map[5] = true; Map[7] = true;
-	int64 i, j;
-	for (i = 0; ; i++){
-		for (j = 0; j <= i; j++){
-			int64 val = V[i] * V[j];
-			if (!Map[val]){
-				V.push_back(val);
-				Map[val] = true;
-			}
+unsigned long Min(long Hasil2, long Hasil3, long Hasil5, long Hasil7)
+{
+	long Temp[4], max;
+	int i;
+	Temp[0] = Hasil2;
+	Temp[1] = Hasil3;
+	Temp[2] = Hasil5;
+	Temp[3] = Hasil7;
+	max = Temp[0];
+	for (i = 1; i < 4; i++)
+	{
+		if (Temp[i] < max)
+		{
+			max = Temp[i];
 		}
-		if (V.size() > 14000)
-			break;
 	}
-	sort(V.begin(), V.end());
-	while (true){
-		int64 N;
-		cin >> N;
-		if (N == 0)
+	return max;
+}
+
+int main()
+{
+	long ugly[5842];
+	int k = 5842;
+	long index2 = 0, index3 = 0, index5 = 0, index7 = 0;
+	long Hasil2, Hasil3, Hasil5, Hasil7, target;
+	long i;
+	Hasil2 = 1;
+	Hasil3 = 1;
+	Hasil5 = 1;
+	Hasil7 = 1;
+	ugly[0] = 1;
+	for (i = 1; i < k; i++)
+	{
+		target = ugly[i - 1] + 1;
+		while ((Hasil2 = 2 * ugly[index2]) < target)
+		{
+			index2++;
+		}
+		while ((Hasil3 = 3 * ugly[index3]) < target)
+		{
+			index3++;
+		}
+		while ((Hasil5 = 5 * ugly[index5]) < target)
+		{
+			index5++;
+		}
+		while ((Hasil7 = 7 * ugly[index7]) < target)
+		{
+			index7++;
+		}
+		ugly[i] = Min(Hasil2, Hasil3, Hasil5, Hasil7);
+	}
+	while (scanf("%ld", &i))
+	{
+		if (i == 0)
+		{
 			break;
-		int64 T = N % 10;
-		int64 H = (N % 100) / 10;
-		string str;
-		if (T == 1 && H != 1)
-			str = "st";
-		else if (T == 2 && H != 1)
-			str = "nd";
-		else if (T == 3 && H != 1)
-			str = "rd";
+		}
+		if ((i % 100) >= 10 && (i % 100) <= 20)
+		{
+			printf("The %ldth humble number is %ld.\n", i, ugly[i - 1]);
+		}
+		else if ((i % 10) == 1)
+		{
+			printf("The %ldst humble number is %ld.\n", i, ugly[i - 1]);
+		}
+		else if ((i % 10) == 2)
+		{
+			printf("The %ldnd humble number is %ld.\n", i, ugly[i - 1]);
+		}
+		else if ((i % 10) == 3)
+		{
+			printf("The %ldrd humble number is %ld.\n", i, ugly[i - 1]);
+		}
+		else if ((i % 10) == 4)
+		{
+			printf("The %ldth humble number is %ld.\n", i, ugly[i - 1]);
+		}
 		else
-			str = "th";
-			
-		cout << "The " <<  N << str << " humble number is " << V[N - 1] << ".\n";
+		{
+			printf("The %ldth humble number is %ld.\n", i, ugly[i - 1]);
+		}
 	}
 	return 0;
 }
-

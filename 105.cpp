@@ -1,25 +1,39 @@
-#include <cstdio>
-#include <cstring>
-#include <algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main() {
-	int line[10005] = {0};
-	int L, H, R;
-	int Min = 10004, Max = 0;
-	while (scanf("%d %d %d", &L, &H, &R) != EOF) {
-		Min = min(L, Min);
-		Max = max(R, Max);
-		
-		for (int i = L; i < R; i++)
-			line[i] = max(line[i], H);
+int main()
+{
+	int hs[10001] = {0}, l, h, r;
+	while (scanf("%d%d%d", &l, &h, &r) == 3)
+	{
+		for (int i = l; i < r; ++i)
+		{
+			if (h > hs[i])
+			{
+				hs[i] = h;
+			}
+		}
 	}
-	
-	for (int i = Min; i <= Max; i++) {
-		if (line[i] != line[i - 1]) {
-			if (i > Min) printf(" ");
-			
-			printf("%d %d", i, line[i]);
+
+	// only show preceeding space on non-first cases
+	bool not_fst = false;
+	int curr_h = 0;
+	for (int pos = 0; pos != 10000; ++pos)
+	{
+		if (hs[pos] != curr_h)
+		{
+			if (not_fst)
+			{
+				printf(" ");
+			}
+			else
+			{
+				not_fst = true;
+			}
+			printf("%d %d", pos, hs[pos]);
+
+			curr_h = hs[pos];
 		}
 	}
 	printf("\n");

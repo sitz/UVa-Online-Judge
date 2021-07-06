@@ -1,85 +1,236 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for (i = A; i <= B; i++)
-#define FOD(i, A, B) for (i = A; i >= B; i--)
+#define MAXN 10000
 
-string low(string S) {
-	int i, L = S.length() - 1;
-	FOI(i, 0, L)
-		S[i] = tolower(S[i]);
-	return S;
+char GRID[MAXN][51];
+char WORD[55];
+int M, N, WW, R, C;
+
+int HF(int r, int c)
+{
+	int i, j;
+	for (i = 0; WORD[i]; i++)
+		if (WORD[i] != GRID[r][c++])
+		{
+			return 0;
+		}
+	R = r;
+	C = c - 1;
+	return 1;
 }
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int T;
-	cin >> T;
-	while (T--)  {
-		int M, N;
-		int i, j, k;
-		cin >> M >> N;
-		string str[M];
-		FOI(i, 0, M-1) {
-			cin >> str[i];
-			str[i] = low(str[i]);
+int HB(int r, int c)
+{
+	int i, j;
+	for (i = 0; WORD[i]; i++)
+	{
+		if (c < 0)
+		{
+			return 0;
 		}
-		int Q;
-		cin >> Q;
-		while (Q--) {
-			string S;
-			cin >> S;
-			S = low(S);
-			int L = S.length();
-			bool flag = false;
-			FOI(i, 0, M-1) {
-				FOI(j, 0, N-1) {
-					string A = "", B = "", C = "", D = "", E = "", F = "", G = "", H = "";
-					FOI(k, 0, L-1) {
-						if (j + k < N)				 A += str[i][j + k];
-						if (i + k < M && j + k < N)	 B += str[i + k][j + k];
-						if (i + k < M)				 C += str[i + k][j];
-						if (i + k < M && j - k >= 0) D += str[i + k][j - k];
-						if (j - k >= 0)				 E += str[i][j - k];
-						if (i - k >= 0 && j - k >=0) F += str[i - k][j - k];
-						if (i - k >= 0)				 G += str[i - k][j];
-						if (i - k >= 0 && j + k < N) H += str[i - k][j + k];
-					}
-					if (A == S || B == S || C == S || D == S || E == S || F == S || G == S || H == S) {
-						flag = true;
-						break;
-					}
+		if (WORD[i] != GRID[r][c--])
+		{
+			return 0;
+		}
+	}
+	R = r;
+	C = c + 1;
+	return 1;
+}
+int VF(int r, int c)
+{
+	int i, j;
+	for (i = 0; WORD[i]; i++)
+	{
+		if (r >= M)
+		{
+			return 0;
+		}
+		if (WORD[i] != GRID[r++][c])
+		{
+			return 0;
+		}
+	}
+	R = r - 1;
+	C = c;
+	return 1;
+}
+int VB(int r, int c)
+{
+	int i, j;
+	for (i = 0; WORD[i]; i++)
+	{
+		if (r < 0)
+		{
+			return 0;
+		}
+		if (WORD[i] != GRID[r--][c])
+		{
+			return 0;
+		}
+	}
+	R = r + 1;
+	C = c;
+	return 1;
+}
+int DWN(int r, int c)
+{
+	int i, j;
+	for (i = 0; WORD[i]; i++)
+	{
+		if (r < 0 || c < 0)
+		{
+			return 0;
+		}
+		if (WORD[i] != GRID[r--][c--])
+		{
+			return 0;
+		}
+	}
+	R = r + 1;
+	C = c + 1;
+	return 1;
+}
+int DNE(int r, int c)
+{
+	int i, j;
+	for (i = 0; WORD[i]; i++)
+	{
+		if (r < 0 || c >= N)
+		{
+			return 0;
+		}
+		if (WORD[i] != GRID[r--][c++])
+		{
+			return 0;
+		}
+	}
+	R = r + 1;
+	C = r - 1;
+	return 1;
+}
+int DES(int r, int c)
+{
+	int i, j;
+	for (i = 0; WORD[i]; i++)
+	{
+		if (r >= M || c >= N)
+		{
+			return 0;
+		}
+		if (WORD[i] != GRID[r++][c++])
+		{
+			return 0;
+		}
+	}
+	R = r - 1;
+	C = c - 1;
+	return 1;
+}
+int DSW(int r, int c)
+{
+	int i, j;
+	for (i = 0; WORD[i]; i++)
+	{
+		if (r >= M || c < 0)
+		{
+			return 0;
+		}
+		if (WORD[i] != GRID[r++][c--])
+		{
+			return 0;
+		}
+	}
+	R = r - 1;
+	C = c + 1;
+	return 1;
+}
+int CHECK(int r, int c)
+{
+	if (HF(r, c))
+	{
+		return 1;
+	}
+	else if (HB(r, c))
+	{
+		return 1;
+	}
+	else if (VF(r, c))
+	{
+		return 1;
+	}
+	else if (VB(r, c))
+	{
+		return 1;
+	}
+	else if (DWN(r, c))
+	{
+		return 1;
+	}
+	else if (DNE(r, c))
+	{
+		return 1;
+	}
+	else if (DES(r, c))
+	{
+		return 1;
+	}
+	else if (DSW(r, c))
+	{
+		return 1;
+	}
+	return 0;
+}
+int SOLVECASE()
+{
+	int p, q;
+	for (p = 0; p < M; p++)
+		for (q = 0; q < N; q++)
+			if (WORD[0] == GRID[p][q])
+				if (CHECK(p, q))
+				{
+					goto done;
 				}
-				if (flag) break;
+done:;
+	printf("%d %d\n", p + 1, q + 1);
+	return 0;
+}
+int main()
+{
+	int kase, i, n, m, f, j;
+	char input[50], fal[10];
+	gets(input);
+	sscanf(input, "%d", &kase);
+	f = kase;
+	while (kase--)
+	{
+		gets(fal);
+		gets(input);
+		sscanf(input, "%d%d", &M, &N);
+		for (i = 0; i < M; i++)
+		{
+			gets(GRID[i]);
+			for (j = 0; GRID[i][j]; j++)
+			{
+				GRID[i][j] = tolower(GRID[i][j]);
 			}
-			cout << i + 1 << " " << j + 1 << endl;
 		}
-		if (T) cout << endl;
+		gets(input);
+		sscanf(input, "%d", &WW);
+		for (i = 0; i < WW; i++)
+		{
+			gets(WORD);
+			for (j = 0; WORD[j]; j++)
+			{
+				WORD[j] = tolower(WORD[j]);
+			}
+			SOLVECASE();
+		}
+		if (kase > 0)
+		{
+			printf("\n");
+		}
 	}
 	return 0;
 }

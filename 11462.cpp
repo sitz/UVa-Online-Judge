@@ -1,29 +1,30 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    int n=0;
-    for(;;){
-            cin>>n;
-            if(n==0)
-                    break;
-                     int age[200]={0};
-                     int j=0,ctr=0;
-                     for(int i=0;i<n;i++){
-                             cin>>j;
-                             age[j]++;
-                             ctr++;
-                             
-                     }
-                     for(int i=0;i<=100;i++){
-                             for(int k=0;k<age[i];k++){
-                                     cout<<i;
-                                     ctr--;
-                                     if(ctr>0)
-                                              cout<<" ";
-                             }
-                     }
-                     cout<<endl;
-    }
-    return 0;
+int p[2000000];
+
+int main()
+{
+	string line;
+	while (getline(cin, line))
+	{
+		int numPeople = atoi(line.c_str());
+		if (numPeople == 0)
+		{
+			break;
+		}
+		getline(cin, line);
+		istringstream sin(line);
+		int i = 0;
+		while (sin >> p[i++])
+			;
+		sort(p, p + numPeople);
+		for (int i = 0; i < numPeople - 1; ++i)
+		{
+			printf("%d ", p[i]);
+		}
+		printf("%d\n", p[numPeople - 1]);
+	}
+	return 0;
 }

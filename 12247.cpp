@@ -1,55 +1,73 @@
-#include <set>
-#include <cstdio>
-#include <iostream>
-#include <algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-bool check(int A[], int B[]) {
-    sort(A, A + 3);
-    bool flag = true;
-    do {
-        sort(B, B + 3);
-        do {
-            int C = 0;
-            for (int j = 0; j < 3; j++) {
-                if (A[j] < B[j]) ++C;
-            }
-            if (C < 2) flag = false;
-        } while (next_permutation(B, B + 3) );
-    } while (next_permutation(A, A + 3) );
+int a[3], b[2];
+bool busy[64], used[3];
 
-    return flag;
-}
-
-int main() {
-    //freopen("testI.txt", "r", stdin);
-    //freopen("testO.txt", "w", stdout);
-    while (true) {
-        int X[3], Y[3], i;
-        cin >> X[0] >> X[1] >> X[2] >> Y[0] >> Y[1];
-        if (!X[0] && !X[1] && !X[2] && !Y[0] && !Y[1]) break;
-
-        set< int > S;
-        S.insert(X[0]); S.insert(X[1]); S.insert(X[2]);
-        S.insert(Y[0]); S.insert(Y[1]);
-        bool flag = false;
-        for (i = 1; i < 53; i++) {
-            if (S.find(i) != S.end()) continue;
-            //cout << i << " ";
-            Y[2] = i;
-            int A[3], B[3];
-            for (int i = 0; i < 3; i++) {
-                A[i] = X[i];
-                B[i] = Y[i];
-            }
-            if (check(A, B)) {
-                flag = true;
-                break;
-            }
-        }
-        //if (i < 0 || i > 52) flag = false;
-        if (flag) cout << i << endl;
-        else cout << "-1" << endl;
-    }
-    return 0;
+int main()
+{
+	while (scanf("%d %d %d %d %d", &a[0], &a[1], &a[2], &b[0], &b[1]) == 5)
+	{
+		if (!(a[0] || a[1] || a[2] || b[0] || b[1]))
+		{
+			break;
+		}
+		int s = 1, win = 0;
+		sort(a, a + 3);
+		if (b[0] > b[1])
+		{
+			swap(b[0], b[1]);
+		}
+		for (int i = 0; i < 64; ++i)
+		{
+			busy[i] = 0;
+		}
+		busy[a[0]] = busy[a[1]] = busy[a[2]] = busy[b[0]] = busy[b[1]] = 1;
+		used[0] = used[1] = used[2] = 0;
+		for (int i = 0; i < 2; ++i)
+		{
+			int x = b[i], y = -1, idx = -1;
+			for (int j = 0; j < 3; ++j)
+				if (!used[j] && a[j] > x)
+				{
+					y = a[j], idx = j;
+					break;
+				}
+			if (idx == -1)
+				for (int j = 0; j < 3; ++j)
+					if (!used[j])
+					{
+						y = a[j], idx = j;
+						break;
+					}
+			used[idx] = 1;
+			if (x > y)
+			{
+				++win;
+			}
+		}
+		if (win)
+		{
+			if (win == 1)
+				for (int j = 0; j < 3; ++j)
+					if (!used[j])
+					{
+						s = a[j] + 1;
+					}
+			while (busy[s])
+			{
+				++s;
+			}
+		}
+		if (!win || s > 52)
+		{
+			puts("-1");
+		}
+		else
+		{
+			printf("%d\n", s);
+		}
+	}
+	return 0;
 }

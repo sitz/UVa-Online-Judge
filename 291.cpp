@@ -1,71 +1,131 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+bool visited[100];
+vector<int> steps;
+set<int> results;
+vector<int> r;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
+struct Vertex
+{
+	vdata id;
+	vector<Vertex *> adj;
+	Vertex(vdata id) : id(id) {}
+};
+typedef map<vdata, Vertex *> vmap;
+typedef pair<vdata, Vertex *> vpair;
+typedef int vdata;
 
-bool adj[5][5];
-int vec[10];
+struct Graph
+{
+	Graph() {}
+	~Graph();
+	Vertex *addVertex(vdata v);
+	void addEdge(vdata begin, vdata end, bool directed);
+	Vertex *firstVertex();
+	void solve(int point, int depth);
 
-void backTrack(int ind, int cnt){
-	vec[cnt] = ind;
-	int i;
-	if( cnt == 8 ){
-		FOI(i, 0, 8)
-			printf("%d", vec[i] + 1);
-		printf("\n");
+	Vertex *getVertex(vdata v);
+	vmap vertexMap;
+	vector<Vertex *> allVertexes;
+};
+
+Graph::~Graph()
+{
+	for (int i = 0; i < allVertexes.size(); i++)
+	{
+		delete allVertexes[i];
+	}
+}
+
+Vertex *Graph::addVertex(vdata v)
+{
+	Vertex *newv = new Vertex(v);
+	allVertexes.push_back(newv);
+	vertexMap.insert(vpair(v, newv));
+	return newv;
+}
+
+void Graph::addEdge(vdata begin, vdata end, bool directed = false)
+{
+	Vertex *v = getVertex(begin);
+	Vertex *w = getVertex(end);
+	v->adj.push_back(w);
+	if (!directed)
+	{
+		w->adj.push_back(v);
+	}
+}
+
+Vertex *Graph::getVertex(vdata v)
+{
+	vmap::iterator it = vertexMap.find(v);
+	if (it == vertexMap.end())
+	{
+		return addVertex(v);
+	}
+	return (*it).second;
+}
+
+Vertex *Graph::firstVertex()
+{
+	return allVertexes[0];
+}
+
+void Graph::solve(int point, int depth)
+{
+	if (depth == 8)
+	{
+		int result = 0;
+		for (int i = 0, sz = steps.size(); i < sz; i++)
+		{
+			result = result * 10 + steps[i];
+		}
+		results.insert(result);
 		return;
 	}
-	FOI(i, 0, 4){
-		if( adj[ind][i] ){
-			adj[ind][i] = adj[i][ind] = false;
-			backTrack(i, cnt + 1);
-			adj[ind][i] = adj[i][ind] = true;
+	Vertex *v = getVertex(point);
+	for (int i = 0, sz = v->adj.size(); i < sz; i++)
+	{
+		if (visited[point * 10 + v->adj[i]->id] == false)
+		{
+			visited[point * 10 + v->adj[i]->id] = true;
+			visited[v->adj[i]->id * 10 + point] = true;
+			steps.push_back(v->adj[i]->id);
+			solve(v->adj[i]->id, depth + 1);
+			steps.pop_back();
+			visited[v->adj[i]->id * 10 + point] = false;
+			visited[point * 10 + v->adj[i]->id] = false;
 		}
 	}
 }
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	memset(adj, false, sizeof adj);
-	adj[0][1] = true; adj[1][0] = true;
-	adj[0][2] = true; adj[2][0] = true;
-	adj[0][4] = true; adj[4][0] = true;
-	adj[1][2] = true; adj[2][1] = true;
-	adj[1][4] = true; adj[4][1] = true;
-	adj[2][3] = true; adj[3][2] = true;
-	adj[2][4] = true; adj[4][2] = true;
-	adj[3][4] = true; adj[4][3] = true;
-	
-	backTrack(0, 0);
+int main()
+{
+	Graph g;
+	g.addEdge(1, 2);
+	g.addEdge(1, 3);
+	g.addEdge(1, 5);
+	g.addEdge(2, 3);
+	g.addEdge(2, 5);
+	g.addEdge(3, 4);
+	g.addEdge(3, 5);
+	g.addEdge(4, 5);
+	for (int i = 0; i < 100; i++)
+	{
+		visited[i] = false;
+	}
+	steps.push_back(1);
+	g.solve(1, 0);
+	for (set<int>::iterator it = results.begin(); it != results.end(); it++)
+	{
+		r.push_back(*it);
+	}
+	sort(r.begin(), r.end());
+	for (int i = 0, sz = r.size(); i < sz; i++)
+	{
+		cout << r[i] << endl;
+	}
 	return 0;
 }

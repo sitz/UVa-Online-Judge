@@ -1,26 +1,19 @@
-#include <cstdio>
-#include <cmath>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-const double PI = acos(-1.0);
+#define PI 3.1415926535897932384626433832795
 
-int main() {
-	double a, b, c;
-	while (scanf("%lf%lf%lf", &a, &b, &c) != EOF) {
-			double s = (a + b + c) / 2.0;
-			
-			double V = sqrt(s * (s - a) * (s - b) * (s - c));
-			
-			double Rr = V / s;
-			double R = PI * Rr * Rr;
-			
-			double Sr = (a * b * c) / (4 * Rr * s);
-			double S = PI * Sr * Sr;
-			
-			S -= V;
-			V -= R;
-			
-			printf("%.4lf %.4lf %.4lf\n", S, V, R);
+int main()
+{
+	int a, b, c;
+	while (cin >> a >> b >> c)
+	{
+		double s = (a + b + c) / 2.0;
+		double A = sqrt(s * (s - a) * (s - b) * (s - c));
+		double R = (a * b * c) / (4 * A);
+		double r = A / s;
+		cout << setprecision(4) << fixed << showpoint << PI * R * R - A << " " << A - PI * r * r << " " << PI * r * r << endl;
 	}
 	return 0;
 }

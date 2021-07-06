@@ -1,39 +1,58 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    while(true){
-                  int N, i, w;
-                  cin>>N;
-                  if(N == 0)
-                       break;
-                  double price[N+1];
-                  double nMem, MW=0;
-                  for(i=1; i<=N; i++){
-                           cin>>price[i];
-                           price[i]*=10;
-                           MW += price[i];
-                  }
-                  sort(price+1,price+N+1);
-                  double dVal = MW;
-                  MW /= 2;
-//                  MW*=10;       
-                  int mat[N+1][(int)MW+1];
-                  for(i=0; i<=N; i++)
-                           mat[i][0] = 0;
-                  for(w=0; w<=(int)MW; w++)
-                           mat[0][w] = 0;
-                  for(i=1; i<=N; i++){
-                           for(w=1; w<=(int)MW; w++){
-                                    if(price[i] > w)
-                                                 mat[i][w] = mat[i-1][w];
-                                    else
-                                        mat[i][w] = max(mat[i-1][w], mat[i-1][w-(int)price[i]] + (int)price[i]);
-                           }
-                  }
-                  cout<<(dVal-2*mat[N][(int)MW])/10.0;
-//                                totVal += mat[N][(int)MW];
-//                  cout<<totVal<<endl;
-    }
-    return 0;
+char tmp[1000];
+double sum, r[100];
+int i, j, k, m, n, R[100], prev_[20001], who[20001];
+
+int main()
+{
+	while (1 == scanf("%d", &n) && n)
+	{
+		for (i = 0; i < n; i++)
+		{
+			scanf("%lf", &r[i]);
+		}
+		for (i = sum = 0; i < n; i++)
+		{
+			sum += r[i];
+		}
+		for (i = 0; i < n; i++)
+		{
+			R[i] = r[i] * 20000 / sum;
+		}
+		memset(who, 0, sizeof(who));
+		memset(prev_, 0, sizeof(prev_));
+		who[0] = -1;
+		for (i = 0; i < n; i++)
+		{
+			for (j = 10000; j >= 0; j--)
+			{
+				if (!who[j])
+				{
+					continue;
+				}
+				if (who[j + R[i]])
+				{
+					continue;
+				}
+				who[j + R[i]] = i + 1;
+				prev_[j + R[i]] = j;
+			}
+		}
+		for (i = 10000; !who[i]; i--)
+			;
+		while (i)
+		{
+			printf("%d ", who[i]);
+			i = prev_[i];
+		}
+		printf("\n");
+	}
+	if (n != 0)
+	{
+		printf("missing end delimiter\n");
+	}
+	return 0;
 }

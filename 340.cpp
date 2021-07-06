@@ -1,46 +1,69 @@
-#include <cstring>
-#include <cstdio>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main() {
-	int t = 1;
-	while (true) {
-		int N;
-		scanf("%d", &N);
-		if (!N) break;
-		printf("Game %d:\n", t++);
-		int A[N], B[N];
-		for (int i = 0; i < N; i++)
-			scanf("%d", &A[i]);
-		while (true) {
-			int C = 0;
-			for (int i = 0; i < N; i++) {
-				scanf("%d", &B[i]);
-				if (!B[i]) ++C;
+int main()
+{
+	int n;
+	int correct[1000], guess[1000];
+	int correct_count[10], guess_count[10], correct_count_copy[10];
+	int counter = 0;
+	while (cin >> n)
+	{
+		if (!n)
+		{
+			break;
+		}
+		counter++;
+		cout << "Game " << counter << ":" << endl;
+		for (int i = 0; i < 10; i++)
+		{
+			correct_count[i] = 0;
+		}
+		for (int i = 0; i < n; i++)
+		{
+			cin >> correct[i];
+			correct_count[correct[i]]++;
+		}
+		while (true)
+		{
+			int strong = 0;
+			int weak = 0;
+			bool empty = true;
+			for (int i = 0; i < 10; i++)
+			{
+				guess_count[i] = 0;
 			}
-			if (C == N) break;
-			bool flag[N];
-			int X = 0, Y = 0;
-			memset(flag, true, sizeof flag);
-			for (int i = 0; i < N; i++) {
-				if (A[i] == B[i]) {
-					++X;
-					flag[i] = false;
-					B[i] = -1;
+			for (int i = 0; i < 10; i++)
+			{
+				correct_count_copy[i] = correct_count[i];
+			}
+			for (int i = 0; i < n; i++)
+			{
+				cin >> guess[i];
+				if (guess[i] > 0)
+				{
+					empty = false;
+				}
+				if (guess[i] == correct[i])
+				{
+					strong++;
+					correct_count_copy[correct[i]]--;
+				}
+				else
+				{
+					guess_count[guess[i]]++;
 				}
 			}
-			for (int i = 0; i < N; i++) {
-				if (flag[i]) {
-					for (int j = 0; j < N; j++) {
-						if (A[i] == B[j]) {
-							++Y;
-							B[j] = -1;
-							break;
-						}
-					}
-				}
+			if (empty)
+			{
+				break;
 			}
-			printf("    (%d,%d)\n", X, Y);
+			for (int i = 1; i < 10; i++)
+			{
+				weak += min(correct_count_copy[i], guess_count[i]);
+			}
+			cout << "    (" << strong << "," << weak << ")" << endl;
 		}
 	}
 	return 0;

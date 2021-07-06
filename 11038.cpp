@@ -1,25 +1,80 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    for(;;){
-            long long m=0,n=0;
-            cin>>m>>n;
-            if(m==-1 && n==-1)
-                     break;
-            long long cnt=0;
-            for(long long i=m;i<=n;i++){
-                    long long no=i;
-                    if(no==0)
-                             cnt++;
-                    while(no>0){
-                                long long rem=no%10;
-                                if(rem==0)
-                                          cnt++;
-                                no/=10;
-                    }
-            }
-            cout<<cnt<<endl;
-    }
-    return 0;
+int powten[10] = {1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000};
+
+long long m, n, cnt;
+
+void solve(long long range, int level)
+{
+	if (range < 10)
+	{
+		return;
+	}
+	long long flor = range / 10 * 10;
+	for (long long k = flor + 1; k <= range; k++)
+	{
+		long long mm = k;
+		while (mm)
+		{
+			if (mm % 10 == 0)
+			{
+				cnt += powten[level];
+			}
+			mm /= 10;
+		}
+	}
+	cnt += flor / 10 * powten[level];
+	int temp = flor / 10;
+	while (temp)
+	{
+		if (temp % 10 == 0)
+		{
+			cnt += powten[level];
+		}
+		temp /= 10;
+	}
+	solve(flor / 10 - 1, level + 1);
+}
+
+int main()
+{
+	while (cin >> m >> n && m >= 0 && n >= 0)
+	{
+		long long cntM, cntN;
+		if (m == n)
+		{
+			cnt = 0;
+			if (m == 0)
+			{
+				cnt++;
+			}
+			while (m)
+			{
+				if (m % 10 == 0)
+				{
+					cnt++;
+				}
+				m /= 10;
+			}
+			cout << cnt << endl;
+		}
+		else
+		{
+			cnt = 0;
+			solve(m - 1, 0);
+			cntM = cnt;
+			cnt = 0;
+			solve(n, 0);
+			cntN = cnt;
+			long long result = cntN - cntM;
+			if (m == 0)
+			{
+				result++;
+			}
+			cout << result << endl;
+		}
+	}
+	return 0;
 }

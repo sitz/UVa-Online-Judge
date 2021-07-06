@@ -1,23 +1,27 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    int t;
-    cin>>t;
-    for(int i=1;i<=t;i++){
-            int no[3];
-            for(int j=0;j<3;j++)
-                    cin>>no[j];
-            for(int j=0;j<3;j++){
-                    for(int k=j+1;k<3;k++){
-                            if(no[j]>no[k]){
-                                            int temp=no[j];
-                                            no[j]=no[k];
-                                            no[k]=temp;
-                            }
-                    }
-            }
-            cout<<"Case "<<i<<": "<<no[1]<<endl;
-    }
-    return 0;
+bool func(int a, int b)
+{
+	return (a < b);
+}
+
+int main()
+{
+	int testcase;
+	cin >> testcase;
+	for (int p = 0; p < testcase; p++)
+	{
+		vector<int> V;
+		int a, b, c;
+		V.clear();
+		cin >> a >> b >> c;
+		V.push_back(a);
+		V.push_back(b);
+		V.push_back(c);
+		sort(V.begin(), V.end(), func);
+		cout << "Case " << p + 1 << ": " << V[1] << endl;
+	}
+	return 0;
 }

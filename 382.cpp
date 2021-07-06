@@ -1,27 +1,40 @@
-#include<iostream>
+#include <bits/stdc++.h>
 
 using namespace std;
 
 int main()
 {
-    int N,div_sum=1;
-    cout<<"PERFECTION OUTPUT"<<endl;
-    while((cin>>N))
-    {
-                      div_sum=1;
-                      for(int i=2;i<N;i++)
-                      {
-                              if(N%i==0)
-                                        div_sum+=i;
-                      }
-                      printf("%-10 d",div_sum);
-                      if(div_sum<N)
-                                   cout<<"DEFICIENT"<<endl;
-                      if(div_sum==N)
-                                   cout<<"PERFECT"<<endl;
-                      if(div_sum>N)
-                                   cout<<"ABUNDANT"<<endl;
-    }
-    cout<<"END OF OUTPUT";
-    return 0;
+	int n;
+	cout << "PERFECTION OUTPUT" << endl;
+	while (cin >> n)
+	{
+		if (n == 0)
+		{
+			break;
+		}
+		int sum = 0;
+		for (int i = 1; i <= n / 2; i++)
+		{
+			if (n % i == 0)
+			{
+				sum += i;
+			}
+		}
+		cout << setw(5) << n << "  ";
+		if (sum == n)
+		{
+			cout << "PERFECT";
+		}
+		else if (sum < n)
+		{
+			cout << "DEFICIENT";
+		}
+		else
+		{
+			cout << "ABUNDANT";
+		}
+		cout << endl;
+	}
+	cout << "END OF OUTPUT" << endl;
+	return 0;
 }

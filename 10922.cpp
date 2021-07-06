@@ -1,82 +1,65 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
-
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define REP(i, N) for(i=1; i<=N; i++)
-
-struct Rec{
-       bool div;
-       int dep;
-       Rec(bool di, int de){
-                div = di;
-                dep = de;
-       }
-};
-
-Rec rec(false, 1);
-
-void check(int N){
-     if(N < 10){
-          if(N==0 || N==9)
-                  rec.div = true;
-          else
-              rec.div = false;
-              
-          return;
-     }
-     int s = 0;
-     while(N > 0){
-             s += N%10;
-             N /= 10;
-     }
-     rec.dep++;
-     check(s);
+/*
+10922
+*/
+#define maxn 1000 * 9 + 2
+int A[maxn];
+char Fg[maxn];
+int Recur(int n)
+{
+	int i, k = 0, x;
+	char ss[1002];
+	if (n == 9)
+	{
+		return 1;
+	}
+	sprintf(ss, "%d", n);
+	for (i = 0; ss[i]; i++)
+	{
+		k += ss[i] - '0';
+	}
+	x = Recur(k);
+	return x + 1;
 }
-
-int main(){
-    while(true){
-                string str;
-                cin>>str;
-                if(str == "0")
-                       break;
-                int sum = 0, i, LEN=str.length()-1;
-                FOI(i, 0, LEN)
-                       sum += (str[i] - '0');
-                rec = Rec(false, 1);
-                check(sum);
-                if(rec.div)
-                            cout<<str<<" is a multiple of 9 and has 9-degree "<<rec.dep<<".\n";
-                else
-                    cout<<str<<" is not a multiple of 9.\n";
-    }
-    return 0;
+int Div(char xx[])
+{
+	int i, c = 0, d, x;
+	for (i = 0; xx[i]; i++)
+	{
+		d = xx[i] - '0';
+		x = c * 10 + d;
+		c = x % 9;
+	}
+	if (!c)
+	{
+		return 0;
+	}
+	return 1;
+}
+void Cal(char x[])
+{
+	int i, d = 0;
+	if (Div(x))
+	{
+		printf("%s is not a multiple of 9.\n", x);
+		return;
+	}
+	for (i = 0; x[i]; i++)
+	{
+		d += x[i] - '0';
+	}
+	d = Recur(d);
+	printf("%s is a multiple of 9 and has 9-degree %d.\n", x, d);
+}
+int main()
+{
+	char x[1002];
+	while (gets(x) && strcmp(x, "0"))
+	{
+		Cal(x);
+	}
+	return 0;
 }

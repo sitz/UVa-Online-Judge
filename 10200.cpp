@@ -1,44 +1,56 @@
-#include <cstdio>
-#include <cstring>
-#include <cmath>
+﻿#include <bits/stdc++.h>
+
 using namespace std;
 
-const int LIM = 10001;
+const int MAXSIZE = 10010;
 
-int Cal(int N){
-	return ( N * N + N + 41 );
-}
+int cntPrime[MAXSIZE];
 
-bool isPrime(int N){
-	for (int i=2; i*i<=N; i++)
-		if( N%i == 0 )
+bool isPrime(int n)
+{
+	for (int i = 2; i <= (int)sqrt(n); i++)
+		if (n % i == 0)
+		{
 			return false;
+		}
 	return true;
 }
 
-int main(){
-	int prime[LIM+1];
+void init()
+{
 	int i;
-	memset(prime, 0, sizeof prime);
-	prime[0] = 1;
-	for (i=1; i<LIM; i++){
-		bool stat = isPrime( Cal(i) );
-		prime[i] = prime[i-1];
-		if( stat )
-			prime[i]++;
+	cntPrime[0] = 1;
+	for (i = 1; i < 40; i++)
+	{
+		cntPrime[i] = cntPrime[i - 1] + 1;
 	}
-	int A, B;
-	while( scanf("%d%d", &A, &B) != EOF ){
-		int val = 0;
-		val = prime[B];
-		if( A > 0 )
-			val -= prime[A-1];
-		double per = (double)val / (double)(B - A + 1);
-		per *= 10000;
-		per = floor( per + 0.5 );
-		per /= 100;
-		printf("%.2lf\n", per);
+	for (; i <= 10000; i++)
+		if (isPrime(i * i + i + 41))
+		{
+			cntPrime[i] = cntPrime[i - 1] + 1;
+		}
+		else
+		{
+			cntPrime[i] = cntPrime[i - 1];
+		}
+}
+
+int main()
+{
+	init();
+	int a, b;
+	while (scanf("%d%d", &a, &b) == 2)
+	{
+		int cnt;
+		if (a == 0)
+		{
+			cnt = cntPrime[b];
+		}
+		else
+		{
+			cnt = cntPrime[b] - cntPrime[a - 1];
+		}
+		printf("%.2lf\n", cnt * 100.0 / (b - a + 1) + 1e-6);
 	}
 	return 0;
 }
-

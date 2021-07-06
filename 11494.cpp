@@ -1,19 +1,65 @@
-#include<iostream>
-#include<cstdio>
-#include<cmath>
-#include<algorithm>
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
-typedef long double ldouble;
+#include <bits/stdc++.h>
+
 using namespace std;
-int main(){
-    for(;;){
-            int i,j,u,v;
-            cin>>i>>j>>u>>v;
-            if(i==0 && j==0 && u==0 && v==0)
-                    break;
-            cout << ( (i == u && j == v) ? 0 : (i == u || j == v || abs(i - u) == abs(j - v)) ? 1 : 2 ) << endl;
-    }
-    return 0;
+
+bool check_position(int x1, int y1, int x2, int y2)
+{
+	if (y1 == y2 || x1 == x2)
+	{
+		return true;
+	}
+	for (int i = 0; x1 - i > 0 && y1 - i > 0; i++)
+	{
+		if (x1 - i == x2 && y1 - i == y2)
+		{
+			return true;
+		}
+	}
+	for (int i = 0; x1 + i < 9 && y1 + i < 9; i++)
+	{
+		if (x1 + i == x2 && y1 + i == y2)
+		{
+			return true;
+		}
+	}
+	for (int i = 0; x1 - i > 0 && y1 + i < 9; i++)
+	{
+		if (x1 - i == x2 && y1 + i == y2)
+		{
+			return true;
+		}
+	}
+	for (int i = 0; x1 + i < 9 && y1 - i > 0; i++)
+	{
+		if (x1 + i == x2 && y1 - i == y2)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+int main()
+{
+	int x1, y1, x2, y2;
+	while (cin >> x1 >> y1 >> x2 >> y2)
+	{
+		if (x1 == 0 && x2 == 0 && y1 == 0 && y2 == 0)
+		{
+			break;
+		}
+		if (x1 == x2 && y1 == y2)
+		{
+			cout << 0 << endl;
+		}
+		else if (check_position(x1, y1, x2, y2))
+		{
+			cout << 1 << endl;
+		}
+		else
+		{
+			cout << 2 << endl;
+		}
+	}
+	return 0;
 }

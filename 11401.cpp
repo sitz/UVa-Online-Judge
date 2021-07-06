@@ -1,50 +1,29 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#include <bits/stdc++.h>
 
 using namespace std;
-#define LIM 1000001
-int main(){
-    static int64 vec[LIM], i;
-    vec[3] =0;
-    vec[4] = 1;
-    for(i=5; i<LIM; i++){
-             int64 b = i/2 + 1;
-             int64 R = i*(i-1) -(i+1)*(i-b) -b*(b-1);
-             vec[i] = vec[i-1] + R;
-    }
-    while(true){
-                int ind;
-                scanf("%d", &ind);
-                if(ind < 3)
-                       break;
-                printf("%lld\n", vec[ind]);
-    }
-    return 0;
+
+/*
+  Name: UVA 11401
+  Author: zoom
+  Date: 28/07/11
+*/
+
+#define LLU long long unsigned int
+#define LLD long long double
+#define FOR(i, N) for (int i = 0; i < (N); i++)
+LLU ans[1000001];
+int main()
+{
+	ans[0] = ans[1] = ans[2] = ans[3] = 0;
+	LLU inc = 0;
+	int N;
+	for (int i = 4; i < 1000001; i++)
+	{
+		inc += (i - 2) / 2;
+		ans[i] = ans[i - 1] + inc;
+	}
+	while (cin >> N and N >= 3)
+	{
+		cout << ans[N] << endl;
+	}
 }

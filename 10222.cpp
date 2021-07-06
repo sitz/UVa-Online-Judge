@@ -1,22 +1,22 @@
-#include<iostream>
-#include<cstdio>
-#include<cmath>
-#include<algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
-int main(){
-    string master="`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./";
-    int max=master.length();
-    string str;
-    while(getline(cin,str,'\n')){
-                                      int len=str.length(),i,j;
-                                      for(i=0;i<len;i++){
-                                             str[i]=tolower(str[i]);
-                                             for(j=0;j<max;j++){
-                                                     if(str[i]==master[j])
-                                                                          str[i]=master[j-2];
-                                             }
-                                      }
-                                      cout<<str<<endl;
-    }
-    return 0;
+
+int main()
+{
+	string keys = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./";
+	char c;
+	while (cin.get(c))
+	{
+		if (c == '\n' || c == '\t' || c == ' ')
+		{
+			cout << c;
+		}
+		else
+		{
+			size_t found = keys.find(tolower(c));
+			cout << keys[found - 2];
+		}
+	}
+	return 0;
 }

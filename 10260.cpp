@@ -1,24 +1,26 @@
-#include<iostream>
-#include<cstdio>
-#include<cmath>
-#include<algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
-int main(){
-    char code[] = { '0','1','2','3','0','1','2','0','0','2','2','4','5','5','0','1','2','6','2','3','0','1','0','2','0','2' };
-    string str;
-    while(cin>>str){
-                                int len=str.length(),i;
-                                string out,finalStr;
-                                for(i=0;i<len;i++){
-                                                   char ch=code[str[i]-'A'];
-                                                   out+=ch;
-                                }
-                                len=out.length();
-                                for(i=0;i<len;i++){
-                                       if(out[i]!=out[i+1] && out[i]!='0')
-                                                 finalStr+=out[i];
-                                }
-                                cout<<finalStr<<endl;
-    }
-    return 0;
+
+char table[30] = "01230120022455012623010202";
+
+int main()
+{
+	char buf[100];
+	while (cin >> buf)
+	{
+		int i;
+		for (i = 0; buf[i]; i++)
+		{
+			if (table[buf[i] - 'A'] != '0')
+			{
+				if (table[buf[i] - 'A'] != table[buf[i - 1] - 'A'])
+				{
+					cout << table[buf[i] - 'A'];
+				}
+			}
+		}
+		cout << endl;
+	}
+	return 0;
 }

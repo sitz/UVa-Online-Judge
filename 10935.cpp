@@ -1,35 +1,47 @@
-#include <cstdio>
-#include <vector>
-#include <queue>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main() {
-	while (true) {
-		int N;
-		scanf("%d", &N);
-		if (!N) break;
-		
-		queue< int > q;
-		vector< int > T;
-		for (int i = 1; i <= N; i++) q.push(i);
-		
-		while (q.size() > 2) {
-			T.push_back(q.front());
-			q.pop();
-			q.push(q.front());
-			q.pop();
+int main()
+{
+	int n;
+	int remain;
+	while (cin >> n)
+	{
+		if (!n)
+		{
+			break;
 		}
-		if (q.size() == 2) {
-			T.push_back(q.front());
-			q.pop();
+		deque<int> q;
+		bool first = true;
+		for (int i = 1; i <= n; i++)
+		{
+			q.push_back(i);
 		}
-		
-		printf("Discarded cards:");
-		for (int i = 0; i < T.size(); i++) {
-			if (i > 0) printf(",");
-			printf(" %d", T[i]);
+		cout << "Discarded cards:";
+		while (!q.empty())
+		{
+			remain = q.front();
+			q.pop_front();
+			if (q.empty())
+			{
+				break;
+			}
+			if (first)
+			{
+				cout << " " << remain;
+			}
+			else
+			{
+				cout << ", " << remain;
+			}
+			remain = q.front();
+			q.pop_front();
+			q.push_back(remain);
+			first = false;
 		}
-		printf("\n");
-		printf("Remaining card: %d\n", q.front());
+		cout << endl;
+		cout << "Remaining card: " << remain << endl;
 	}
+	return 0;
 }

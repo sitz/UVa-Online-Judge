@@ -1,70 +1,59 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for (i = A; i <= B; i++)
-#define FOD(i, A, B) for (i = A; i >= B; i--)
-typedef long long int64;
+inline int CharToDigit(char c)
+{
+	if (isdigit(c))
+		return c - '0';
+	return c - 'A' + 10;
+}
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	string Dic = "0123456789ABCDEF";
-	string S;
-	int64 A, B;
-	while (cin >> S >> A >> B) {
-		int64 i, j;
-		int64 V = 0, mul = 1;
-		vector< char > C;
-		int L = S.length() - 1;
-		FOD(i, L, 0) {
-			if (isalpha(S[i]))
-				V += (S[i] - 'A' + 10) * mul;
-			else
-				V += (S[i] - '0') * mul;
-				
-			mul *= A;
-		}
-		while (V > 0) {
-			C.push_back(Dic[V % B]);
-			V /= B;
-		}
-		if (C.size() == 0)
-			C.push_back('0');
-		string O = "";
-		if (C.size() > 7)
-			O = "ERROR";
-		else {
-			O = "";
-			reverse(C.begin(), C.end());
-			L = C.size() - 1;
-			FOI(i, 0, L)
-				O += C[i];
-		}
-		printf("%7s\n", O.c_str());
+inline char DigitToChar(int n)
+{
+	return "0123456789ABCDEF"[n];
+}
+
+// convert string 'in' to int 'value'
+long long parseValue(int base1, string &in)
+{
+	long long value = 0, curBase = 1;
+	for (int i = in.length() - 1; i >= 0; --i)
+	{
+		value += CharToDigit(in[i]) * curBase;
+		curBase *= base1;
 	}
+	return value;
+}
+
+// convert int 'value' to string 'out'
+string toBase(int base2, long long value)
+{
+	if (value == 0)
+		return "0";
+	string out;
+	while (value > 0)
+	{
+		out += DigitToChar(value % base2);
+		value /= base2;
+	}
+	reverse(out.begin(), out.end());
+	return out;
+}
+
+string convert(string &in, int base1, int base2)
+{
+	string out = toBase(base2, parseValue(base1, in));
+	if (out.length() > 7)
+		return "ERROR";
+	return out;
+}
+
+int main()
+{
+	int base1, base2;
+	string in;
+	while (cin >> in >> base1 >> base2)
+		printf("%7s\n", convert(in, base1, base2).c_str());
 	return 0;
 }

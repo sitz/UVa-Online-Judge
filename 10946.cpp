@@ -1,83 +1,76 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
+char a[50 + 3][50 + 3];
+int R, C, cnt;
 
-int R, C;
-string mat[50];
+struct node
+{
+	char ch;
+	int f;
+} p[2600];
 
-int dI[] = {0, -1, 0, 1};
-int dJ[] = {-1, 0, 1, 0};
+void dfs(int r, int c, char k)
+{
+	if (r < 0 || r == R || c < 0 || c == C || a[r][c] != k)
+	{
+		return;
+	}
+	cnt++;
+	a[r][c] = '.';
+	dfs(r - 1, c, k);
+	dfs(r + 1, c, k);
+	dfs(r, c + 1, k);
+	dfs(r, c - 1, k);
+}
 
-bool comp(pair<char, int> A, pair<char, int> B){
-	if( A.second != B.second )
-		return A.second > B.second;
-	if( A.first != B.first )
-		return A.first < B.first;
+bool cmp(const node &x, const node &y)
+{
+	if (x.f > y.f)
+	{
+		return true;
+	}
+	if (x.f == y.f && x.ch < y.ch)
+	{
+		return true;
+	}
 	return false;
 }
 
-int floodFill(int I, int J, char ch){
-	if( I < 0 || I >= R )
-		return 0;
-	if( J < 0 || J >= C )
-		return 0;
-	if( mat[I][J] != ch )
-		return 0;
-	mat[I][J] = '.';
-	int k, sum = 1;
-	FOI(k, 0, 3)
-		sum += floodFill(I + dI[k], J + dJ[k], ch);
-	return sum;
-}
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	for (int t = 1; ; t++){
-		cin >> R >> C;
-		if(R == 0 && C == 0)
+int main()
+{
+	int t = 0;
+	while (scanf("%d%d", &R, &C))
+	{
+		if (R == 0 && C == 0)
+		{
 			break;
-		int i, j;
-		FOI(i, 0, R-1)
-			cin >> mat[i];
-		vector< pair<char, int> > vec;
-		FOI(i, 0, R-1)
-			FOI(j, 0, C-1)
-				if( isalpha( mat[i][j] ) ){
-					char c = mat[i][j];
-					int hole = floodFill(i, j, mat[i][j]);
-					vec.push_back( make_pair(c, hole) );
+		}
+		for (int i = 0; i < R; i++)
+		{
+			scanf("%s", a[i]);
+		}
+		int len = 0;
+		for (int i = 0; i < R; i++)
+		{
+			for (int j = 0; j < C; j++)
+			{
+				if (a[i][j] != '.')
+				{
+					cnt = 0;
+					p[len].ch = a[i][j];
+					dfs(i, j, a[i][j]);
+					p[len++].f = cnt;
 				}
-		sort(vec.begin(), vec.end(), comp);
-		cout << "Problem " << t << ":" << endl;
-		FOI(i, 0, vec.size()-1)
-			cout << vec[i].first << " " << vec[i].second << endl;
+			}
+		}
+		sort(p, p + len, cmp);
+		printf("Problem %d:\n", ++t);
+		for (int i = 0; i < len; i++)
+		{
+			printf("%c %d\n", p[i].ch, p[i].f);
+		}
 	}
 	return 0;
 }

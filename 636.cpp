@@ -1,36 +1,49 @@
-#include <iostream>
-#include <cstring>
-#include <cstdlib>
-#include <cstdio>
-#include <cmath>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-long mystrtol(char *str, int b) {
-  long result = 0;
-  for(int i=0; i<strlen(str); i++) {
-    result = result * b + str[i]-'0';
-  }
-  return result;
+int any2dec(int n, int base)
+{
+	int result = 0;
+	int count = 0;
+	int tmp;
+	while (n)
+	{
+		tmp = n % 10;
+		n /= 10;
+		if (tmp >= base)
+		{
+			return -1;
+		}
+		result += tmp * pow(base, count);
+		count++;
+	}
+	return result;
 }
 
-int main(){
-  char str[100];
-  char *end;
-  long a, i, max;
-  while( true ) {
-  	scanf("%s", str);
-  	if( str[0] == '0' )
-  		break;
-    max = 0;
-    for( i = strlen(str)-1; i >= 0 ; i--)
-  	  if( str[i] - '0' > max )
-  	  	  max = str[i] - '0';
-    for(i=max+1; i<100; i++) {
-      a = mystrtol(str, i);
-      if( (long)sqrt( a ) * (long)sqrt( a ) == a)
-        break;
-    }
-    printf("%ld\n", i);
-  }
-  return 0;
+int main()
+{
+	int n, sq, tmp;
+	while (cin >> n)
+	{
+		if (n == 0)
+		{
+			break;
+		}
+		for (int base = 2; base < 100; base++)
+		{
+			tmp = any2dec(n, base);
+			if (tmp == -1)
+			{
+				continue;
+			}
+			sq = sqrt(tmp);
+			if (sq * sq == tmp)
+			{
+				cout << base << endl;
+				break;
+			}
+		}
+	}
+	return 0;
 }

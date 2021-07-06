@@ -1,58 +1,43 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define EPS	0.0000000001
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	while( true ){
-		double H, U, D, F;
-		cin >> H;
-		if( H <= 0 )
-			break;
-		cin >> U >> D >> F;
-		F = (U * F)/100.0;
-		
-		int day = 1;
-		double cur = 0.0;
-		while( true ){
-			cur += U;
-			if( cur > H ){
-				cout << "success on day " << day << endl;
-				break;
-			}
-			U = max(U - F, 0.0);
-			cur -= D;
-			if( cur < 0.0 ){
-				cout << "failure on day " << day << endl;
-				break;
-			}
+int main()
+{
+	double H, U, D, F, loss, d_cover;
+	int day;
+	while (scanf("%lf", &H) && H)
+	{
+		scanf("%lf%lf%lf", &U, &D, &F);
+		loss = (U * F) / 100;
+		day = 0;
+		d_cover = 0;
+		while (1)
+		{
 			day++;
+			d_cover += U;
+			if (d_cover > H)
+			{
+				break;
+			}
+			d_cover -= D;
+			if (d_cover < 0)
+			{
+				break;
+			}
+			U -= loss;
+			if (U < 0)
+			{
+				U = 0;
+			}
+		}
+		if (d_cover > H)
+		{
+			printf("success on day %d\n", day);
+		}
+		else
+		{
+			printf("failure on day %d\n", day);
 		}
 	}
 	return 0;

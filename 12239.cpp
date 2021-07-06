@@ -1,28 +1,42 @@
-#include <set>
-#include <cmath>
-#include <cstdio>
-#include <algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main() {
-    //freopen("testI.txt", "r", stdin);
-    //freopen("testO.txt", "w", stdout);
-    while (true) {
-        int N, B;
-        scanf("%d%d", &N, &B);
-        if (!N && !B) break;
+bool cando[128];
+int b[128];
 
-        set< int > Set;
-        int Arr[B];
-        for (int i = 0; i < B; i++) scanf("%d", &Arr[i]);
+int abs(int x)
+{
+	return x < 0 ? -x : x;
+}
 
-        for (int i = 0; i < B; i++)
-            for (int j = i; j < B; j++) {
-                int T = (int)abs(Arr[i] - Arr[j]);
-                if (T <= N) Set.insert(T);
-            }
-        if (Set.size() == N + 1) printf("Y\n");
-        else printf("N\n");
-    }
-    return 0;
+int main()
+{
+	for (int B, N; scanf("%d %d", &N, &B) == 2 && (N || B);)
+	{
+		int s = 1;
+		for (int i = 0; i <= N; ++i)
+		{
+			cando[i] = 0;
+		}
+		for (int i = 0; i < B; ++i)
+		{
+			scanf("%d", &b[i]);
+			for (int j = 0; j < i; ++j)
+			{
+				int diff = abs(b[i] - b[j]);
+				s += !cando[diff];
+				cando[diff] |= 1;
+			}
+		}
+		if (s == N + 1)
+		{
+			puts("Y");
+		}
+		else
+		{
+			puts("N");
+		}
+	}
+	return 0;
 }

@@ -1,54 +1,59 @@
-#include <cstdio>
-#include <cstring>
-#include <vector>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define MAX 10000
-bool Prime[MAX + 1];
-int Count[MAX + 1];
-vector< int > P;
+int result[10001];
 
-void Sieve() {
-    memset(Prime, true, sizeof Prime);
-    P.clear();
-    Prime[0] = Prime[1] = false;
-
-    for (int i = 2; i <= MAX; i++) {
-        if (Prime[i]) {
-            P.push_back(i);
-            for (int j = i * i; j <= MAX; j += i)
-                Prime[j] = false;
-        }
-    }
-    //printf("%d\n", P.size());
+bool is_prime(int n)
+{
+	for (int i = 3, sq = sqrt(n); i <= sq; i += 2)
+	{
+		if (n % i == 0)
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
-void Calc() {
-    memset(Count, 0, sizeof Count);
-    int N = P.size();
-
-    for (int i = 0; i < N; i++) {
-        int sum = 0;
-        for (int j = i; j < N; j++) {
-            sum += P[j];
-            if (sum > MAX) continue;
-            ++Count[sum];
-        }
-    }
-}
-
-int main() {
-    //freopen("testI.txt", "r", stdin);
-    //freopen("testO.txt", "w", stdout);
-    Sieve();
-    Calc();
-
-    while (true) {
-        int N;
-        scanf("%d", &N);
-        if (!N) break;
-
-        printf("%d\n", Count[N]);
-    }
-    return 0;
+int main()
+{
+	int n;
+	for (int i = 0; i < 10001; i++)
+	{
+		result[i] = 0;
+	}
+	vector<int> primes;
+	primes.push_back(2);
+	for (int i = 3; i < 10001; i += 2)
+	{
+		if (is_prime(i))
+		{
+			primes.push_back(i);
+		}
+	}
+	for (int i = 0, sz = primes.size(); i < sz; i++)
+	{
+		for (int j = i; j < sz; j++)
+		{
+			int count = 0;
+			for (int k = i; k < j; k++)
+			{
+				count += primes[k];
+			}
+			if (count < 10001)
+			{
+				result[count] += 1;
+			}
+		}
+	}
+	while (cin >> n)
+	{
+		if (!n)
+		{
+			break;
+		}
+		cout << result[n] << endl;
+	}
+	return 0;
 }

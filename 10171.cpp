@@ -1,89 +1,117 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for (i = A; i <= B; i++)
-#define FOD(i, A, B) for (i = A; i >= B; i--)
-#define INF	1<<30
+#define MX 30
+#define INF 900005
+#define MIN(a, b) (a > b ? b : a)
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	while (true) {
-		int N;
-		cin >> N;
-		if (N == 0) break;
-		map<string, int> MapY, namY;
-		map<string, int> MapO, namO;
-		map<string, int>::iterator it1, it2;
-		int matY[30][30], matO[30][30];
-		int indY = 0, indO = 0;
-		int i, j, k;
-		FOI(i, 0, 29) {
-			FOI(j, 0, 29) {
-				if (i == j)
-					matY[i][j] = matO[i][j] = 0;
-				else
-					matY[i][j] = matO[i][j] = INF;
+int S[MX][MX], M[MX][MX];
+
+void Ini()
+{
+	int i, j;
+	for (i = 0; i < 26; i++)
+	{
+		for (j = 0; j < 26; j++)
+		{
+			S[i][j] = M[i][j] = INF;
+		}
+		S[i][i] = M[i][i] = 0;
+	}
+}
+
+void Set(char p, char dr, char u, char v, int cost)
+{
+	int U, V;
+	U = u - 'A';
+	V = v - 'A';
+	if (p == 'M')
+	{
+		if (M[U][V] > cost)
+		{
+			M[U][V] = cost;
+		}
+		if (dr == 'B' && M[V][U] > cost)
+		{
+			M[V][U] = cost;
+		}
+	}
+	if (p == 'Y')
+	{
+		if (S[U][V] > cost)
+		{
+			S[U][V] = cost;
+		}
+		if (dr == 'B' && S[V][U] > cost)
+		{
+			S[V][U] = cost;
+		}
+	}
+}
+
+void Floyd(int ss[][MX])
+{
+	int i, j, k;
+	for (k = 0; k < 26; k++)
+	{
+		for (i = 0; i < 26; i++)
+		{
+			for (j = 0; j < 26; j++)
+			{
+				ss[i][j] = MIN(ss[i][j], ss[i][k] + ss[k][j]);
 			}
 		}
-		while (N--) {
-			string YM, UB, X, Y;
-			int D;
-			cin >> YM >> UB >> X >> Y >> D;
-			if (YM == "Y") {
-				it1 = MapY.find(X);
-				it2 = MapY.find(Y);
-				if (it1 == MapY.end()) { MapY[X] = indO; namY[indO] = X; indY++; }
-				if (it2 == MapY.end()) { MapY[Y] = indO; namY[indO] = Y; indY++; }
-				
-				matY[MapY[X]][MapY[Y]] = min(D, matY[MapY[X]][MapY[Y]]);
-				if (UB == "B")
-					matY[MapY[Y]][MapY[X]] = min(D, matY[MapY[Y]][MapY[X]]);
-			}
-			else {
-				it1 = MapO.find(X);
-				it2 = MapO.find(Y);
-				if (it1 == MapO.end()) { MapO[X] = indO; namO[indO] = X; ind0++; }
-				if (it2 == MapO.end()) { MapO[Y] = indO; namO[indO] = Y; ind0++; }
-				
-				matO[MapO[X]][MapO[Y]] = min(D, matO[MapO[X]][MapO[Y]]);
-				if (UB == "B")
-					matO[MapO[Y]][MapO[X]] = min(D, matO[MapO[Y]][MapO[X]]);
-			}
+	}
+}
+
+void Cal(int s, int m)
+{
+	int i, min = 900000, x, j = 0;
+	int dummy[30];
+	Floyd(S);
+	Floyd(M);
+	for (i = 0; i < 26; i++)
+	{
+		x = S[s][i] + M[m][i];
+		if (x < min)
+		{
+			dummy[0] = i;
+			j = 1;
+			min = x;
 		}
-		FOI(k, 0, indY-1)
-			FOI(i, 0, indY-1)
-				FOI(j, 0, indY-1)
-					matY[i][j] = min(matY[i][j], matY[i][k] + matY[k][j]);
-		FOI(k, 0, indO-1)
-			FOI(i, 0, indO-1)
-				FOI(j, 0, indO-1)
-					matO[i][j] = min(matO[i][j], matO[i][k] + matO[k][j]);
-		
+		else if (x == min)
+		{
+			dummy[j++] = i;
+		}
+	}
+	if (j == 0)
+	{
+		printf("You will never meet.\n");
+		return;
+	}
+	printf("%d", min);
+	for (i = 0; i < j; i++)
+	{
+		printf(" %c", dummy[i] + 'A');
+	}
+	printf("\n");
+}
+
+int main()
+{
+	int n, m;
+	char p[3], d[3], u[3], v[3];
+	while (scanf("%d", &n) && n)
+	{
+		Ini();
+		while (n--)
+		{
+			scanf("%s%s%s%s%d", p, d, u, v, &m);
+			Set(p[0], d[0], u[0], v[0], m);
+		}
+		scanf("%s%s", p, d);
+		Cal(p[0] - 'A', d[0] - 'A');
 	}
 	return 0;
 }

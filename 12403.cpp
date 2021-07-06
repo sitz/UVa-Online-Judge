@@ -1,18 +1,24 @@
-#include <cstring>
-#include <cstdio>
+#include <bits/stdc++.h>
 
-int main() {
-	int T, D = 0, I;
-	char str[20];
-	scanf("%d", &T);
-	while (T--) {
-		scanf("%s", str);
-		if (!strcmp(str, "report")) {
-			printf("%d\n", D);
+using namespace std;
+
+int main()
+{
+	int t, sum = 0, tmp;
+	string input;
+	cin >> t;
+	cin.ignore(100, '\n');
+	while (t--)
+	{
+		cin >> input;
+		if (input == "donate")
+		{
+			cin >> tmp;
+			sum += tmp;
 		}
-		else {
-			scanf("%d", &I);
-			D += I;
+		else if (input == "report")
+		{
+			cout << sum << endl;
 		}
 	}
 	return 0;

@@ -1,75 +1,96 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for (i = A; i <= B; i++)
-#define FOD(i, A, B) for (i = A; i >= B; i--)
-
-struct Play {
-	double T;
-	double W;
+struct game
+{
+	int win;
+	int loss;
+	int gm;
 };
+game P[102];
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	bool flag = false;
-	while (true) {
-		int N, K;
-		int i, j;
-		cin >> N;
-		if (N == 0) break;
-		cin >> K;
-		K = (K * N * (N - 1) )/ 2;
-		Play P[N + 1];
-		FOI(i, 0, N) {
-			P[i].T = 0.0;
-			P[i].W = 0.0;
-		}
-		while (K--) {
-			int p1, p2;
-			string m1, m2;
-			cin >> p1 >> m1 >> p2 >> m2;
-			if (m1 != m2) {
-				P[p1].T += 1.0;
-				P[p2].T += 1.0;
-			   if ( (m1 == "paper" && m2 == "rock") || (m1 == "scissors" && m2 == "paper") || (m1 == "rock" && m2 == "scissors"))
-					P[p1].W += 1.0;
-				else
-					P[p2].W += 1.0;
+void Cal(int n, int k)
+{
+	string move1, move2;
+	int p1, p2, y;
+	y = k * (n * (n - 1)) / 2;
+	while (y--)
+	{
+		cin >> p1 >> move1 >> p2 >> move2;
+		if (move1 == "rock")
+		{
+			if (move2 == "paper")
+			{
+				P[p1].loss++;
+				P[p1].gm++;
+				P[p2].win++;
+				P[p2].gm++;
+			}
+			else if (move2 == "scissors")
+			{
+				P[p1].win++;
+				P[p1].gm++;
+				P[p2].loss++;
+				P[p2].gm++;
 			}
 		}
-		if (flag) cout << endl;
-		FOI(i, 1, N) {
-			if (P[i].T > 0)
-				printf("%.3lf\n", P[i].W / P[i].T);
-			else
-				printf("-\n");
+		else if (move1 == "paper")
+		{
+			if (move2 == "rock")
+			{
+				P[p1].win++;
+				P[p1].gm++;
+				P[p2].loss++;
+				P[p2].gm++;
+			}
+			else if (move2 == "scissors")
+			{
+				P[p1].loss++;
+				P[p1].gm++;
+				P[p2].win++;
+				P[p2].gm++;
+			}
 		}
-		flag = true; 
+		else
+		{
+			if (move2 == "paper")
+			{
+				P[p1].win++;
+				P[p1].gm++;
+				P[p2].loss++;
+				P[p2].gm++;
+			}
+			else if (move2 == "rock")
+			{
+				P[p1].loss++;
+				P[p1].gm++;
+				P[p2].win++;
+				P[p2].gm++;
+			}
+		}
+	}
+	double x;
+	for (int i = 1; i <= n; i++)
+	{
+		x = (double)P[i].win / (double)P[i].gm;
+		if (P[i].gm == 0)
+			printf("-\n");
+		else
+			printf("%.3lf\n", x);
+		P[i].gm = P[i].loss = P[i].win = 0;
+	}
+}
+
+int main()
+{
+	int n, k, g = 0;
+	while (cin >> n && n)
+	{
+		cin >> k;
+		if (g++)
+			printf("\n");
+		Cal(n, k);
 	}
 	return 0;
 }

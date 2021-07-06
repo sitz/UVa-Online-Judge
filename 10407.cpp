@@ -1,62 +1,86 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int gcd(int a, int b){
-    if(b > a) return gcd(b, a);
-    if(b==0) return a;
-    else return gcd(b, a%b);
+int a[1001], dif[1001], p;
+int sort_function(const void *a, const void *b)
+{
+	return *(int *)a - *(int *)b;
 }
-int main(){
-    while(true){
-            int arr[1000], i=0, n=1;
-            cin>>arr[0];
-            if(arr[0]==0)
-                    break;
-            while(true){
-                        cin>>arr[n];
-                        if(arr[n] == 0)
-                                  break;
-                        n++;
-            }
-            int gd = gcd(arr[0], arr[1]);
-            if(arr[0]==arr[1] && n==2){
-                              cout<<gd<<endl;
-                              continue;
-            }
-            for(i=1; i<n; i++)
-                     arr[i] = (int)abs(arr[i] - arr[i-1]);
-            for(i=2; i<n; i++)
-                     gd = gcd(gd, arr[i]);
-            cout<<gd<<endl;
-    }
-    return 0;
+int diff()
+{
+	int i;
+	for (i = 0; i < p - 1; i++)
+	{
+		dif[i] = abs(a[i + 1] - a[i]);
+	}
+	return 0;
+}
+int gsg(int a, int b)
+{
+	int d, c;
+	if (!a && b)
+	{
+		return b;
+	}
+	if (a && !b)
+	{
+		return a;
+	}
+	if (!a && !b)
+	{
+		return 0;
+	}
+	while (1)
+	{
+		d = b % a;
+		if (!d)
+		{
+			break;
+		}
+		b = a;
+		a = d;
+	}
+	return a;
+}
+int result()
+{
+	int min, i, j, c;
+	for (i = 0; i < p - 1; i++)
+		if (p == 2)
+		{
+			return dif[0];
+		}
+	min = gsg(dif[0], dif[1]);
+	if (min == 1)
+	{
+		return 1;
+	}
+	for (i = 2; i < p - 1; i++)
+	{
+		c = gsg(min, dif[i]);
+		if (c == 1)
+		{
+			return 1;
+		}
+		min = c;
+	}
+	return min;
+}
+int main()
+{
+	p = 0;
+	while (scanf("%d", &a[p]) && a[p])
+	{
+		p++;
+		while (scanf("%d", &a[p]) && a[p])
+		{
+			p++;
+		}
+		qsort((void *)a, p, sizeof(int), sort_function);
+		diff();
+		printf("%d\n", result());
+		p = 0;
+	}
+	return 0;
 }

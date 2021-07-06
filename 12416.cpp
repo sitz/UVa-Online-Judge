@@ -1,22 +1,38 @@
-#include <iostream>
-#include <string>
-#include <cctype>
-#include <cmath>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main() {
-	string str;
-	while (getline(cin, str)) {
-		double action = 0.0, space = 0.0;
-		for (int i = 0; i < str.length(); i++) {
-			if (str[i] == ' ') space += 1.0;
-			else {
-				//cout << space << " ";
-				action = max(action, log2(space));
-				space = 0;
-			}
+#define REP(i, b, n) for (int i = b; i < n; i++)
+#define rep(i, n) REP(i, 0, n)
+
+int longest_spaces(string &input)
+{
+	int result = 0;
+	int tmp = 0;
+	rep(i, input.size())
+	{
+		if (input[i] == ' ')
+		{
+			tmp++;
 		}
-		cout << ceil(action) << endl;
+		else
+		{
+			if (tmp > result)
+			{
+				result = tmp;
+			}
+			tmp = 0;
+		}
+	}
+	return result;
+}
+
+int main()
+{
+	string input;
+	while (getline(cin, input))
+	{
+		cout << ceil(log2(longest_spaces(input))) << endl;
 	}
 	return 0;
 }

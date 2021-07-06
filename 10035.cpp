@@ -1,52 +1,72 @@
-#include<iostream>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-long long carry(long long n)
+enum
 {
-    long long carry=0;
-    if(n>9)
-           carry =1;
-    else 
-         carry =0;
-         
-    return carry;
+	MAX_LEN = 12
+};
+
+int to_big_number(char *num)
+{
+	// reverse
+	int len = strlen(num);
+	for (int i = 0; i < len / 2; ++i)
+	{
+		swap(num[i], num[len - i - 1]);
+	}
+	// sub ascii
+	for (int i = 0; i < len; ++i)
+	{
+		num[i] = num[i] - '0';
+	}
+	// fill zero
+	for (int i = len; i < MAX_LEN; ++i)
+	{
+		num[i] = 0;
+	}
+}
+
+int count_carry(char *a, char *b)
+{
+	to_big_number(a);
+	to_big_number(b);
+	int carry_counter = 0;
+	for (int i = 0; i < MAX_LEN; ++i)
+	{
+		a[i] = a[i] + b[i];
+		if (a[i] > 9)
+		{
+			a[i] = a[i] - 10;
+			a[i + 1]++;
+			carry_counter++;
+		}
+	}
+	return carry_counter;
 }
 
 int main()
 {
-    long long a,b,r1=0,r2=0,r=0,c=0,count=0;
-    for(;;)
-    {
-           cin>>a>>b;
-           
-           if(a==0 && b==0)
-                   break;
-                   
-           count =0;
-           r1=0;r2=0;r=0;
-           while((a!=0)||(b!=0))
-           {
-                      r1=a%10;                   
-                      r2=b%10;
-                      a/=10;
-                      b/=10;
-                      
-                      r=r1+r2+c;
-                      
-                      if(r>=9)
-                             count++;
-                             
-                      c=carry(r);                      
-           }
-           if(count>1)
-                      cout<<count<<" carry operations."<<endl;
-           if(count==1)
-                      cout<<"1 carry operation."<<endl;
-                
-           if(count==0)
-                       cout<<"No carry operation."<<endl;
-    }
-    
-    return 0;
+	char a[MAX_LEN], b[MAX_LEN];
+	while (scanf("%s %s ", a, b) == 2)
+	{
+		if (a[0] == '0' && b[0] == '0')
+		{
+			break;
+		}
+		int result = count_carry(a, b);
+		if (result == 0)
+		{
+			printf("No carry operation.\n");
+		}
+		else if (result == 1)
+		{
+			printf("1 carry operation.\n");
+		}
+		else
+		{
+			printf("%d carry operations.\n", result);
+		}
+	}
+	return 0;
 }

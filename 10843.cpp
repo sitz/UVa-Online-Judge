@@ -1,23 +1,54 @@
-#include <stdio.h>
-const long long MOD = 2000000011LL;
+#include <bits/stdc++.h>
 
-long long bigMod(long long a, long long b) {
-	long long x = 1, y = a;
-	while (b > 0) {
-		if (b % 2 == 1)
-			x = (x * y) %MOD;
-		y = (y * y) %MOD;
-		b /= 2;
+using namespace std;
+
+/*
+10843
+*/
+typedef long long ss;
+ss N;
+const ss X = 2000000011;
+ss Bmod(ss n, ss m)
+{
+	ss r, mod;
+	if (m == 0)
+	{
+		return 1;
 	}
-	return x %MOD;
+	if (m == 1)
+	{
+		return n;
+	}
+	if (m % 2)
+	{
+		mod = (n * Bmod(n, m - 1)) % X;
+	}
+	else
+	{
+		r = (Bmod(n, m / 2));
+		r %= X;
+		mod = (r * r) % X;
+	}
+	return mod;
 }
-
-int main() {
-	long long T, N, t;
-	scanf("%lld", &T);
-	for (t = 1; t <= T; t++) {
+void Cal()
+{
+	if (N <= 1)
+	{
+		printf("1\n");
+		return;
+	}
+	printf("%lld\n", Bmod(N, N - 2));
+}
+int main()
+{
+	ss k, x = 1;
+	scanf("%lld", &k);
+	while (k--)
+	{
 		scanf("%lld", &N);
-		printf("Case #%lld: %lld\n", t, bigMod(N, N - 2));
+		printf("Case #%lld: ", x++);
+		Cal();
 	}
 	return 0;
 }

@@ -1,14 +1,13 @@
-#include <cstdio>
-#include <cmath>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    while(true){
-                int n;
-                scanf("%d", &n);
-                if(n==0)
-                        break;
-                printf("%d\n", (int)floor(log2(n)));
-    }
-    return 0;
+int main()
+{
+	int n;
+	while (scanf("%d", &n)==1, n)
+	{
+		printf("%d\n", log2(n));
+	}
+	return 0;
 }

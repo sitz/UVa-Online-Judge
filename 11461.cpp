@@ -1,20 +1,23 @@
-#include<iostream>
-#include<cmath>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    for(;;){
-            long long a,b;
-            cin>>a>>b;
-            if(a==0 && b==0)
-                    break;
-            double sqra=sqrt(a);
-            long long na=(long long)sqra;
-            if(sqra==(long long)sqra)
-                           na-=1;
-            double sqrb=sqrt(b);
-            long long nb=(long long)sqrb;
-            cout<<nb-na<<endl;
-    }
-    return 0;
+int main()
+{
+	int a, b;
+	while (scanf("%d %d", &a, &b) == 2)
+	{
+		if (!a)
+		{
+			break;
+		}
+		int counter = 0;
+		int i = ceil(sqrt(a));
+		while (i * i <= b)
+		{
+			counter++, i++;
+		}
+		printf("%d\n", counter);
+	}
+	return 0;
 }

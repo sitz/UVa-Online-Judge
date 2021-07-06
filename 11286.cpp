@@ -1,60 +1,73 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
+bool theTruthIsOutThere(const pair<string, int> &a, const pair<string, int> &b)
+{
+	return a.second > b.second;
+}
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	while (true){
-		int N, i;
-		cin >> N;
-		if (N == 0)
+int main()
+{
+	int n;
+	int courses[5];
+	while (cin >> n)
+	{
+		if (!n)
+		{
 			break;
-		map<vector<int>, int> Map;
-		map<vector<int>, int>::iterator it;
-		int maxm = 1;
-		while (N--){
-			vector<int> V(5);
-			FOI(i, 0, 4)
-				cin >> V[i];
-			sort(V.begin(), V.end());
-			Map[V] += 1;
-			maxm = max(maxm, Map[V]);
 		}
-		int tot = 0;
-		for (it = Map.begin(); it != Map.end(); it++){
-			if (maxm == (*it).second)
-				tot += (*it).second;
+		int result = 0;
+		map<string, int> m;
+		vector<pair<string, int>> v;
+		while (n--)
+		{
+			for (int i = 0; i < 5; i++)
+			{
+				cin >> courses[i];
+			}
+			sort(courses, courses + 5);
+			stringstream ss;
+			for (int i = 0; i < 5; i++)
+			{
+				ss << courses[i];
+			}
+			string s = ss.str();
+			if (m.find(s) == m.end())
+			{
+				m[s] = 1;
+				v.push_back(make_pair(s, 0));
+			}
+			else
+			{
+				m[s] += 1;
+			}
 		}
-		
-		cout << tot << endl;
+		for (int i = 0, sz = v.size(); i < sz; i++)
+		{
+			v[i].second = m[v[i].first];
+		}
+		sort(v.begin(), v.end(), theTruthIsOutThere);
+		if (v.size() == 1)
+		{
+			result = v[0].second;
+		}
+		else if (v[0].second == v[1].second)
+		{
+			for (int i = 0, sz = v.size(); i < sz; i++)
+			{
+				if (v[i].second < v[0].second)
+				{
+					break;
+				}
+				result += v[i].second;
+			}
+		}
+		else
+		{
+			result = v[0].second;
+		}
+		cout << result << endl;
 	}
 	return 0;
 }
-

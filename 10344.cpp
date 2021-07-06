@@ -1,47 +1,71 @@
-#include <algorithm>
-#include <cstdio>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int func(int tot, int val, int I) {
-	switch (I) {
-		case 0: return (tot + val);
-		case 1: return (tot - val);
-		case 2: return (tot * val);
+int X[5];
+int check(int lv, int v)
+{
+	if (lv == 5)
+	{
+		return (v == 23);
+	}
+	if (check(lv + 1, v + X[lv]))
+	{
+		return 1;
+	}
+	if (check(lv + 1, v - X[lv]))
+	{
+		return 1;
+	}
+	if (check(lv + 1, v * X[lv]))
+	{
+		return 1;
+	}
+	return 0;
+}
+int perm(int lv)
+{
+	if (lv == 5)
+	{
+		return check(1, X[0]);
+	}
+	int i, t;
+	if (perm(lv + 1))
+	{
+		return 1;
+	}
+	for (i = lv + 1; i < 5; i++)
+	{
+		t = X[lv];
+		X[lv] = X[i];
+		X[i] = t;
+		if (perm(lv + 1))
+		{
+			return 1;
+		}
+		t = X[lv];
+		X[lv] = X[i];
+		X[i] = t;
 	}
 	return 0;
 }
 
-int main() {
-	while (true) {
-		int num[5];
-		for (int i = 0; i < 5; i++)
-			scanf("%d", &num[i]);
-		if (count(num, num + 5, 0) == 5)
+int main()
+{
+	while (scanf("%d%d%d%d%d", X, X + 1, X + 2, X + 3, X + 4) == 5)
+	{
+		if ((X[0] | X[1] | X[2] | X[3] | X[4]) == 0)
+		{
 			break;
-			
-		bool flag = false;
-		sort(num, num + 5);
-		do {
-			for (int a = 0; a < 3; a++)
-				for (int b = 0; b < 3; b++)
-					for (int c = 0; c < 3; c++)
-						for (int d = 0; d < 3; d++) {
-							int tot = num[0];
-							tot = func(tot, num[1], a);
-							tot = func(tot, num[2], b);
-							tot = func(tot, num[3], c);
-							tot = func(tot, num[4], d);
-							if (tot == 23) {
-								flag = true;
-								break;
-							}
-						}
-		} while (next_permutation(num, num + 5));
-		
-		if (flag)
+		}
+		if (perm(0))
+		{
 			printf("Possible\n");
+		}
 		else
+		{
 			printf("Impossible\n");
+		}
 	}
 	return 0;
 }

@@ -1,45 +1,72 @@
-#include <algorithm>
-#include <iostream>
-#include <cstdio>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef long long int64;
-const int64 MAXM =  1 * 1LL<<60;
-const int64 MINM = -1 * 1LL<<60;
+vector<long long> precalc[18];
 
-int main() {
-	//cout << MAXM << " " << MINM << endl;
-	
-	int64 T, t;
-	scanf("%lld", &T);
-	for (t = 1; t <= T; t++) {
-		int64 p, q;
-		scanf("%lld %lld", &p, &q);
-		
-		q = 1LL<<q;
-		int64 Min = MAXM;
-		int64 Max = MINM;
-		for (int64 i = 0; i <= 1LL<<p; i++) {
-			int64 val = 0, mul = 1;
-			for (int64 j = 0; j < p; j++) {
-				if (i & 1LL<<j) val += (mul * 2);
-				else val += (mul * 1);
-				
-				mul *= 10;
+void precalculate(int n, long long a, int depth)
+{
+	if (depth == n)
+	{
+		precalc[n].push_back(a);
+		return;
+	}
+	precalculate(n, a * 10 + 1, depth + 1);
+	precalculate(n, a * 10 + 2, depth + 1);
+}
+
+int mypow(int a)
+{
+	int result = 1;
+	while (a--)
+	{
+		result <<= 1;
+	}
+	return result;
+}
+
+int main()
+{
+	int t, p, q;
+	vector<int> result;
+	for (int i = 1; i < 18; i++)
+	{
+		precalculate(i, 0, 0);
+		sort(precalc[i].begin(), precalc[i].end());
+	}
+	cin >> t;
+	for (int i = 0; i < t; i++)
+	{
+		cin >> p >> q;
+		result.clear();
+		int div = mypow(q);
+		long long min = -1, max = -1;
+		for (int j = 0, sz = precalc[p].size(); j < sz; j++)
+		{
+			if (precalc[p][j] % div == 0)
+			{
+				if (min == -1)
+				{
+					min = precalc[p][j];
+				}
+				else
+				{
+					max = precalc[p][j];
+				}
 			}
-			if (val % q == 0) {
-				Min = min(Min, val);
-				Max = max(Max, val);
-			}
 		}
-		if (Min == MAXM && Max == MINM) {
-			printf("Case %lld: impossible\n", t);
+		cout << "Case " << i + 1 << ": ";
+		if (min == -1)
+		{
+			cout << "impossible" << endl;
 		}
-		else if (Min == Max) {
-			printf("Case %lld: %lld\n", t, Min);
+		else if (max == -1)
+		{
+			cout << min << endl;
 		}
-		else {
-			printf("Case %lld: %lld %lld\n", t, Min, Max);
+		else
+		{
+			cout << min << " " << max << endl;
 		}
 	}
 	return 0;

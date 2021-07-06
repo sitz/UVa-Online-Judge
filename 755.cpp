@@ -1,89 +1,127 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-
-string SI[] = {"2", "2", "2", "3", "3", "3", "4", "4", "4", "5", "5", "5", "6", "6", "6", "7", "", "7", "7", "8", "8", "8", "9", "9", "9", ""};
-
-string mod(string S){
-	int i = 0, L = S.length();
-	string R = "";
-	FOI(i, 0, L-1){
-		if (isdigit(S[i]))
-			R += S[i];
-		else if (isalpha(S[i]))
-			R += SI[S[i] - 'A'];
-		else
+/***************
+Title : 787-3279
+   No : 755
+***************/
+#define max 100009
+char a[400];
+char digit[max][10];
+char tele_num[max][50];
+int N;
+int sort_function(const void *a, const void *b)
+{
+	return (strcmp((char *)a, (char *)b));
+}
+int value()
+{
+	int p;
+	char i, m = '2';
+	char j = 2, k = 0;
+	for (i = 'A'; i < 'Z'; i++)
+	{
+		if (i == 'Q')
+		{
 			continue;
-	}
-	return R;
-}
-
-string con(string S){
-	S.insert(3, "-");
-	return S;
-}
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int T;
-	cin >> T;
-	while (T--){
-		int N, i;
-		cin >> N;
-		map<string, int> Map;
-		map<string, int>::iterator it;
-		while (N--){
-				string str;
-				cin >> str;
-				str = mod(str);
-				it = Map.find(str);
-				if (it != Map.end())
-					Map[str] += 1;
-				else
-					Map[str] = 1;
 		}
-		vector< string > V;
-		for (it = Map.begin(); it != Map.end(); it++){
-			if ((*it).second > 1)
-				V.push_back((*it).first);
+		k++;
+		if (k % 4 == 0)
+		{
+			m++;
+			k = 1;
 		}
-		if (V.size() == 0)
-			cout << "No duplicates." << endl;
-		else{
-			sort(V.begin(), V.end());
-			FOI(i, 0, V.size()-1)
-				cout << con(V[i]) << " " << Map[V[i]] << endl;
-		}	
-		if (T)
-			cout << endl;
+		p = i;
+		a[p] = m;
 	}
 	return 0;
 }
-
+int convert()
+{
+	int i, j, k, m;
+	for (i = 0; i < N; i++)
+	{
+		k = 0;
+		for (j = 0; tele_num[i][j]; j++)
+		{
+			if (isdigit(tele_num[i][j]))
+			{
+				digit[i][k] = tele_num[i][j];
+			}
+			else if (isalpha(tele_num[i][j]))
+			{
+				m = tele_num[i][j];
+				digit[i][k] = a[m];
+			}
+			else
+			{
+				continue;
+			}
+			k++;
+		}
+		digit[i][k] = NULL;
+	}
+	return 0;
+}
+int calculate()
+{
+	char temp[10];
+	int i, j, c, k;
+	k = 0;
+	for (i = 0; i < N;)
+	{
+		strcpy(temp, digit[i]);
+		c = 1;
+		for (++i; !strcmp(temp, digit[i]) && i < N; i++)
+		{
+			c++;
+		}
+		if (c >= 2)
+		{
+			k = 1;
+			for (j = 0; temp[j]; j++)
+			{
+				printf("%c", temp[j]);
+				if (j == 2)
+				{
+					printf("-");
+				}
+			}
+			printf(" %d\n", c);
+			c = 1;
+		}
+	}
+	if (!k)
+	{
+		printf("No duplicates.\n");
+	}
+	return 0;
+}
+int main()
+{
+	int i, pp;
+	char f[120], qq[120];
+	value();
+	gets(qq);
+	sscanf(qq, "%d", &pp);
+	gets(qq);
+	while (pp--)
+	{
+		gets(f);
+		sscanf(f, "%d", &N);
+		for (i = 0; i < N; i++)
+		{
+			gets(tele_num[i]);
+		}
+		convert();
+		qsort((void *)digit, N, sizeof(digit[0]), sort_function);
+		calculate();
+		if (pp)
+		{
+			printf("\n");
+			gets(f);
+		}
+	}
+	return 0;
+}

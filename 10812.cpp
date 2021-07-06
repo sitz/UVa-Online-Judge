@@ -1,17 +1,27 @@
-#include <stdio.h>
+#include <bits/stdc++.h>
 
-int main() {
-	int T;
-	scanf("%d", &T);
-	while( T-- ){
-		int S, D;
-		scanf("%d%d", &S, &D);
-		int A = S + D;
-		int B = S - D;
-		if (A < 0 || A&1 || B < 0 || B&1)
-			printf("impossible\n");
-		else
-			printf("%d %d\n", A/2, B/2);
+using namespace std;
+
+int main()
+{
+	int tmp;
+	scanf("%d ", &tmp);
+	int sum, dif;
+	while (scanf("%d %d", &sum, &dif) == 2)
+	{
+		if (sum < dif)
+		{
+			puts("impossible");
+			continue;
+		}
+		else if (sum % 2 != dif % 2)
+		{
+			puts("impossible");
+			continue;
+		}
+		int a = (sum + dif) / 2;
+		int b = (sum - dif) / 2;
+		printf("%d %d\n", a, b);
 	}
 	return 0;
 }

@@ -1,32 +1,32 @@
-#include <set>
-#include <cstdio>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main() {
-	int T, t;
-	scanf("%d", &T);
-	for (t = 1; t <= T; t++) {
-		int N, M;
-		scanf("%d", &N);
-		M = N;
-		set< int > Set;
-		while (true) {
-			Set.insert(M);
-			int temp = 0;
-			while (M) {
-				int R = M % 10;
-				temp += R * R;
-				M = M / 10;
+int main()
+{
+	int t, n, tmp;
+	scanf("%d", &t);
+	for (int i = 1; i <= t; i++)
+	{
+		scanf("%d", &n);
+		printf("Case #%d: %d is ", i, n);
+		while (n > 9)
+		{
+			tmp = 0;
+			while (n)
+			{
+				tmp += (n % 10) * (n % 10);
+				n /= 10;
 			}
-			if (temp == 1) {
-				printf("Case #%d: %d is a Happy number.\n", t, N);
-				break;
-			}
-			if (Set.find(temp) != Set.end()) {
-				printf("Case #%d: %d is an Unhappy number.\n", t, N);
-				break;
-			}
-			M = temp;
+			n = tmp;
+		}
+		if (n % 6 == 1)
+		{
+			printf("a Happy number.\n");
+		}
+		else
+		{
+			printf("an Unhappy number.\n");
 		}
 	}
 	return 0;

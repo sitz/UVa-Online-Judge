@@ -1,66 +1,39 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef long long int64;
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-
-template <class ReverseIterator>
-typename ReverseIterator::iterator_type make_forward(ReverseIterator rit){
-    return --rit.base();
-}
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	while (true){
-		int64 N;
-		scanf("%lld", &N);
-		if (N == 0)
+int main()
+{
+	int n, k, bill;
+	unsigned long long result;
+	multiset<int> bills;
+	multiset<int>::iterator it1;
+	multiset<int>::reverse_iterator it2;
+	while (cin >> n)
+	{
+		if (n == 0)
+		{
 			break;
-		multiset< int64 > mset;
-		multiset< int64 >::iterator mit, rit;
-		int64 T = 0;
-		while (N--){
-			int64 K;
-			scanf("%lld", &K);
-			while (K--){
-				int64 I;
-				scanf("%lld", &I);
-				mset.insert(I);
-			}
-			mit = mset.begin();
-			rit = make_forward( mset.rbegin() );	
-			T += (*rit - *mit);
-			mset.erase(mit);
-			mset.erase(rit);
 		}
-		printf("%lld\n", T);
+		bills.clear();
+		result = 0;
+		for (int i = 0; i < n; i++)
+		{
+			cin >> k;
+			while (k--)
+			{
+				cin >> bill;
+				bills.insert(bill);
+			}
+			it1 = bills.begin();
+			it2 = bills.rbegin();
+			bill = *it2;
+			result += *it2 - *it1;
+			bills.erase(it1);
+			it1 = bills.find(bill);
+			bills.erase(it1);
+		}
+		cout << result << endl;
 	}
 	return 0;
 }
-

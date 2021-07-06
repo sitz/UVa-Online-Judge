@@ -1,97 +1,65 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-
-map<string, int> Ing;
-map<string, int>::iterator iit;
-map<string, int> Cost;
-map<string, int>::iterator cit;
-vector< string > Ans;
-		
-bool comp(string A, string B){
-	if (Cost[A] != Cost[B])
-		return Cost[A] < Cost[B];
-	return A < B;
+bool theTruthIsOutThere(const pair<string, int> &a, const pair<string, int> &b)
+{
+	return a.second == b.second ? a.first < b.first : a.second < b.second;
 }
 
-string Upper(string S){
-	int L = S.length() - 1, i;
-	string R = "";
-	FOI(i, 0, L) R += toupper(S[i]);
-	return R;
-}
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int T;
-	string S;
-	cin >> T;
-	getline(cin, S);
-	while (T--){
-		Ing.clear(); Cost.clear(); Ans.clear();
-		int i, j, k;
-		string binder;
-		getline(cin, binder);
-		cout << Upper(binder) << endl;
-		int M, N, B;
-		cin >> M >> N >> B;
-		getline(cin, S);
-		int I, K;
-		while (M--){
-			cin >> S >> I;
-			Ing[S] = I;
-			getline(cin, S);
+int main()
+{
+	int t;
+	int m, n, b;
+	int cost;
+	int k;
+	int amount;
+	map<string, int> ingredients;
+	string ingredient;
+	string binder_name;
+	string recipy_name;
+	vector<pair<string, int>> result;
+	cin >> t;
+	while (t--)
+	{
+		result.clear();
+		ingredients.clear();
+		cin.ignore(100, '\n');
+		getline(cin, binder_name);
+		cin >> m >> n >> b;
+		for (int i = 0; i < m; i++)
+		{
+			cin >> ingredient >> cost;
+			ingredients[ingredient] = cost;
 		}
-		string R;
-		while (N--){
-			getline(cin, R);
-			Cost[R] = 0;
-			cin >> K;
-			getline(cin, S);
-			while (K--){
-				cin >> S >> I;
-				Cost[R] += (I * Ing[S]);
-				getline(cin, S);
+		for (int i = 0; i < n; i++)
+		{
+			cin.ignore(100, '\n');
+			getline(cin, recipy_name);
+			cin >> k;
+			cost = 0;
+			for (int j = 0; j < k; j++)
+			{
+				cin >> ingredient >> amount;
+				cost += ingredients[ingredient] * amount;
 			}
-			if (Cost[R] < B)
-				Ans.push_back(R);
+			if (cost <= b)
+			{
+				result.push_back(make_pair(recipy_name, cost));
+			}
 		}
-		sort(Ans.begin(), Ans.end(), comp);
-		int SZ = Ans.size();
-		if (SZ == 0)
+		sort(result.begin(), result.end(), theTruthIsOutThere);
+		transform(binder_name.begin(), binder_name.end(), binder_name.begin(), ::toupper);
+		cout << binder_name << endl;
+		for (int i = 0, sz = result.size(); i < sz; i++)
+		{
+			cout << result[i].first << endl;
+		}
+		if (result.size() == 0)
+		{
 			cout << "Too expensive!" << endl;
-		else
-			FOI(i, 0, SZ-1)
-				cout << Ans[i] << endl;
+		}
 		cout << endl;
 	}
 	return 0;
 }
-

@@ -1,17 +1,34 @@
-#include<iostream>
-#include<cmath>
+#include <bits/stdc++.h>
+
 using namespace std;
-int main(){
-    for(;;){
-            long double m,x;
-            cin>>m>>x;
-            if(m==0 && x==0)
-                    break;
-            long long v=(long long)floor(((m-1)/(1.0-x/100.0)));
-            if(v>=m)
-                    cout<<v<<endl;
-            else
-                    cout<<"Not found"<<endl;
-    }
-    return 0;
+
+long long int m, x;
+
+int main()
+{
+	while (scanf("%lld %lld", &m, &x), x || m)
+	{
+		if (x == 100 || x == 0 || m == 1)
+		{
+			puts("Not found");
+		}
+		else
+		{
+			long long a = (m - 1) * 100, b = (100 - x);
+			long long int v = a / b;
+			if (a % b == 0)
+			{
+				v--;
+			}
+			if (v >= m)
+			{
+				printf("%lld\n", v);
+			}
+			else
+			{
+				puts("Not found");
+			}
+		}
+	}
+	return 0;
 }

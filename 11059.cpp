@@ -1,25 +1,34 @@
-#include <algorithm>
-#include <cstdio>
-#include <cmath>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef long long int64;
-
-int main() {
-	int64 t = 1, N;
-	while (scanf("%lld", &N) != EOF) {
-		int64 Vec[N];
-		for (int i = 0; i < N; i++) scanf("%lld", &Vec[i]);
-		
-		int64 Max = 0;
-		for (int i = 0; i < N; i++) {
-			int64 Pro = 1;
-			for (int j = i; j < N; j++) {
-				Pro *= Vec[j];
-				Max = max(Max, Pro);
+int main()
+{
+	int n;
+	int nums[20];
+	int casenum = 0;
+	while (cin >> n)
+	{
+		casenum++;
+		for (int i = 0; i < n; i++)
+		{
+			cin >> nums[i];
+		}
+		long long best = 0;
+		for (int i = 0; i < n; i++)
+		{
+			long long current = 1;
+			for (int j = i; j < n; j++)
+			{
+				current *= nums[j];
+				if (current > best)
+				{
+					best = current;
+				}
 			}
 		}
-		printf("Case #%lld: The maximum product is %lld.\n\n", t++, Max);
+		cout << "Case #" << casenum << ": The maximum product is " << best << "." << endl;
+		cout << endl;
 	}
 	return 0;
 }

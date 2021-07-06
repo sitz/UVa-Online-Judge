@@ -1,66 +1,112 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#include <bits/stdc++.h>
 
 using namespace std;
 
-struct Team{
-       string name;
-       int att;
-       int def;
-};
+#define num_play 10
 
-bool mainComp(Team A, Team B){
-     if(A.att != B.att)
-              return (A.att > B.att);
-     else if(A.def != B.def)
-          return (A.def < B.def);
-     else
-         return (A.name < B.name);
-}
-bool supComp(Team A, Team B){
-     return (A.name < B.name);
-}
-int main(){
-    int test;
-    cin>>test;
-    for(int t=1; t<=test; t++){
-            Team team[10];
-            int i;
-            for(i=0; i<10; i++)
-                     cin>>team[i].name>>team[i].att>>team[i].def;
-            sort(team, team+10, mainComp);
-            cout<<"Case "<<t<<":\n";
-            sort(team, team+5, supComp);
-            cout<<"("<<team[0].name<<", "<<team[1].name<<", "<<team[2].name<<", "<<team[3].name<<", "<<team[4].name<<")\n";
-            sort(team+5, team+10, supComp);
-            cout<<"("<<team[5].name<<", "<<team[6].name<<", "<<team[7].name<<", "<<team[8].name<<", "<<team[9].name<<")\n";
-    }
-    return 0;
+typedef struct
+{
+	char name[50];
+	int attack;
+	int defence;
+} team;
+team player[20], tem;
+int main()
+{
+	int i, j, k, t, test_case;
+	while (scanf("%d ", &test_case) == 1)
+	{
+		for (t = 1; t <= test_case; t++)
+		{
+			for (i = 0; i < num_play; i++)
+			{
+				scanf("%s %d %d", &player[i].name, &player[i].attack, &player[i].defence);
+			}
+			/*sorting for divide in two group*/
+			for (i = 0; i < num_play - 1; i++)
+			{
+				for (k = i + 1; k < num_play; k++)
+				{
+					if (player[i].attack < player[k].attack)
+					{
+						tem = player[i];
+						player[i] = player[k];
+						player[k] = tem;
+					}
+					else if (player[i].attack == player[k].attack)
+					{
+						if (player[i].defence > player[k].defence)
+						{
+							tem = player[i];
+							player[i] = player[k];
+							player[k] = tem;
+						}
+						else if (player[i].defence == player[k].defence)
+						{
+							if (strcmp(player[i].name, player[k].name) > 0)
+							{
+								tem = player[i];
+								player[i] = player[k];
+								player[k] = tem;
+							}
+						}
+					}
+				}
+			}
+			/*sorting for lexicography*/
+			/*first half attacking*/
+			for (i = 0; i < 4; i++)
+			{
+				for (k = i + 1; k < 5; k++)
+				{
+					if (strcmp(player[i].name, player[k].name) > 0)
+					{
+						tem = player[i];
+						player[i] = player[k];
+						player[k] = tem;
+					}
+				}
+			}
+			/*last half defending*/
+			for (i = 5; i < 9; i++)
+			{
+				for (k = i + 1; k < 10; k++)
+				{
+					if (strcmp(player[i].name, player[k].name) > 0)
+					{
+						tem = player[i];
+						player[i] = player[k];
+						player[k] = tem;
+					}
+				}
+			}
+			/*printing attack*/
+			printf("Case %d:\n", t);
+			printf("(");
+			for (i = 0; i < 5; i++)
+			{
+				if (i != 4)
+				{
+					printf("%s, ", player[i].name);
+				}
+				else if (i == 4)
+				{
+					printf("%s)\n", player[i].name);
+				}
+			}
+			/*printing defence*/
+			printf("(");
+			for (i = 5; i < 10; i++)
+			{
+				if (i != 9)
+				{
+					printf("%s, ", player[i].name);
+				}
+				else if (i == 9)
+				{
+					printf("%s)\n", player[i].name);
+				}
+			}
+		}
+	}
 }

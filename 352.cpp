@@ -1,76 +1,66 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+enum
+{
+	MAX = 25 + 2
+};
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
+int img_size;
+char img[MAX][MAX];
 
-int N;
-char adjMat[30][30];
-bool visit[30][30];
-
-void floodFill(int X, int Y){
-	if ( X < 0 || Y < 0 || X >= N || Y >= N )
-		return;
-	if ( adjMat[X][Y] == '0' )
-		return;
-	
-	adjMat[X][Y] = '0';
-	
-	int dx[] = {-1, -1, -1, 0, 1, 1, 1, 0};
-	int dy[] = {-1, 0, 1, 1, 1, 0, -1, -1};
-	int j;
-	FOI(j, 0, 7)
-		floodFill(X + dx[j], Y + dy[j]);
+bool is_valid(int x, int y)
+{
+	return (x < img_size && x >= 0 && y < img_size && y >= 0);
 }
 
-int main(int argc, char **argv){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int T = 1;
-	while( scanf("%d", &N) != EOF ){
-		if( N == 0 )
-			break;
-		int i, j;
-		int comp = 0;
-		memset(adjMat, '0', sizeof (adjMat) );
-		FOI(i, 0, N-1)
-			scanf("%s", adjMat[i]);
-		FOI(i, 0, N-1)
-			FOI(j, 0, N-1)
-			if ( adjMat[i][j] == '1' ){
-				comp++;
-				floodFill(i, j);
+void dfs(int x, int y)
+{
+	img[x][y] = '0';
+	for (int dx = -1; dx <= 1; ++dx)
+	{
+		for (int dy = -1; dy <= 1; ++dy)
+		{
+			int next_x = x + dx;
+			int next_y = y + dy;
+			if (is_valid(next_x, next_y) && img[next_x][next_y] == '1')
+			{
+				dfs(next_x, next_y);
 			}
-				
-		printf("Image number %d contains %d war eagles.\n", T++, comp);
+		}
+	}
+}
+
+int solve(char img[MAX][MAX], int img_size)
+{
+	int war_eagles_counter = 0;
+	for (int i = 0; i < img_size; ++i)
+	{
+		for (int j = 0; j < img_size; ++j)
+		{
+			if (img[i][j] == '1')
+			{
+				dfs(i, j);
+				war_eagles_counter++;
+			}
+		}
+	}
+	return war_eagles_counter;
+}
+
+int main()
+{
+	int caseNo = 1;
+	while (scanf("%d ", &img_size) == 1)
+	{
+		for (int i = 0; i < img_size; ++i)
+		{
+			scanf("%s", img[i]);
+		}
+		int war_eagles = solve(img, img_size);
+		printf("Image number %d ", caseNo++);
+		printf("contains %d war eagles.\n", war_eagles);
 	}
 	return 0;
 }

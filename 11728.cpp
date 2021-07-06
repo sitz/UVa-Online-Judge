@@ -1,19 +1,46 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    int sum[10000]={0};
-    sum[0]=1;
-    for(int i=2;;i++){
-            int s=0;
-            for(int j=1;j<i;j++){
-                    if(i%j==0)
-                              s+=j;
-            }
-            sum[i]=s;
-            cout<<sum[i]<<endl;
-            if(s==1000)
-                    break;
-    }
-    return 0;
+int sumOfFactors(int n)
+{
+	int output = 1;
+	for (int i = 2; i < n; i++)
+	{
+		if (n % i == 0)
+		{
+			output += i;
+		}
+		if (output > 1000)
+		{
+			break;
+		}
+	}
+	if (n != 1)
+	{
+		output += n;
+	}
+	return output;
+}
+
+int main()
+{
+	int save[1000 + 5];
+	memset(save, -1, 1005 * sizeof(int));
+	int sof;
+	int cases = 0;
+	for (int i = 1; i <= 1000; i++)
+	{
+		sof = sumOfFactors(i);
+		if (sof <= 1000)
+		{
+			save[sof] = i;
+		}
+	}
+	int s;
+	while (scanf("%d", &s) && s)
+	{
+		printf("Case %d: %d\n", ++cases, save[s]);
+	}
+	return 0;
 }

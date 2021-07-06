@@ -1,52 +1,33 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#include <bits/stdc++.h>
 
 using namespace std;
-string ref = "0123456789";
-int main(){
-    while(true){
-                int64 N;
-                cin>>N;
-                if(N < 0)
-                     break;
-                else if(N == 0)
-                     cout<<"0\n";
-                else{
-                string ter="";
-                while(N>0){
-                           int64 rem = N%3;
-                           ter = ref[rem] + ter;
-                           N /= 3;
-                }
-                cout<<ter<<endl;
-                }
-    }
-    return 0;
+
+string convert(int n, int base)
+{
+	if (n == 0)
+	{
+		return "0";
+	}
+	char NUMS[] = "0123456789ABCDEF";
+	string result = "";
+	do
+	{
+		result.push_back(NUMS[n % base]);
+		n /= base;
+	} while (n);
+	return string(result.rbegin(), result.rend());
+}
+
+int main()
+{
+	int n;
+	while (cin >> n)
+	{
+		if (n < 0)
+		{
+			break;
+		}
+		cout << convert(n, 3) << endl;
+	}
+	return 0;
 }

@@ -1,26 +1,33 @@
-#include <cstdio>
+#include <bits/stdc++.h>
 
-long long power(long long A, long long B, long long C) {
-    if (B == 0) return (1 %C);
-    if (B == 1) return (A %C);
+using namespace std;
 
-    long long V = power(A, B/2, C);
-    V = (V %C * V %C) %C;
-    if (B & 1)
-        V = (V %C * A %C) %C;
-    return V;
+unsigned int calc(unsigned int x, int y, int n)
+{
+	if (y == 1)
+	{
+		return x;
+	}
+	if (y % 2 == 0)
+	{
+		return calc((x * x) % n, y / 2, n);
+	}
+	else
+	{
+		return (x * calc((x * x) % n, y / 2, n)) % n;
+	}
 }
 
-int main() {
-    //freopen("testI.txt", "r", stdin);
-    //freopen("testO.txt", "w", stdout);
-
-    int T;
-    scanf("%d", &T);
-    while (T--) {
-        long long A, B, C;
-        scanf("%lld%lld%lld", &A, &B, &C);
-        printf("%lld\n", power(A, B, C));
-    }
-    return 0;
+int main()
+{
+	int cases;
+	unsigned int x;
+	int y, n;
+	cin >> cases;
+	while (cases--)
+	{
+		cin >> x >> y >> n;
+		cout << calc(x, y, n) << endl;
+	}
+	return 0;
 }

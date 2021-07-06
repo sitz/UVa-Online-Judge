@@ -1,30 +1,29 @@
-#include <cstring>
-#include <cstdio>
+#include <bits/stdc++.h>
 
-int main() {
-	int T, N;
-	char crop[105];
-	scanf("%d", &T);
-	for (int t = 1; t <= T; t++) {
-		scanf("%d", &N);
-		scanf("%s", crop);
-		bool seen = false;
-		int previous, scareCrow = 0;
-		for (int i = 0; i < N; i++) {
-			if (seen) {
-				if (i - previous == 2) {
-					++scareCrow;
-					seen = false;
-				}
-				continue;
+using namespace std;
+
+int main()
+{
+	scanf("%*d");
+	for (int cnum = 0, n; scanf("%d\n", &n) == 1;)
+	{
+		int scarecrows = 0;
+		char c, p = '#';
+		while (n--)
+		{
+			c = getc(stdin);
+			scarecrows += p == '.';
+			if (p == '.')
+			{
+				c = 'S';
 			}
-			if (crop[i] == '.') {
-				seen = true;
-				previous = i;
+			else if (p == 'S')
+			{
+				c = '#';
 			}
+			p = c;
 		}
-		if (seen) ++scareCrow;
-		printf("Case %d: %d\n", t, scareCrow);
+		printf("Case %d: %d\n", ++cnum, scarecrows + (p == '.'));
 	}
 	return 0;
 }

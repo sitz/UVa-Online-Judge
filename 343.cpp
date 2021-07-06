@@ -1,57 +1,68 @@
-#include <map>
-#include <cstdio>
-#include <string>
-#include <iostream>
-#include <algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-string Alpha = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-map<char, int> Map;
+typedef long long big_int;
 
-int calc(string S, int B) {
-	int mul = 1;
-	int val = 0;
-	for (int i = S.length() - 1; i >= 0; i--) {
-		val += (Map[S[i]] * mul);
-		mul *= B;
-	}
-	return val;
+inline int CharToDigit(char c)
+{
+	if (isdigit(c))
+		return c - '0';
+	return c - 'A' + 10;
 }
 
-int maxm(string S) {
-	int B = 0;
-	for (int i = 0; i < S.length(); i++) {
-		B = max(B, Map[S[i]]);
-	}
-	return max(2, B + 1);
+inline char DigitToChar(int n)
+{
+	return "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"[n];
 }
 
-int main() {
-	for (int i = 0; i < Alpha.length(); i++) {
-		Map[(char)Alpha[i]] = i;
-		//cout << Alpha[i] << " " << Map[Alpha[i]] << endl;
+bool checkIllegal(int base1, string &in)
+{
+	for (int i = 0; i < in.length(); ++i)
+		if (CharToDigit(in[i]) >= base1)
+			return true;
+	return false;
+}
+
+// convert string 'in' to int 'value'
+big_int parseValue(int base, string &in)
+{
+	if (checkIllegal(base, in))
+		return -1;
+	big_int value = 0, curBase = 1;
+	for (int i = in.length() - 1; i >= 0; --i)
+	{
+		value += CharToDigit(in[i]) * curBase;
+		curBase *= base;
 	}
-		
-	string A, B;
-	while (cin >> A >> B) {
-		int baseA, baseB;
-		int aSta = maxm(A), bSta = maxm(B);
-		//cout << aSta << " " << bSta << endl;
-		bool flag = false;
-		for (baseA = aSta; baseA <= 36; baseA++) {
-			int valA = calc(A, baseA);
-			for (baseB = bSta; baseB <= 36; baseB++) {
-				int valB = calc(B, baseB);
-				if (valA == valB) {
-					cout << A << " (base " << baseA << ") = " << B << " (base " << baseB << ")\n";
-					flag = true;
-					break;
-				}
+	return value;
+}
+
+void match(string &num1, string &num2)
+{
+	for (int i = 2; i <= 36; ++i)
+	{
+		for (int j = 2; j <= 36; ++j)
+		{
+			big_int value1 = parseValue(i, num1);
+			big_int value2 = parseValue(j, num2);
+			if (value1 < 0 || value2 < 0)
+				continue;
+			if (value1 == value2)
+			{
+				printf("%s (base %d) = %s (base %d)\n", num1.c_str(), i, num2.c_str(), j);
+				return;
 			}
-			if (flag) break;
 		}
-		if (!flag)
-			cout << A << " is not equal to " << B << " in any base 2..36\n";
 	}
+	// fail
+	printf("%s is not equal to %s in any base 2..36\n", num1.c_str(), num2.c_str());
+}
+
+int main()
+{
+	string num1, num2;
+	while (cin >> num1 >> num2)
+		match(num1, num2);
 	return 0;
 }

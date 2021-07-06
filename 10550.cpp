@@ -1,56 +1,49 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int main(){
-    while(true){
-                int A, B, C, D, tot=0;
-                cin>>A>>B>>C>>D;
-                if(A==0 & B==0 & C==0 & D==0)
-                        break;
-                tot += 80;
-                if(B >= A)
-                     tot += (B-A);
-                else
-                     tot += (40 - A + B);
-                tot += 40;
-                if(C <= B)
-                     tot += (B-C);
-                else
-                    tot += (40 - C + B);
-                if(D >= C)
-                     tot += (D-C);
-                else
-                    tot += (40 - C + D);
-                cout<< 3240 - tot*9 <<endl;
-    }
-    return 0;
+/****
+10550
+****/
+#define MAXN 1080
+int Close(int a, int b)
+{
+	int c = 0;
+	while (a != b)
+	{
+		c++;
+		a--;
+		if (a == -1)
+		{
+			a = 39;
+		}
+	}
+	return c * 9;
+}
+int Counter(int a, int b)
+{
+	int c = 0;
+	while (a != b)
+	{
+		c++;
+		a++;
+		if (a == 40)
+		{
+			a = 0;
+		}
+	}
+	return c * 9;
+}
+int main()
+{
+	int a, b, c, d;
+	while (scanf("%d%d%d%d", &a, &b, &c, &d) == 4)
+	{
+		if (a == 0 && b == 0 && c == 0 && d == 0)
+		{
+			break;
+		}
+		printf("%d\n", Close(a, b) + Counter(b, c) + Close(c, d) + MAXN);
+	}
+	return 0;
 }

@@ -1,36 +1,40 @@
-#include<iostream>
-#include<cstdio>
-#include<cmath>
-#include<string>
-#include<algorithm>
+#include <bits/stdc++.h>
+
 using namespace std;
-int main(){
-    for(int z=1;;z++){
-            string str;
-            int i;
-            getline(cin,str,'\n');
-            if(str=="EOF" || str=="\0")
-                          break;
-            int len=str.length();
-            int counter[len];
-            counter[0]=0;
-            for(i=1;i<len;i++){
-                    if(str[i]!=str[i-1])
-                                        counter[i]=counter[i-1]+1;
-                    else
-                                        counter[i]=counter[i-1];
-            }
-            printf("Case %d:\n",z);
-            int cases;
-            scanf("%d\n",&cases);
-            while(cases--){
-                           int a,b;
-                           scanf("%d %d\n",&a,&b);
-                           if(counter[a]==counter[b])
-                                                     printf("Yes\n");
-                           else
-                                                     printf("No\n");
-            }
-    }
-    return 0;
+
+int main()
+{
+	char buf[1000001];
+	int table[1000001];
+	int i, j, n, t, kase = 1;
+	while (cin >> buf)
+	{
+		cout << "Case " << kase++ << ":" << endl;
+		memset(table, 0, sizeof(table));
+		for (i = 1; buf[i]; i++)
+		{
+			if (buf[i] == buf[i - 1])
+			{
+				table[i] = table[i - 1];
+			}
+			else
+			{
+				table[i] = table[i - 1] + 1;
+			}
+		}
+		cin >> n;
+		for (t = 0; t < n; t++)
+		{
+			cin >> i >> j;
+			if (table[i] == table[j])
+			{
+				cout << "Yes" << endl;
+			}
+			else
+			{
+				cout << "No" << endl;
+			}
+		}
+	}
+	return 0;
 }

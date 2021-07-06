@@ -1,54 +1,114 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
+/*
+ *  Algorithm:
+ *      Counting Problem.
+ *      Si means the Si+1'th num from 0 which has not been used.
+ *      So you can use binary search + TreeArray to calculate
+ *      the Si+1'th number which has not been used.
+ * */
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int T;
-	scanf("%d", &T);
-	while (T--){
-		int N, i;
-		scanf("%d", &N);
-		vector <int> ind(N);
-		FOI(i, 0, N-1)
-			ind[i] = i + 1;
-		FOI(i, 0, N-1){
-			int I;
-			scanf("%d", &I);
-			printf("%d", ind[I]);
-			ind.erase(ind.begin() + I);
-			if (i < N-1)
-				printf(" ");
+const int MAXSIZE = 50010;
+
+class TreeArray
+{
+public:
+	int C[MAXSIZE], size;
+
+	void init(int len)
+	{
+		size = len;
+		memset(C, 0, sizeof(C));
+	}
+
+	int lowbit(int x)
+	{
+		return x & (x ^ (x - 1));
+	}
+
+	void insert(int k, int value)
+	{
+		while (k <= size)
+		{
+			C[k] += value;
+			k += lowbit(k);
 		}
-		printf("\n");
+	}
+
+	int getSum(int k)
+	{
+		int sum = 0;
+		while (k > 0)
+		{
+			sum += C[k];
+			k -= lowbit(k);
+		}
+		return sum;
+	}
+} ta;
+
+int K, S[50010];
+
+void input()
+{
+	cin >> K;
+	for (int i = 0; i < K; i++)
+	{
+		cin >> S[i];
+	}
+}
+
+void solve()
+{
+	int i;
+	vector<int> ans;
+	ta.init(K + 1);
+	for (i = 1; i <= K; i++)
+	{
+		ta.insert(i, 1);
+	}
+	for (i = 0; i < K; i++)
+	{
+		int low = 1, mid, high = K;
+		while (low < high)
+		{
+			mid = (low + high) / 2;
+			int sum = ta.getSum(mid);
+			if (sum < S[i] + 1)
+			{
+				low = mid + 1;
+			}
+			else
+			{
+				high = mid;
+			}
+		}
+		ans.push_back(high);
+		ta.insert(high, -1);
+	}
+	bool f = false;
+	for (i = 0; i < (int)ans.size(); i++)
+	{
+		if (f)
+		{
+			cout << " ";
+		}
+		f = true;
+		cout << ans[i];
+	}
+	cout << endl;
+}
+
+int main()
+{
+	int T;
+	cin >> T;
+	while (T--)
+	{
+		input();
+		solve();
 	}
 	return 0;
 }
-

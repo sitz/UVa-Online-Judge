@@ -1,34 +1,75 @@
-#include <cstring>
-#include <cmath>
-#include <cstdio>
-#include <cfloat>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main() {
-	int tree[5000 + 5][3], N = 0;
-	int dist[10];
-	memset(dist, 0, sizeof dist);
-	
-	while (true) {
-		scanf("%d%d%d", &tree[N][0], &tree[N][1], &tree[N][2]);
-		if (!(tree[N][0] || tree[N][1] || tree[N][2])) break;
-		++N;
-	}
-	
-	for (int i = 0; i < N; i++) {
-		double minD = DBL_MAX;
-		for (int j = 0; j < N; j++) {
-			if (i == j) continue;
-			double xD = tree[i][0] - tree[j][0];
-			double yD = tree[i][1] - tree[j][1];
-			double zD = tree[i][2] - tree[j][2];
-			double DD = sqrt(xD * xD + yD * yD + zD * zD);
-			if (DD < minD) minD = DD;
+struct point
+{
+	int x, y, z;
+};
+
+bool theTruthIsOutThere(const point &a, const point &b)
+{
+	return a.x < b.x;
+}
+
+int main()
+{
+	point tmp;
+	int best;
+	double dist;
+	int distance;
+	bool **counted;
+	int result[10] = {0};
+	vector<point> points;
+	while (cin >> tmp.x >> tmp.y >> tmp.z)
+	{
+		if (tmp.x == 0 && tmp.y == 0 && tmp.z == 0)
+		{
+			break;
 		}
-		if (minD < 10) ++dist[(int) minD];
+		points.push_back(tmp);
 	}
-	
-	for (int i = 0; i < 10; i++) printf("%4d", dist[i]);
-	printf("\n");
+	sort(points.begin(), points.end(), theTruthIsOutThere);
+	for (int i = 0, sz = points.size(); i < sz; i++)
+	{
+		best = 10;
+		// left side
+		for (int j = i - 1; j >= 0; j--)
+		{
+			if (abs(points[i].x - points[j].x) >= best)
+			{
+				break;
+			}
+			dist = sqrt(pow(points[i].x - points[j].x, 2) + pow(points[i].y - points[j].y, 2) + pow(points[i].z - points[j].z, 2));
+			distance = dist;
+			if (distance < best)
+			{
+				best = distance;
+			}
+		}
+		// right side
+		for (int j = i + 1; j < sz; j++)
+		{
+			if (abs(points[i].x - points[j].x) >= best)
+			{
+				break;
+			}
+			dist = sqrt(pow(points[i].x - points[j].x, 2) + pow(points[i].y - points[j].y, 2) + pow(points[i].z - points[j].z, 2));
+			distance = dist;
+			if (distance < best)
+			{
+				best = distance;
+			}
+		}
+		if (best < 10)
+		{
+			result[best]++;
+		}
+	}
+	for (int i = 0; i < 10; i++)
+	{
+		printf("%4i", result[i]);
+	}
+	cout << endl;
 	return 0;
 }

@@ -1,12 +1,14 @@
-#include<iostream>
-#include<cmath>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    long long n=0,p=0,k=0;
-    while(cin>>n>>p){
-                    k=exp(log(p)/n);
-                    cout<<(long long int)k<<endl;
-    }
-    return 0;
+int main()
+{
+	int n;
+	double p;
+	while (scanf("%d%lf", &n, &p) != EOF)
+	{
+		printf("%d\n", (int)floor(pow(p, (1.0 / (double)n)) + 0.1));
+	}
+	return 0;
 }

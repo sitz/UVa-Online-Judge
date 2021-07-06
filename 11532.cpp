@@ -1,47 +1,64 @@
-#include <algorithm>
-#include <cstdio>
-#include <string>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-long long toLL(string S) {
-	long long V = 0, i, j, L = S.length(), toMul = 1;
-	for (i = 0; i < L; i++) {
-		V += (toMul * (S[i] - '0'));
-		toMul *= 2;
+// @BEGIN_OF_SOURCE_CODE
+
+#define INT_MAX 2147483647
+#define INT_MIN -2147483647
+#define pi acos(-1.0)
+#define N 1000000
+#define LL unsigned long long
+
+LL powerOf2(int b)
+{
+	LL ret = 1;
+	for (int i = 1; i <= b; i++)
+	{
+		ret *= 2;
 	}
-	return V;
+	return ret;
 }
 
-int main() {
-	int C, i, j, P, Q;
-	string S = "";
-	scanf("%d", &C);
-	while (C--) {
-		scanf("%d %d", &P, &Q);
-		S =  "";
-		if (P) {
-			S += "1";
-			P -= 1;
+void makeDecimal(string s)
+{
+	LL ret = 0;
+	for (size_t i = 0; i < s.length(); i++)
+	{
+		ret += (powerOf2(i) * (s.at(i) - '0'));
+	}
+	cout << ret << endl;
+}
+
+int main()
+{
+	int testCase;
+	scanf("%d", &testCase);
+	while (testCase--)
+	{
+		int p, q;
+		scanf("%d %d", &p, &q);
+		string str = "";
+		while (p >= 2 && q >= 1)
+		{
+			str += "101";
+			p -= 2;
+			q--;
 		}
-		for (j = 0; j + 1 < Q; Q--) {
-			S = "0" + S;
-			for (i = 0; i < min(2, P); i++) {
-				S = "1" + S;
-			}
-			P -= 2;
+		if (p == 1 && q >= 1)
+		{
+			str = "01" + str;
+			p--;
+			q--;
 		}
-		if (Q) {
-			S = "0" + S;
-			if (P > 0) {
-				S = "1" + S;
-				P -= 1;
-			}
+		for (int i = 0; i < p; i++)
+		{
+			str += "1";
 		}
-		while (P-- > 0) {
-			S = S + "1";
-		}
-		reverse(S.begin(), S.end());
-		printf("%lld\n", toLL(S));
+		reverse(str.begin(), str.end());
+		makeDecimal(str);
 	}
 	return 0;
 }
+
+// @END_OF_SOURCE_CODE

@@ -1,161 +1,101 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for (i = A; i <= B; i++)
-#define FOD(i, A, B) for (i = A; i >= B; i--)
+vector<int> stk[25]; // blks
+int pos[25]; // curr pos of each blk
 
-int N;
-vector< int > P(25);
-stack < int > tmp;
-stack < int > S[25];
-
-void moveOnto(int A, int B) {
-	while (S[P[A]].top() != A) {
-		int t = S[P[A]].top();
-		S[t].push(t);
-		P[t] = t;
-		S[P[A]].pop();
+inline void blk_init(int n)
+{
+	for (int i = 0; i < n; ++i)
+	{
+		stk[i].clear();
+		stk[i].push_back(i);
 	}
-	while (S[P[B]].top() != B) {
-		int t = S[P[B]].top();
-		S[t].push(t);
-		P[t] = t;
-		S[P[B]].pop();
-	}
-	S[P[B]].pop();
-	P[B] = B;
-	S[B].push(B);
-	S[B].push(S[P[A]].top());
-	S[P[A]].pop();
-	P[A] = B;
-}
-
-void moveOver(int A, int B) {
-	while (S[P[A]].top() != A) {
-		int t = S[P[A]].top();
-		S[t].push(t);
-		P[t] = t;
-		S[P[A]].pop();
-	}
-	S[P[B]].push(S[P[A]].top());
-	S[P[A]].pop();
-	P[A] = P[B];
-}
-
-void pileOnto(int A, int B) {
-	while (S[P[B]].top() != B) {
-		int t = S[P[B]].top();
-		S[t].push(t);
-		P[t] = t;
-		S[P[B]].pop();
-	}
-	S[P[B]].pop();
-	P[B] = B;
-	S[B].push(B);
-	
-	while (S[P[A]].top() != A) {
-		tmp.push(S[P[A]].top());
-		S[P[A]].pop();
-	}
-	tmp.push(S[P[A]].top());
-	S[P[A]].pop();
-	
-	while (!tmp.empty()) {
-		int t = tmp.top();
-		S[P[B]].push(t);
-		P[t] = P[B];
-		tmp.pop();
+	for (int i = 0; i < n; ++i)
+	{
+		pos[i] = i;
 	}
 }
 
-void pileOver(int A, int B) {
-	while (S[P[A]].top() != A) {
-		tmp.push(S[P[A]].top());
-		S[P[A]].pop();
-	}
-	tmp.push(S[P[A]].top());
-	S[P[A]].pop();
-	
-	while (!tmp.empty()) {
-		int t = tmp.top();
-		S[P[B]].push(t);
-		P[t] = P[B];
-		tmp.pop();
+inline bool same_stk(int x, int y)
+{
+	return pos[x] == pos[y];
+}
+
+// clr all blks above 'x'
+inline void clr_above(int x)
+{
+	int px = pos[x];
+	while (stk[px].back() != x)
+	{
+		// place blk 'num' in its orig stk[num]
+		int num = stk[px].back();
+		stk[num].push_back(num);
+		pos[num] = num;
+		stk[px].pop_back();
 	}
 }
 
-void quit() {
-	int i, j;
-	FOI(i, 0, N-1) {
-		cout << i << ":";
-		while (!S[i].empty()) {
-			tmp.push(S[i].top());
-			S[i].pop();
+inline void mv(int x, int y)
+{
+	int px = pos[x], py = pos[y];
+	vector<int>::iterator mv_begin, mv_end;
+	mv_begin = find(stk[px].begin(), stk[px].end(), x);
+	mv_end = stk[px].end();
+	// append blks (mv_begin ~ mv_end) to end of stk[pos[y]]
+	stk[py].insert(stk[py].end(), mv_begin, mv_end);
+	// upd pos[]
+	vector<int>::const_iterator it;
+	for (it = mv_begin; it != mv_end; ++it)
+	{
+		pos[(*it)] = py;
+	}
+	stk[px].erase(mv_begin, mv_end);
+}
+
+inline void print_result(int num_blks)
+{
+	for (int i = 0; i < num_blks; ++i)
+	{
+		printf("%d:", i);
+		for (int j = 0; j < (int)stk[i].size(); ++j)
+		{
+			printf(" %d", stk[i][j]);
 		}
-		while (!tmp.empty()) {
-			cout << " " << tmp.top();
-			tmp.pop();
-		}
-		cout << endl;
+		putchar('\n');
 	}
 }
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	cin >> N;
-	int i, j;
-	FOI(i, 0, N-1) {
-		S[i].push(i);
-		P[i] = i;
-	}
-	while (true) {
-		string A, B;
-		int I, J;
-		cin >> A;
-		if (A == "quit")
-			break;
-		cin >> I >> B >> J;
-		if (I == J || P[I] == P[J])
-			continue;
-		if (A == "move" && B == "onto") {
-			moveOnto(I, J);
+int main()
+{
+	int num_blks;
+	scanf("%d", &num_blks);
+	blk_init(num_blks);
+	char cmd1[10], cmd2[10];
+	int a, b;
+	// [mv/pile] a [onto/over] b
+	while (scanf("%s %d %s %d", cmd1, &a, cmd2, &b) == 4)
+	{
+		// ign invalid cmd
+		if (a == b)
+		{
 			continue;
 		}
-		if (A == "move" && B == "over") {
-			moveOver(I, J);
+		if (same_stk(a, b))
+		{
 			continue;
 		}
-		if (A == "pile" && B == "onto") {
-			pileOnto(I, J);
-			continue;
+		if (strcmp("mv", cmd1) == 0)
+		{
+			clr_above(a);
 		}
-			pileOver(I, J);
+		if (strcmp("onto", cmd2) == 0)
+		{
+			clr_above(b);
+		}
+		mv(a, b);
 	}
-	quit();
+	print_result(num_blks);
 	return 0;
 }

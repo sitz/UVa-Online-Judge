@@ -1,29 +1,42 @@
-#include <cstdio>
-#include <string>
-#include <sstream>
-#include <iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    //freopen("testI.txt", "r", stdin);
-    //freopen("testO.txt", "w", stdout);
-    while (true) {
-        string SS, S;
-        getline(cin, SS);
-        if (SS == "*") break;
-
-        bool flag = true;
-        stringstream ss(SS);
-        ss >> S;
-        char C = tolower(S[0]);
-        while (ss >> S) {
-            if (tolower(S[0]) != C) {
-                flag = false;
-                break;
-            }
-        }
-        if (flag) cout << "Y\n";
-        else cout << "N\n";
-    }
-    return 0;
+int main()
+{
+	string input;
+	while (getline(cin, input))
+	{
+		if (input == "*")
+		{
+			break;
+		}
+		transform(input.begin(), input.end(), input.begin(), ::tolower);
+		stringstream ss(input, stringstream::in);
+		char ch = ' ';
+		bool ok = true;
+		while (ss >> input)
+		{
+			if (ch == ' ')
+			{
+				ch = input[0];
+			}
+			else
+			{
+				if (ch != input[0])
+				{
+					ok = false;
+				}
+			}
+		}
+		if (ok)
+		{
+			cout << "Y" << endl;
+		}
+		else
+		{
+			cout << "N" << endl;
+		}
+	}
+	return 0;
 }

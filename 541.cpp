@@ -1,46 +1,98 @@
-#include<iostream>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int main(){
-    
-    for(;;){
-    int n=0,i=0,j=0,mat[100][100]={0},rowsum[100]={0},colsum[100]={0},r=0,c=0,row=0,col=0;
-    cin>>n;
-    if(n==0)
-            break;
-    
-    for(i=0;i<n;i++)
-    for(j=0;j<n;j++){
-                     cin>>mat[i][j];
-                     }
-
-    for(i=0;i<n;i++){
-    for(j=0;j<n;j++)
-                     rowsum[i]+=mat[i][j];
-                    
-    if(rowsum[i]%2!=0){
-                      r++;
-                      row=i;
-                      }
-    }
-    for(j=0;j<n;j++){
-    for(i=0;i<n;i++)
-                    colsum[j]+=mat[i][j];
-                    
-    if(colsum[j]%2!=0){
-                       c++;
-                       col=j;
-                       }
-    }
-    if(r==0 && c==0)
-            cout<<"OK"<<endl;
-    if(r==1 && c==1)
-            cout<<"Change bit ("<<row+1<<","<<col+1<<")"<<endl;
-    
-    if(r>1 || c>1)
-           cout<<"Corrupt"<<endl;
-    }
-    return 0;
+int main()
+{
+	int n;
+	int col, row;
+	int count;
+	bool corrupt;
+	while (cin >> n)
+	{
+		if (n == 0)
+		{
+			break;
+		}
+		int matrix[n][n];
+		col = row = -1;
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				cin >> matrix[i][j];
+			}
+		}
+		corrupt = false;
+		for (int i = 0; i < n; i++)
+		{
+			count = 0;
+			for (int j = 0; j < n; j++)
+			{
+				if (matrix[i][j] == 1)
+				{
+					++count;
+				}
+			}
+			if (count % 2 > 0)
+			{
+				if (row > -1)
+				{
+					corrupt = true;
+					break;
+				}
+				else
+				{
+					row = i;
+				}
+			}
+		}
+		if (corrupt)
+		{
+			cout << "Corrupt" << endl;
+			continue;
+		}
+		corrupt = false;
+		for (int i = 0; i < n; i++)
+		{
+			count = 0;
+			for (int j = 0; j < n; j++)
+			{
+				if (matrix[j][i] == 1)
+				{
+					++count;
+				}
+			}
+			if (count % 2 > 0)
+			{
+				if (col > -1)
+				{
+					corrupt = true;
+					break;
+				}
+				else
+				{
+					col = i;
+				}
+			}
+		}
+		if (corrupt)
+		{
+			cout << "Corrupt" << endl;
+			continue;
+		}
+		if (col > -1 && row > -1)
+		{
+			cout << "Change bit (" << row + 1 << "," << col + 1 << ")" << endl;
+		}
+		else if (col == -1 && row == -1)
+		{
+			cout << "OK" << endl;
+		}
+		else
+		{
+			cout << "Corrupt" << endl;
+		}
+	}
+	return 0;
 }
-                      

@@ -1,74 +1,55 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#define MAX 105
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
+int R, C;
+char MAP[MAX][MAX];
 
-int N, M;
-char adjMat[105][105];
-
-void floodFill(int X, int Y){
-	if ( X < 0 || Y < 0 || X >= M || Y >= N )
+void circle(int r, int c)
+{
+	if (r < 0 || r >= R || c < 0 || c >= C)
+	{
 		return;
-	if ( adjMat[X][Y] == '*' )
+	}
+	if (MAP[r][c] != '@')
+	{
 		return;
-	
-	adjMat[X][Y] = '*';
-	
-	int dx[] = {-1, -1, -1, 0, 1, 1, 1, 0};
-	int dy[] = {-1, 0, 1, 1, 1, 0, -1, -1};
-	int j;
-	FOI(j, 0, 7)
-		floodFill(X + dx[j], Y + dy[j]);
-}
-
-int main(int argc, char **argv){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	while( true ){
-		scanf( "%d%d", &M, &N );
-		if( M == 0 )
-			break;
-		int i, j;
-		int oil = 0;
-		FOI(i, 0, M-1)
-			scanf("%s", adjMat[i]);
-		FOI(i, 0, M-1)
-			FOI(j, 0, N-1)
-			if ( adjMat[i][j] == '@' ){
-				oil++;
-				floodFill(i, j);
+	}
+	MAP[r][c] = '1';
+	for (int i = -1; i <= 1; i++)
+		for (int j = -1; j <= 1; j++)
+			if (i != 0 || j != 0)
+			{
+				circle(r + i, c + j);
 			}
-				
-		printf("%d\n", oil);
+}
+int main()
+{
+	int i, j, count;
+	char input[20];
+	while (1)
+	{
+		gets(input);
+		sscanf(input, "%d%d", &R, &C);
+		if (R == 0)
+		{
+			break;
+		}
+		count = 0;
+		for (i = 0; i < R; i++)
+		{
+			gets(MAP[i]);
+		}
+		for (i = 0; i < R; i++)
+			for (j = 0; j < C; j++)
+				if (MAP[i][j] == '@')
+				{
+					count++;
+					circle(i, j);
+				}
+		printf("%d\n", count);
 	}
 	return 0;
 }

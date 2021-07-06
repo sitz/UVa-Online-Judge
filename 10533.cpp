@@ -1,72 +1,66 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define MAX 1000000
-
-bool prime[MAX + 1];
-int dPrime[MAX + 1];
-
-int dSum(int N) {
-	int T = 0;
-	while (N) {
-		T += (N % 10);
-		N /= 10;
+int p[1000010];
+int digit[1000010];
+void compute_prime_table() /* with Sieve of Eratosthenes */
+{
+	int i, j;
+	p[0] = p[1] = 0;
+	for (i = 2; i <= 1000000; i++)
+	{
+		p[i] = 1; /* initialization */
 	}
-	return T;
+	for (i = 2; i <= 1000;) /* for all primes up to 1000 */
+	{
+		for (j = i + i; j <= 1000000; j += i)
+		{
+			p[j] = 0; /* delete all multiples of i */
+		}
+		for (i++; !p[i]; i++)
+			; /* find next prime */
+	}
 }
 
-void seive() {
-	long long i, j;
-	for (i = 0; i <= MAX; i++) {
-		prime[i]  = true;
-		dPrime[i] = 0;
+int digit_sum(int n)
+{
+	int sum = 0;
+	while (n)
+	{
+		sum += n % 10;
+		n /= 10;
 	}
-	prime[0] = false;
-	prime[1] = false;
-	for (i = 2; i <= MAX; i++) {
-		dPrime[i] = dPrime[i - 1];
-		if (prime[i]) {
-			if (prime[dSum(i)]) ++dPrime[i];
-			for (j = i * i; j <= MAX; j += i)
-				prime[j] = false;
+	return sum;
+}
+
+void get_digit_prime_table()
+{
+	compute_prime_table();
+	int i;
+	digit[0] = 0;
+	for (i = 1; i <= 1000000; i++)
+	{
+		if (p[i] && p[digit_sum(i)])
+		{
+			digit[i] = digit[i - 1] + 1;
+		}
+		else
+		{
+			digit[i] = digit[i - 1];
 		}
 	}
 }
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	seive();
-	int N;
-	int A, B;
+int main()
+{
+	get_digit_prime_table();
+	int N, t, t1, t2;
 	scanf("%d", &N);
-	while (N--) {
-		scanf("%d%d", &A, &B);
-		printf("%d\n", dPrime[B] - dPrime[A - 1]);
+	for (t = 0; t < N; t++)
+	{
+		scanf("%d %d", &t1, &t2);
+		printf("%d\n", digit[t2] - digit[t1 - 1]);
 	}
 	return 0;
 }

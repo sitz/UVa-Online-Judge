@@ -1,57 +1,40 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	while (true){
-		int N;
-		scanf("%d", &N);
-		if (N == 0)
-			break;
-		double Max = 0;
-		int Ind = 1, i;
-		FOI(i, 1, N){
-			double A, B, T;
-			scanf("%lf%lf", &A, &B);
-			T = A;
-			A = min(T, B);
-			B = max(T, B);
-			double val = max( min(A, B/4.0), min(A/2.0, B/2.0) );
-			if (val > Max){
-				Max = val;
-				Ind  = i;
+int main()
+{
+	int N;
+	scanf("%d", &N);
+	while (N)
+	{
+		int max = 0, m_index = 0;
+		int w, h;
+		for (int i = 0; i < N; i++)
+		{
+			scanf(" %d %d", &w, &h);
+			if (h > w)
+			{
+				int t;
+				t = h;
+				h = w;
+				w = t;
+			}
+			int l = h * 6;
+			if (l > max)
+			{
+				m_index = i;
+				max = l;
+			}
+			l = (w * 3) > (h * 12) ? h * 12 : w * 3;
+			if (l > max)
+			{
+				m_index = i;
+				max = l;
 			}
 		}
-		printf("%d\n", Ind);
+		printf("%d\n", m_index + 1);
+		scanf("%d", &N);
 	}
 	return 0;
 }
-

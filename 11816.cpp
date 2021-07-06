@@ -1,65 +1,84 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#include <bits/stdc++.h>
 
 using namespace std;
 
-struct Item{
-       string name;
-       double PST, GST, HST;
-};
+#define REP(i, b, n) for (int i = b; i < n; i++)
+#define rep(i, n) REP(i, 0, n)
+#define myabs(x) ((x) < 0 ? -x : x)
+typedef long long ll;
 
-int main(){
-    int test;
-    cin>>test;
-    while(test--){
-                  int N, M, i, j;
-                  cin>>N>>M;
-                  Item item[N];
-                  for(i=0; i<N; i++){
-                           char *ch1, *ch2, *ch3;
-                           scanf("%s%s%s%s", &item[i].name, &ch1, &ch2, ch3);
-                           item[i].PST = atof(ch1);
-                           item[i].GST = atof(ch2);
-                           item[i].HST = atof(ch3);
-                  }
-                  for(i=0; i<M; i++){
-                           string nam;
-                           double amt;
-                           char ch;
-                           scanf("%s$%lf", &nam, &amt);
-                           for(j=0; j<N; j++)
-                                    if(nam == item[j].name)
-                                           break;
-                           double val = (item[j].HST - item[j].GST - item[j].PST)*amt;
-                           printf("%.2lf\n", val);
-                  }
-    }
-    return 0;
+ll getdif(ll pay, ll tax)
+{
+	ll tmp = pay * tax;
+	if (tmp % 10000 < 5000)
+	{
+		return tmp / 10000;
+	}
+	else
+	{
+		return tmp / 10000 + 1;
+	}
+}
+
+int main()
+{
+	int te;
+	cin >> te;
+	while (te--)
+	{
+		int n, m;
+		char dummy;
+		cin >> n >> m;
+		map<string, ll> tax[3];
+		rep(i, n)
+		{
+			string name;
+			ll tp;
+			string tmp;
+			cin >> name;
+			rep(j, 3)
+			{
+				cin >> tp >> dummy;
+				tp = tp * 100;
+				if (dummy == '.')
+				{
+					cin >> tmp;
+					tp += (tmp[0] - '0') * 10;
+					if (tmp.size() == 3)
+					{
+						tp += tmp[1] - '0';
+					}
+				}
+				tax[j][name] = tp;
+			}
+		}
+		ll dif = 0;
+		rep(i, m)
+		{
+			string name;
+			ll dol, pay;
+			string cent;
+			cin >> name >> dummy >> dol >> dummy >> cent;
+			if (cent.size() == 2)
+			{
+				pay = dol * 100 + (cent[0] - '0') * 10 + cent[1] - '0';
+			}
+			else if (cent.size() == 1)
+			{
+				pay = dol * 100 + (cent[0] - '0') * 10;
+			}
+			dif -= getdif(pay, tax[0][name]);
+			dif -= getdif(pay, tax[1][name]);
+			dif += getdif(pay, tax[2][name]);
+		}
+		if (dif < 0)
+		{
+			printf("-%lld.%02lld\n", myabs(dif / 100), myabs(dif % 100));
+		}
+		else
+		{
+			printf("%lld.%02lld\n", dif / 100, myabs(dif % 100));
+		}
+	}
+	return 0;
 }

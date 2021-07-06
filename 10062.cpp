@@ -1,43 +1,53 @@
-# include <iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-struct freq
-{
-       char ch;
-       long int X ;
-};
+char str[1005];
+int sum[129];
 
-bool compare(freq A, freq B)
+typedef struct
 {
-     if (A.X>B.X)
-     return false;
-     else if (A.X<B.X)
-     return true;
-     else return (A.ch>B.ch);
+	int ascii, cnt;
+} kind;
+kind data[128];
+int cmp(kind a, kind b)
+{
+	if (a.cnt != b.cnt)
+	{
+		return a.cnt < b.cnt;
+	}
+	return a.ascii > b.ascii;
 }
 
 int main()
 {
-    char str[1005];
-    int start=0;
-    while(gets(str)!=NULL)
-    {
-                            
-                            if (start)
-                            cout<<endl;            
-                            else start=1;
-                            
-                          freq arr[128]; int i;
-    for (int  ch=0;ch<=127;ch++)
-{    arr[ch].ch=ch;arr[ch].X=0;}
-    
-    
-    for(i=0;i<strlen(str);i++)
-    arr[str[i]].X++;
-    sort(arr,arr+128,compare);
-    for (i=0;i<128;i++)
-    if (arr[i].X>0)
-    cout<<(int)arr[i].ch<<" "<<arr[i].X<<endl; 
-    }
-return 0;
+	int total = 0;
+	while (gets(str))
+	{
+		if (total++)
+		{
+			printf("\n");
+		}
+		memset(sum, 0, sizeof(sum));
+		for (int i = 0; str[i]; ++i)
+		{
+			sum[str[i]]++;
+		}
+		int cnt = 0;
+		for (int i = 32; i < 128; ++i)
+		{
+			if (sum[i])
+			{
+				data[cnt].ascii = i;
+				data[cnt].cnt = sum[i];
+				cnt++;
+			}
+		}
+		sort(data, data + cnt, cmp);
+		for (int i = 0; i < cnt; ++i)
+		{
+			printf("%d %d\n", data[i].ascii, data[i].cnt);
+		}
+	}
+	return 0;
 }

@@ -1,51 +1,57 @@
-#include <stack>
-#include <cstdio>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-char Mat[110][110];
-int N;
+char field[102][102];
 
-int dx[] = {-1, 1, 0, 0};
-int dy[] = {0, 0, -1, 1};
-void dfs(int i, int j) {
-	stack< pair<int, int> > S;
-	S.push(make_pair(i, j));
-	while (!S.empty()) {
-		pair<int, int> P = S.top();
-		S.pop();
-		i = P.first;
-		j = P.second;
-		if (i < 0 || i >= N) continue;
-		if (j < 0 || j >= N) continue;
-		if (Mat[i][j] == '.')continue;
-	
-		Mat[i][j] = '.';
-		for (int I = 0; I < 4; I++)
-			S.push(make_pair(i + dx[I], j + dy[I]));
+void remove_ship(int x, int y)
+{
+	field[x][y] = '.';
+	if (field[x + 1][y] == 'x' || field[x + 1][y] == '@')
+	{
+		remove_ship(x + 1, y);
+	}
+	if (field[x][y + 1] == 'x' || field[x][y + 1] == '@')
+	{
+		remove_ship(x, y + 1);
+	}
+	if (field[x - 1][y] == 'x' || field[x - 1][y] == '@')
+	{
+		remove_ship(x - 1, y);
+	}
+	if (field[x][y - 1] == 'x' || field[x][y - 1] == '@')
+	{
+		remove_ship(x, y - 1);
 	}
 }
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int t, T;
-	scanf("%d", &T);
-	for (t = 1; t <= T; t++) {
-		scanf("%d", &N);
-		int i, j;
-		int cnt = 0;
-		
-		for (i = 0; i < N; i++)
-			scanf("%s", Mat[i]);
-
-		for (i = 0; i < N; i++)
-			for (j = 0; j < N; j++)
-				if (Mat[i][j] == 'x') {
-					cnt++;
-					dfs(i, j);
+int main()
+{
+	int t, n;
+	cin >> t;
+	for (int casenum = 0; casenum < t; casenum++)
+	{
+		cin >> n;
+		for (int i = 1; i <= n; i++)
+		{
+			for (int j = 1; j <= n; j++)
+			{
+				cin >> field[i][j];
+			}
+		}
+		int result = 0;
+		for (int i = 1; i <= n; i++)
+		{
+			for (int j = 1; j <= n; j++)
+			{
+				if (field[i][j] == 'x')
+				{
+					result++;
+					remove_ship(i, j);
 				}
-				
-		printf("Case %d: %d\n", t, cnt);
+			}
+		}
+		cout << "Case " << casenum + 1 << ": " << result << endl;
 	}
 	return 0;
 }

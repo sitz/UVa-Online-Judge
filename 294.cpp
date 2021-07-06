@@ -1,50 +1,76 @@
-#include <vector>
-#include <cstdio>
-#include <cstring>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define MAX 66000
-bool P[MAX + 1];
-vector< int > Prime;
-void Sieve() {
-    memset(P, true, sizeof P);
-    P[0] = P[1] = false;
-    for (int i = 2; i * i <= MAX; i++) {
-        if (P[i]) {
-            Prime.push_back(i);
-            for (int j = 2 * i; j <= MAX; j += i)
-                P[j] = false;
-        }
-    }
+enum
+{
+	MAX = 1000000000,
+	SQRT_MAX = 31622
+};
+char isPrime[SQRT_MAX] = {0};
+vector<int> primeNum;
+int sieve()
+{
+	isPrime[0] = 0;
+	isPrime[1] = 0;
+	isPrime[2] = 1;
+	for (int i = 3; i < SQRT_MAX; ++i)
+		isPrime[i] = i % 2;
+	int sqrt_n = sqrt((int)SQRT_MAX);
+	for (int i = 3; i < sqrt_n; i += 2)
+	{
+		if (isPrime[i] == 0)
+			continue;
+		for (int j = i * i; j < SQRT_MAX; j += i)
+			isPrime[j] = 0;
+	}
+	for (int i = 2; i < SQRT_MAX; ++i)
+		if (isPrime[i])
+			primeNum.push_back(i);
 }
 
-int main() {
-    Sieve();
+int getDivisorNumber(int n)
+{
+	if (n == 1)
+		return 1;
+	if (n < SQRT_MAX && isPrime[n])
+		return 2;
+	int total = 1, tmp = n;
+	for (int i = 0; i < primeNum.size() && primeNum[i] * primeNum[i] <= n; ++i)
+	{
+		int div = primeNum[i], exp = 1;
+		for (; tmp % div == 0; exp++)
+			tmp /= div;
+		total *= exp;
+		if (tmp == 1)
+			return total;
+	}
+	if (total != 1)
+		return total * 2;
+	return 2;
+}
 
-    int T;
-    scanf("%d", &T);
-    while (T--) {
-        int L, U;
-        scanf("%d%d", &L, &U);
-        int Div = 1, Num = L;
-        for (int i = L; i <= U; i++) {
-            int N = i, D = 1;
-            for (int j = 0; j < Prime.size(); j++) {
-                if (N % Prime[j] == 0) {
-                    int C = 0;
-                    while (N % Prime[j] == 0) {
-                        ++C;
-                        N /= Prime[j];
-                    }
-                    D *= (C + 1);
-                }
-            }
-            if (D > Div) {
-                Div = D;
-                Num = i;
-            }
-        }
-        printf("Between %d and %d, %d has a maximum of %d divisors.\n", L, U, Num, Div);
-    }
-    return 0;
+int main()
+{
+	sieve();
+	int T;
+	scanf("%d", &T);
+	while (T--)
+	{
+		int a, b;
+		scanf("%d%d", &a, &b);
+		int maxi = 0, maxDiv = 0;
+		for (int i = a; i <= b; ++i)
+		{
+			int curDiv = getDivisorNumber(i);
+			if (curDiv > maxDiv)
+			{
+				maxi = i;
+				maxDiv = curDiv;
+			}
+		}
+		printf("Between %d and %d, %d has a maximum of %d divisors.\n",
+					 a, b, maxi, maxDiv);
+	}
+	return 0;
 }

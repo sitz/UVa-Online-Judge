@@ -1,54 +1,52 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int main(){
-    int test;
-    cin>>test;
-    while(test--){
-                  int N, zero, ones;
-                  cin>>N>>ones;
-                  int arr[N], i;
-                  for(i=0; i<N-ones; i++)
-                           arr[i]=0;
-                  for(i=N-ones; i<N; i++)
-                           arr[i]=1;
-                  do{
-                           for(i=0; i<N; i++)
-                                    cout<<arr[i];
-                           cout<<endl;
-                  }while(next_permutation(arr, arr+N));
-                  
-                  if(test > 0)
-                          cout<<endl;
-    }
-    return 0;
+/***************************
+The Hamming Distance Problem
+     729
+****************************/
+int N, H;
+void Gener()
+{
+	long val, i, j, p, k, q;
+	char temp[20];
+	val = pow(2, N - 1);
+	for (i = 1; i <= pow(2, N); i++)
+	{
+		p = 0;
+		q = 0;
+		for (j = val; j > 0; j = j / 2)
+		{
+			if (i & j)
+			{
+				temp[q++] = '1';
+				p++;
+			}
+			else
+			{
+				temp[q++] = '0';
+			}
+		}
+		if (p == H)
+		{
+			temp[q] = NULL;
+			printf("%s\n", temp);
+		}
+	}
+}
+int main()
+{
+	int kase;
+	scanf("%d", &kase);
+	while (kase--)
+	{
+		scanf("%d%d", &N, &H);
+		Gener();
+		if (kase)
+		{
+			putchar('\n');
+		}
+	}
+	return 0;
 }

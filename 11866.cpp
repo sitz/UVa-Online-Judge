@@ -1,49 +1,54 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int main(){
-    int64 test;
-    cin>>test;
-    while(test--){
-                  int64 X, Y, tot=0;
-                  int64 i, j, k;
-                  cin >> X >> Y ;
-                  for(i=X; i<=Y; i++){
-                           for(j=i; j<=Y; j++){
-                                      int64 val = min(i+j-1, Y) - j + 1;
-                                      tot += val;
-                           }
-                  }
-                  cout << tot << endl;
-    }
-    return 0;
+typedef long long int Integer;
+
+Integer f(Integer n)
+{
+	return n * (n + 1) / 2;
+}
+
+#define MAX 1000001
+int main()
+{
+	int n;
+	Integer *F = new Integer[MAX];
+	Integer dpn;
+	Integer *DP = new Integer[MAX];
+	F[1] = 1;
+	dpn = 0;
+	DP[0] = 0;
+	for (n = 1; n < MAX; ++n)
+	{
+		dpn = f(n) - dpn;
+		DP[n] = DP[n - 1] + dpn;
+		if (n > 1)
+		{
+			F[n] = F[n - 1] + f(n);
+		}
+	}
+	cin >> n;
+	for (int i = 0; i < n; ++i)
+	{
+		Integer X, Y;
+		Integer tX;
+		cin >> X >> Y;
+		if (Y < X)
+		{
+			swap(X, Y);
+		}
+		--X;
+		tX = 2 * X + 1;
+		if (tX >= Y)
+		{
+			tX = Y;
+			X = Y - (1 + X);
+		}
+		Integer ans = F[X + 1] + (DP[Y] - DP[tX]) - f(X) * (Y - tX);
+		cout << ans << endl;
+	}
+	delete[] F;
+	delete[] DP;
+	return 0;
 }

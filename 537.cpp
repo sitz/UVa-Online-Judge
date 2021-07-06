@@ -1,68 +1,80 @@
-#include <algorithm>
-#include <iostream>
-#include <cstring>
-#include <cstdio>
-#include <string>
-#include <sstream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define abs(X) ((X) > 0 ? (X) : (-1.0 * X))
-const double EPS = 1e-9;
-bool isP, isU, isI;
-double P, U, I;
-string str;
+char *cp;
 
-void decide(int A) {
-	string temp = "";
-	double V;
-	int B;
-	for (B = A + 2; !isalpha(str[B]); B++) {
-		temp += str[B];
+void ReadNum(double &res)
+{
+	cp++;
+	if (*cp != '=')
+	{
+		return;
 	}
-	stringstream ss;
-	ss << temp;
-	ss >> V;
-	if (str[B] == 'm') V *= 0.001;
-	if (str[B] == 'k') V *= 1000;
-	if (str[B] == 'M') V *= 1000000;
-	//cout << V << endl;
-	
-	if (str[A] == 'P') {
-		isP = true; P = V; return;
+	cp++;
+	sscanf(cp, "%lf", &res);
+	while (!isalpha(*cp))
+	{
+		cp++;
 	}
-	else if (str[A] == 'U') {
-		isU = true; U = V; return;
+	if (*cp == 'm')
+	{
+		res /= 1000;
 	}
-	else if (str[A] == 'I') {
-		isI = true; I = V; return;
+	else if (*cp == 'k')
+	{
+		res *= 1000;
+	}
+	else if (*cp == 'M')
+	{
+		res *= 1000000;
 	}
 }
 
-int main() {
-	int T, t;
-	scanf("%d\n", &T);
-	for (t = 1; t <= T; t++) {
-		printf("Problem #%d\n", t);
-		getline(cin, str);
-		isP = false; isU = false; isI = false;
-		
-		int A = str.find_first_of("=");
-		decide(A - 1);
-		int B = str.find_last_of("=");
-		decide(B - 1);
-		
-		if (!isP) {
-			P = U * I;
-			printf("P=%.2lfW\n\n", (double)P);
+void solve(char *buf)
+{
+	double I, U, P;
+	I = U = P = -1;
+	for (cp = buf; *cp; cp++)
+	{
+		if (*cp == 'I')
+		{
+			ReadNum(I);
 		}
-		else if (!isU) {
-			U = P / I;
-			printf("U=%.2lfV\n\n", (double)U);
+		else if (*cp == 'U')
+		{
+			ReadNum(U);
 		}
-		else if (!isI) {
-			I = P / U;
-			printf("I=%.2lfA\n\n", (double)I);
+		else if (*cp == 'P')
+		{
+			ReadNum(P);
 		}
+	}
+	if (I < 0)
+	{
+		printf("I=%.2fA\n", P / U);
+	}
+	else if (U < 0)
+	{
+		printf("U=%.2fV\n", P / I);
+	}
+	else if (P < 0)
+	{
+		printf("P=%.2fW\n", I * U);
+	}
+}
+
+int main()
+{
+	char buf[2000];
+	int n, t;
+	scanf("%d\n", &n);
+	for (t = 0; t < n; t++)
+	{
+		cout << "Problem #" << t + 1 << endl;
+		cin.getline(buf, 2000);
+		solve(buf);
+		cout << endl;
 	}
 	return 0;
 }

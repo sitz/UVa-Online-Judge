@@ -1,23 +1,44 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    for(int j=1;;j++){
-            int R,N;
-            cin>>R>>N;
-            if(R==0 && N==0)
-                    break;
-            int pre=-1;
-            for(int i=0;i<=26;i++){
-                    if(N*(1+i)>=R){
-                                   pre=i;
-                                   break;
-                    }
-            }
-            if(pre>=0)
-                      cout<<"Case "<<j<<": "<<pre<<endl;
-            else
-                      cout<<"Case "<<j<<": "<<"impossible"<<endl;
-    }
-    return 0;
+int main()
+{
+	int r, n;
+	int counter;
+	int result;
+	while (cin >> r >> n)
+	{
+		if (r == 0 && n == 0)
+		{
+			break;
+		}
+		counter++;
+		cout << "Case " << counter << ": ";
+		if (n >= r)
+		{
+			result = 0;
+		}
+		else if (n * 27 >= r)
+		{
+			result = (r - n) / n;
+			if ((r - n) % n > 0)
+			{
+				result += 1;
+			}
+		}
+		else
+		{
+			result = -1;
+		}
+		if (result == -1)
+		{
+			cout << "impossible" << endl;
+		}
+		else
+		{
+			cout << result << endl;
+		}
+	}
+	return 0;
 }

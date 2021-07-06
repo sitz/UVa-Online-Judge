@@ -1,26 +1,45 @@
-#include<iostream>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-int main(){
-    int test=0,ampl=0,freq=0,i=0,j=0,t=0,k=0;
-    cin>>test;
-    for(t=1;t<=test;t++){
-            cin>>ampl>>freq;
-            for(i=1;i<=freq;i++){
-                                 for(j=1;j<ampl;j++){
-                                                     for(k=1;k<=j;k++)
-                                                                      cout<<j;
-                                                     cout<<endl;
-                                 }
-                                 for(j=ampl;j>=1;j--){
-                                                      for(k=1;k<=j;k++)
-                                                                       cout<<j;
-                                                      cout<<endl;
-                                 }
-            if((t==test)&&(i==freq))
-                          break;
-            cout<<endl;
-            }
-    }
-    return 0;
+int main()
+{
+	int Amplitude, Frequency;
+	int m;
+	cin >> m;
+	int f = 0;
+	for (int z = 0; z < m; z++)
+	{
+		cin >> Amplitude >> Frequency;
+		for (int cnt = 0; cnt < Frequency; cnt++)
+		{
+			if (f)
+			{
+				cout << endl;
+			}
+			f = 1;
+			int i;
+			for (i = 1; i <= Amplitude; i++)
+			{
+				int j = 0;
+				while (j < i)
+				{
+					cout << i;
+					j++;
+				}
+				cout << endl;
+			}
+			for (i = Amplitude - 1; i > 0; i--)
+			{
+				int j = 0;
+				while (j < i)
+				{
+					cout << i;
+					j++;
+				}
+				cout << endl;
+			}
+		}
+	}
+	return 0;
 }

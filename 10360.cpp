@@ -1,86 +1,56 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define MAXN 1027
+int A[1030][1030];
 
-int Field[MAXN][MAXN];
-int rad, MaxR, MaxC, MaxRat;
-
-void Select(int x, int y, int rat) {
-	if(x > MaxR) return;
-	if(x < MaxR) {
-		MaxR = x;
-		MaxC = y;
-		return;
-	}
-	if(x == MaxR) {
-		if(y > MaxC) return;
-		MaxC = y;
-	}
-}
-
-void Set(int x, int y, int rat) {
-	int tempx, tempy, i, j;
-	tempx = x - rad;
-	tempy = y - rad;
-	for (i = tempx; i<= x + rad; i++) {
-		if (i < 0) continue;
-		if (i > 1024) break;
-		for (j = tempy; j <= y + rad; j++){
-			if (j < 0) continue;
-			if (j > 1024) break;
-			Field[i][j] += rat;
-			if (Field[i][j] > MaxRat) {
-				MaxR = i;
-				MaxC = j;
-				MaxRat = Field[i][j];
+int main()
+{
+	int T, d, n, x1, y1, z1;
+	scanf("%d", &T);
+	while (T-- > 0 && scanf("%d %d", &d, &n) == 2)
+	{
+		memset(A, 0, sizeof(A));
+		while (n-- > 0 && scanf("%d %d %d", &x1, &y1, &z1) == 3)
+		{
+			A[y1 + 1][x1 + 1] = z1;
+		}
+		for (int y = 1; y <= 1025; y++)
+		{
+			for (int x = 1, s = 0; x <= 1025; x++)
+			{
+				s += A[y][x];
+				A[y][x] = A[y - 1][x] + s;
 			}
-			else if (Field[i][j] == MaxRat)
-				Select(i, j, Field[i][j]);
 		}
-	}
-}
-
-int main() {
-	int kase, popu;
-	int i, x, y, rat;
-	scanf("%d", &kase);
-	while (kase--) {
-		scanf("%d", &rad);
-		scanf("%d", &popu);
-		MaxRat = 0;
-		MaxR = MaxC = 1024;
-		for (i = 0; i < popu; i++){
-			scanf("%d%d%d",&x, &y, &rat);
-			Set(x, y, rat);
+		x1 = y1 = 1;
+		z1 = 0;
+		int D = 2 * d + 1;
+		for (int x = d + 1; x <= 1025; x++)
+		{
+			for (int y = d + 1; y <= 1025; y++)
+			{
+				int t = A[y][x];
+				if (y >= D)
+				{
+					t -= A[y - D][x];
+				}
+				if (x >= D)
+				{
+					t -= A[y][x - D];
+				}
+				if (x >= D && y >= D)
+				{
+					t += A[y - D][x - D];
+				}
+				if (t > z1)
+				{
+					x1 = x - d;
+					y1 = y - d;
+					z1 = t;
+				}
+			}
 		}
-		printf("%d %d %d\n",MaxR, MaxC, MaxRat);
-		for (i = 0; i <= 1025; i++)
-			memset(Field[i],0,sizeof(int)*1026);
+		printf("%d %d %d\n", x1 - 1, y1 - 1, z1);
 	}
-	return 0;
 }

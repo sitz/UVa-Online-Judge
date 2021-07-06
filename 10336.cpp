@@ -1,86 +1,113 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
+#define MAXN 20000
+/*  MORE 2000*/
+char LAN[MAXN][MAXN];
+char STORE[MAXN];
+int N, R, C, K;
 
-int R, C;
-string mat[500];
-
-int dI[] = {0, -1, 0, 1};
-int dJ[] = {-1, 0, 1, 0};
-
-void floodFill(int I, int J, char ch){
-	if( I < 0 || I >= R )
+typedef struct list
+{
+	int index;
+	int value;
+} ss;
+ss V[30];
+int sort(const void *a, const void *b)
+{
+	int m = ((ss *)a)->value;
+	int n = ((ss *)b)->value;
+	if (m != n)
+	{
+		return n - m;
+	}
+	return ((ss *)a)->index - ((ss *)b)->index;
+}
+void FFILL(int r, int c, char S)
+{
+	if (r >= R || r < 0 || c >= C || c < 0)
+	{
 		return;
-	if( J < 0 || J >= C )
+	}
+	if (LAN[r][c] != S)
+	{
 		return;
-	if( mat[I][J] != ch )
-		return;
-	mat[I][J] = '-';
-	int k;
-	FOI(k, 0, 3)
-		floodFill(I + dI[k], J + dJ[k], ch);
+	}
+	LAN[r][c] = '1';
+	FFILL(r + 1, c, S);
+	FFILL(r - 1, c, S);
+	FFILL(r, c + 1, S);
+	FFILL(r, c - 1, S);
+}
+void CAL()
+{
+	int i, m, j;
+	char c;
+	K = 0;
+	for (i = 0; i < R; i++)
+	{
+		for (j = 0; j < C; j++)
+		{
+			if (isalpha(LAN[i][j]))
+			{
+				c = LAN[i][j];
+				STORE[K++] = LAN[i][j];
+				m = LAN[i][j] - 97;
+				V[m].index = m;
+				V[m].value++;
+				FFILL(i, j, c);
+			}
+		}
+	}
+	STORE[K] = NULL;
+}
+void MAKEZERO()
+{
+	int i;
+	for (i = 0; i < 30; i++)
+	{
+		V[i].index = 0;
+		V[i].value = 0;
+	}
+}
+void PRINT()
+{
+	int i, k;
+	qsort(V, 30, sizeof(V[0]), sort);
+	for (i = 0; i < 30; i++)
+	{
+		k = 0;
+		if (V[i].value)
+		{
+			k = 1;
+			printf("%c: %d\n", V[i].index + 97, V[i].value);
+		}
+		if (k == 0)
+		{
+			break;
+		}
+	}
 }
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int T;
-	cin >> T;
-	for (int t = 1; t <= T; t++){
-		cin >> R >> C;
-		int i, j;
-		FOI(i, 0, R-1)
-			cin >> mat[i];
-		int alp[26];
-		FOI(i, 0, 25)
-			alp[i] = 0;
-		FOI(i, 0, R-1){
-			FOI(j, 0, C-1){
-				if( isalpha( mat[i][j] ) ){
-					alp[mat[i][j] - 'a']++;
-					floodFill(i, j, mat[i][j]);
-				}
-			}
+int main()
+{
+	int i, kase = 1;
+	char input[20];
+	gets(input);
+	sscanf(input, "%d", &N);
+	while (N--)
+	{
+		gets(input);
+		sscanf(input, "%d%d", &R, &C);
+		for (i = 0; i < R; i++)
+		{
+			gets(LAN[i]);
 		}
-		cout << "World #" << t << endl;
-		FOI(i, 0, 25){
-			int ind = 0;
-			FOI(j, 0, 25){
-				if( alp[ind] < alp[j] ){
-					ind = j;
-				}
-			}
-			if( alp[ind] > 0 ){
-				cout << (char)('a' + ind) << ": " << alp[ind] << endl;
-				alp[ind] = 0;
-			}
-		}
+		CAL();
+		printf("World #%d\n", kase++);
+		PRINT();
+		MAKEZERO();
 	}
 	return 0;
 }

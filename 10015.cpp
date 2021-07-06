@@ -1,69 +1,59 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define MAX 100000
+#define FOR(i, a, b) for (int(i) = int(a); (i) < int(b); (i)++)
+#define FOREQ(i, a, b) for (int(i) = int(a); (i) <= int(b); (i)++)
 
-bool isP[MAX + 1];
-vector<int> Prime;
-
-void seive(){
-	memset(isP, true, sizeof isP);
-	isP[0] = false; isP[1] = false;
-	for (int i = 2; i <= MAX; i++){
-		if (isP[i]){
-			Prime.push_back(i);
-			for (int j = 2 * i; j <= MAX; j += i)
-				isP[j] = false;
-		}
+bool is_prime(int n)
+{
+	if (n == 2)
+	{
+		return true;
 	}
-	//cout << Prime.size() << endl;
+	if (n % 2 == 0)
+	{
+		return false;
+	}
+	for (int i = 3; i * i <= n; i += 2)
+		if (n % i == 0)
+		{
+			return false;
+		}
+	return true;
 }
 
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	seive();
-	while (true){
-		int N, i;
-		scanf("%d", &N);
-		if (N == 0) break;
-		vector<int> V(N);
-		FOI(i, 0, N-1)
-			V[i] = i + 1;
-		int pos = 0;
-		FOI(i, 0, N-2){
-			pos = (pos + Prime[i] - 1) % V.size();
-			//cout << Prime[i] << " " << pos << endl;
-			V.erase(V.begin() + pos);
+static vector<int> primes;
+
+inline int survivor(int n)
+{
+	int i, s;
+	for (s = 0, i = 1; i <= n; i++)
+	{
+		s = (s + primes[n - i]) % i;
+	}
+	return s + 1;
+}
+
+static int n;
+
+int main()
+{
+	primes.push_back(2);
+	for (int i = 3; i < 100000; i += 2)
+	{
+		if (is_prime(i))
+		{
+			primes.push_back(i);
 		}
-		printf("%d\n", V[0]);
+	}
+	while (scanf("%d", &n))
+	{
+		if (!n)
+		{
+			break;
+		}
+		printf("%d\n", survivor(n));
 	}
 	return 0;
 }
-

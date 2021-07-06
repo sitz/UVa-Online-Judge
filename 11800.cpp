@@ -1,170 +1,108 @@
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <deque>
-#include <queue>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <cctype>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
+#include <bits/stdc++.h>
+
 using namespace std;
 
-typedef unsigned int uint;
-typedef long long int64;
-typedef unsigned long long uint64;
+#define db(a) cout << #a << " = " << a << endl;
+#define db2(a, b) cout << #a << " = " << a << " -- " << #b << " = " << b << endl;
+#define foreach(it, l) for (typeof(l.begin()) it = l.begin(); it != l.end(); it++)
 
-#define FOI(i, A, B) for(i=A; i<=B; i++)
-#define FOD(i, A, B) for(i=A; i>=B; i--)
-#define PI	acos(-1.0)
-#define INF	1<<30
-#define EPS	1e-9
-#define sqr(x)	(x)*(x)
+typedef pair<int, int> punto;
+#define x(p) p.first
+#define y(p) p.second
 
-struct Point{
-	int64 X;
-	int64 Y;
-	int64 I;
-};
-
-bool comp(Point A, Point B){
-	return A.I < B.I;
+long long producto_cruz(punto a, punto b)
+{
+	return x(a) * y(b) - y(a) * x(b);
 }
-
-bool isSquare(Point point[]){
-	do{
-		int64 A = sqr(point[0].X - point[1].X) + sqr(point[0].Y - point[1].Y);
-		int64 B = sqr(point[1].X - point[2].X) + sqr(point[1].Y - point[2].Y);
-		int64 C = sqr(point[2].X - point[3].X) + sqr(point[2].Y - point[3].Y);
-		int64 D = sqr(point[3].X - point[0].X) + sqr(point[3].Y - point[0].Y);
-		if( A != B || B != C || C != D || D != A )
-			continue;
-	int64 P = (point[0].Y - point[1].Y) * (point[1].Y - point[2].Y) + (point[0].X - point[1].X) * (point[1].X - point[2].X);
-	int64 Q = (point[1].Y - point[2].Y) * (point[2].Y - point[3].Y) + (point[1].X - point[2].X) * (point[2].X - point[3].X);
-	int64 R = (point[2].Y - point[3].Y) * (point[3].Y - point[0].Y) + (point[2].X - point[3].X) * (point[3].X - point[0].X);
-	int64 S = (point[3].Y - point[0].Y) * (point[0].Y - point[1].Y) + (point[3].X - point[0].X) * (point[0].X - point[1].X);
-		if( P == 0 && Q == 0 && R == 0 && S == 0 )
-			return true;
-	}while( next_permutation(point, point + 4, comp) );
-	
-	return false;
+long long producto_punto(punto a, punto b)
+{
+	return x(a) * x(b) + y(a) * y(b);
 }
-
-bool isRectangle(Point point[]){
-	do{
-		int64 A = sqr(point[0].X - point[1].X) + sqr(point[0].Y - point[1].Y);
-		int64 B = sqr(point[1].X - point[2].X) + sqr(point[1].Y - point[2].Y);
-		int64 C = sqr(point[2].X - point[3].X) + sqr(point[2].Y - point[3].Y);
-		int64 D = sqr(point[3].X - point[0].X) + sqr(point[3].Y - point[0].Y);
-		if( A != C || B != D )
-			continue;
-	int64 P = (point[0].Y - point[1].Y) * (point[1].Y - point[2].Y) + (point[0].X - point[1].X) * (point[1].X - point[2].X);
-	int64 Q = (point[1].Y - point[2].Y) * (point[2].Y - point[3].Y) + (point[1].X - point[2].X) * (point[2].X - point[3].X);
-	int64 R = (point[2].Y - point[3].Y) * (point[3].Y - point[0].Y) + (point[2].X - point[3].X) * (point[3].X - point[0].X);
-	int64 S = (point[3].Y - point[0].Y) * (point[0].Y - point[1].Y) + (point[3].X - point[0].X) * (point[0].X - point[1].X);
-		if( P == 0 && Q == 0 && R == 0 && S == 0 )
-			return true;
-	}while( next_permutation(point, point + 4, comp) );
-	
-	return false;
+long long norma(punto a)
+{
+	return (x(a) * x(a) + y(a) * y(a));
 }
-
-bool isRhombus(Point point[]){
-	do{
-		int64 A = sqr(point[0].X - point[1].X) + sqr(point[0].Y - point[1].Y);
-		int64 B = sqr(point[1].X - point[2].X) + sqr(point[1].Y - point[2].Y);
-		int64 C = sqr(point[2].X - point[3].X) + sqr(point[2].Y - point[3].Y);
-		int64 D = sqr(point[3].X - point[0].X) + sqr(point[3].Y - point[0].Y);
-		if( A != B || B != C || C != D || D != A )
-			continue;
-	int64 P = (point[0].Y - point[1].Y) * (point[1].Y - point[2].Y) + (point[0].X - point[1].X) * (point[1].X - point[2].X);
-	int64 Q = (point[1].Y - point[2].Y) * (point[2].Y - point[3].Y) + (point[1].X - point[2].X) * (point[2].X - point[3].X);
-	int64 R = (point[2].Y - point[3].Y) * (point[3].Y - point[0].Y) + (point[2].X - point[3].X) * (point[3].X - point[0].X);
-	int64 S = (point[3].Y - point[0].Y) * (point[0].Y - point[1].Y) + (point[3].X - point[0].X) * (point[0].X - point[1].X);
-		if( P == R && Q == S )
-			return true;
-	}while( next_permutation(point, point + 4, comp) );
-	
-	return false;
-}
-
-bool isParallelogram(Point point[]){
-	do{
-		int64 A = sqr(point[0].X - point[1].X) + sqr(point[0].Y - point[1].Y);
-		int64 B = sqr(point[1].X - point[2].X) + sqr(point[1].Y - point[2].Y);
-		int64 C = sqr(point[2].X - point[3].X) + sqr(point[2].Y - point[3].Y);
-		int64 D = sqr(point[3].X - point[0].X) + sqr(point[3].Y - point[0].Y);
-		if( A != C || B != D )
-			continue;
-	int64 P = (point[0].Y - point[1].Y) * (point[1].Y - point[2].Y) + (point[0].X - point[1].X) * (point[1].X - point[2].X);
-	int64 Q = (point[1].Y - point[2].Y) * (point[2].Y - point[3].Y) + (point[1].X - point[2].X) * (point[2].X - point[3].X);
-	int64 R = (point[2].Y - point[3].Y) * (point[3].Y - point[0].Y) + (point[2].X - point[3].X) * (point[3].X - point[0].X);
-	int64 S = (point[3].Y - point[0].Y) * (point[0].Y - point[1].Y) + (point[3].X - point[0].X) * (point[0].X - point[1].X);
-	int64 U = (point[0].Y - point[1].Y) * (point[2].X - point[3].X);
-	int64 V = (point[0].X - point[1].X) * (point[2].Y - point[3].Y);
-	int64 W = (point[1].Y - point[2].Y) * (point[0].X - point[3].X);
-	int64 X = (point[1].X - point[2].X) * (point[0].Y - point[3].Y);
-		if( P != 0 && Q != 0 && R != 0 && S != 0 && U == V && W == X )
-			return true;
-	}while( next_permutation(point, point + 4, comp) );
-	
-	return false;
-}
-
-bool isTrapezium(Point point[]){
-	do{
-		int64 P = (point[0].Y - point[1].Y) * (point[2].X - point[3].X);
-		int64 Q = (point[0].X - point[1].X) * (point[2].Y - point[3].Y);
-		int64 R = (point[1].Y - point[2].Y) * (point[0].X - point[3].X);
-		int64 S = (point[1].X - point[2].X) * (point[0].Y - point[3].Y);
-		if( (P == Q) || (R == S) )
-			return true;
-	}while( next_permutation(point, point + 4, comp) );
-	
-	return false;
-}
-
-int main(){
-	//freopen("testI.txt", "r", stdin);
-	//freopen("testO.txt", "w", stdout);
-	int T;
-	cin >> T;	
-	for(int t = 1; t <= T; t++){
-		Point point[4];
-		int i;
-		FOI(i, 0, 3){
-			cin >> point[i].X >> point[i].Y;
-			point[i].I = i;
+int main()
+{
+	int t = 0;
+	int r1, r2, r3, r4;
+	long long tama, tamb, tamc, tamd;
+	bool exito;
+	punto a, b, c, d;
+	punto v1, v2, v3, v4;
+	cin >> t;
+	for (int i = 0; i < t; i++)
+	{
+		scanf("%I64d%I64d%I64d%I64d%I64d%I64d%I64d%I64d", &x(a), &y(a), &x(b), &y(b), &x(c), &y(c), &x(d), &y(d));
+		int buscar[] = {1, 2, 3};
+		vector<punto> puntos;
+		puntos.push_back(a);
+		puntos.push_back(b);
+		puntos.push_back(c);
+		puntos.push_back(d);
+		do
+		{
+			x(v1) = x(puntos[buscar[0]]) - x(a);
+			y(v1) = y(puntos[buscar[0]]) - y(a);
+			x(v2) = x(puntos[buscar[1]]) - x(puntos[buscar[0]]);
+			y(v2) = y(puntos[buscar[1]]) - y(puntos[buscar[0]]);
+			x(v3) = x(puntos[buscar[2]]) - x(puntos[buscar[1]]);
+			y(v3) = y(puntos[buscar[2]]) - y(puntos[buscar[1]]);
+			x(v4) = x(a) - x(puntos[buscar[2]]);
+			y(v4) = y(a) - y(puntos[buscar[2]]);
+			r1 = producto_cruz(v1, v2);
+			r2 = producto_cruz(v2, v3);
+			r3 = producto_cruz(v3, v4);
+			r4 = producto_cruz(v4, v1);
+			if ((r1 > 0 && r2 > 0 && r3 > 0 && r4 > 0) || (r1 < 0 && r2 < 0 && r3 < 0 && r4 < 0))
+			{
+				exito = true;
+			}
+			else
+			{
+				exito = false;
+			}
+		} while (!exito && next_permutation(buscar, buscar + 3));
+		tama = norma(v1);
+		tamb = norma(v2);
+		tamc = norma(v3);
+		tamd = norma(v4);
+		if (producto_punto(v1, v2) == 0 && producto_punto(v2, v3) == 0 && producto_punto(v3, v4) == 0 && producto_punto(v4, v1) == 0)
+		{
+			if (tama == tamb && tamb == tamc && tamc == tamd)
+			{
+				printf("Case %d: Square\n", i + 1);
+			}
+			else
+			{
+				printf("Case %d: Rectangle\n", i + 1);
+			}
 		}
-		cout << "Case " << t << ": ";
-		if( isSquare(point) )
-			cout << "Square\n";
-		else if( isRectangle(point) )
-			cout << "Rectangle\n";
-		else if( isRhombus(point) )
-			cout << "Rhombus\n";
-		else if( isParallelogram(point) )
-			cout << "Parallelogram\n";
-		else if( isTrapezium(point) )
-			cout << "Trapezium\n";
 		else
-			cout << "Ordinary Quadrilateral\n";
-		
+		{
+			if (tama == tamb && tamb == tamc && tamc == tamd)
+			{
+				printf("Case %d: Rhombus\n", i + 1);
+			}
+			else
+			{
+				if (tama == tamc && tamb == tamd)
+				{
+					printf("Case %d: Parallelogram\n", i + 1);
+				}
+				else
+				{
+					if (producto_cruz(v1, v3) == 0 || producto_cruz(v2, v4) == 0)
+					{
+						printf("Case %d: Trapezium\n", i + 1);
+					}
+					else
+					{
+						printf("Case %d: Ordinary Quadrilateral\n", i + 1);
+					}
+				}
+			}
+		}
 	}
 	return 0;
 }
